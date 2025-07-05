@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
-
+import { ThemeToggleBtn } from '@/component/ThemeToggleBtn'
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -24,8 +24,33 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+    <html lang="ko" className="bg-white dark:bg-black">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark')
+                    localStorage.setItem('theme', 'dark')
+                  } else {
+                    document.documentElement.classList.remove('dark')
+                    localStorage.setItem('theme', 'light')
+                  }
+                } catch (_) {}
+              })()
+            `,
+          }}
+        />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <header className="flex justify-between">
+          <h2>권현우</h2>
+          <ThemeToggleBtn />
+        </header>
+        <div className="bg-red dark:bg-blue">{children}</div>
+      </body>
     </html>
   )
 }
