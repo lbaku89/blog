@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "streetsidesoftware.code-spell-checker",
+    "f4bz3.htmlautocompletion",
+    "lllllllqw.jsdoc",
+    "christian-kohler.path-intellisense", // 경로 자동탐색
+    "esbenp.prettier-vscode",
+    // "syler.sass-indented",
+    "swyphcosmo.spellchecker", // 영어 철자 검사
+    "usernamehw.errorlens", // error 표시
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "aaron-bond.better-comments",
+    "naumovs.color-highlight",
+    "alefragnani.bookmarks"
+  ]
+}
