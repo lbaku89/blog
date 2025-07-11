@@ -5,12 +5,12 @@ import { ThemeToggleBtn } from '@/component/ThemeToggleBtn'
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
-  weight: '100 900',
+  weight: '100 200 300 400 500 600 700 800 900',
 })
 const geistMono = localFont({
   src: './fonts/GeistMonoVF.woff',
   variable: '--font-geist-mono',
-  weight: '100 900',
+  weight: '100 200 300 400 500 600 700 800 900',
 })
 
 export const metadata: Metadata = {
@@ -44,7 +44,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-[1600px] min-w-[1024px] mx-auto`}>
         <header className="flex justify-between">
           <h2>권현우</h2>
           <ThemeToggleBtn />
