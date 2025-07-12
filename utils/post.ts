@@ -79,3 +79,41 @@ export async function getAllPosts(): Promise<Post[]> {
 
   return posts
 }
+
+/**
+  * @description slug에 해당하는 포스트를 get
+ *  @param slug - 포스트의 slug (예: '2025/07/rogress-bar')
+
+ */
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  // 직접 파일 경로로 접근
+  const filePath = `${POST_PATH}/${slug}.mdx`
+
+  try {
+    const file = fs.readFileSync(filePath, { encoding: 'utf8' })
+    const frontMatterResult: {
+      attributes: FrontMatter
+      body: string
+    } = frontMatter<FrontMatter>(file)
+
+    if (!frontMatterResult.attributes.published) {
+      return null
+    }
+
+    const tags = frontMatterResult.attributes.tags.map((tag: string) => tag.trim())
+
+    return {
+      frontMatter: {
+        ...frontMatterResult.attributes,
+        tags,
+        date: new Date(frontMatterResult.attributes.date), // 문자열 그대로 사용
+      },
+      body: frontMatterResult.body,
+      slug,
+      path: filePath,
+    }
+  } catch (error) {
+    // 파일이 없거나 에러 발생시 null 반환
+    return null
+  }
+}
