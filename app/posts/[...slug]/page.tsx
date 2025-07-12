@@ -1,0 +1,58 @@
+import { getAllPosts, getPostBySlug } from '@/utils/post'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import { mdxComponents } from '@/utils/mdx-components'
+import { Badge } from '@/component/Badge'
+import { getYYYYMMDD } from '@/utils/date'
+export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug } = await params
+  const slugPath = slug.join('/')
+
+  // 개별 포스트만 조회 (더 효율적)
+  const currentPost = await getPostBySlug(slugPath)
+
+  if (!currentPost) {
+    return <div>Post not found</div>
+  }
+
+  return (
+    <article>
+      {/* 포스트 제목, 설명, 태그 등 */}
+      <div className="flex flex-col gap-4">
+        <h1 className="text-center">{currentPost.frontMatter.title}</h1>
+        <div className="flex flex-col gap-2">
+          <h5 className="text-center">{currentPost.frontMatter.description}</h5>
+          <p className="text-center">{getYYYYMMDD(currentPost.frontMatter.date)}</p>
+          <ul className="mb-4 flex gap-2 justify-center">
+            {currentPost.frontMatter.tags.map((tag) => (
+              <li>
+                <Badge key={tag}>{tag}</Badge>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      {/* 컴포넌트 맵을 전달 */}
+      <div className="p-2">
+        <MDXRemote source={currentPost.body} components={mdxComponents} />
+      </div>
+    </article>
+  )
+}
+
+/**
+ * @description build 시에 해당 slug에 대한 정적 페이지를 생성
+ * @reference https://nextjs.org/docs/14/app/api-reference/file-conventions/route-seg
+ */
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+
+  return posts.map((post) => ({
+    slug: post.slug.split('/'),
+  }))
+}
+
+/**
+ * @description generateStaticParams 없는 목로의 경우 404 page로 처리
+ * @reference https://nextjs.org/docs/14/app/api-reference/file-conventions/route-segment-config#dynamicparams
+ */
+export const dynamicParams = false
