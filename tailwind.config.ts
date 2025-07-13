@@ -8,7 +8,7 @@ const config: Config = {
     './component/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  plugins: [require('tailwindcss-animated')],
+  plugins: [require('tailwindcss-animated'), require('@tailwindcss/typography')],
   theme: {
     extend: {
       colors: {
