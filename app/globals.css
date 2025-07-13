@@ -4,7 +4,6 @@
 
 body {
   @apply bg-white  dark:bg-neutral-900;
-  min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
   /* 내부 텍스트 요소들  */
   @apply text-gray-900 text-base dark:text-gray-100 leading-[1.5];

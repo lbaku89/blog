@@ -1,16 +1,16 @@
 import { EnvelopeIcon } from '@heroicons/react/24/solid'
 export const Footer = () => {
   return (
-    <footer className="flex flex-col items-center gap-4 p-6 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+    <footer className="flex flex-col items-center gap-3 p-6 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
       <p>© {new Date().getFullYear()} My Blog. All rights reserved.</p>
       <div className="flex gap-4">
         <a href="https://github.com/lbaku89" target="_blank">
           <svg
-            height="32"
+            height="24"
             aria-hidden="true"
             viewBox="0 0 24 24"
             version="1.1"
-            width="32"
+            width="24"
             data-view-component="true"
             className="fill-gray-700 dark:fill-gray-300"
           >
@@ -18,7 +18,7 @@ export const Footer = () => {
           </svg>
         </a>
         <a href="mailto:khj930410@naver.com:" target="_blank">
-          <EnvelopeIcon className="w-[32px] h-[32px]"></EnvelopeIcon>
+          <EnvelopeIcon className="w-[24px] h-[24px]"></EnvelopeIcon>
         </a>
       </div>
     </footer>

@@ -45,12 +45,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen">
         <div
-          className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-3xl min-w-[1024px] mx-auto px-3`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-3xl min-w-[1024px] mx-auto px-3 flex-1 flex flex-col`}
         >
           <Header />
-          <div className="py-[30px]">{children}</div>
+          <div className="py-[30px] flex-1">{children}</div>
         </div>
         <Footer />
       </body>
