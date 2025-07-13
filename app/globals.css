@@ -2,22 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  @apply text-base bg-white text-gray-900 dark:bg-neutral-900 dark:text-gray-100 leading-[1.5];
+  @apply bg-white  dark:bg-neutral-900;
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
+  /* 내부 텍스트 요소들  */
+  @apply text-gray-900 text-base dark:text-gray-100 leading-[1.5];
+
+  * {
+    background-color: transparent;
+  }
 }
 
 @layer utilities {
@@ -54,7 +48,7 @@ body {
   }
 
   p {
-    @apply text-base bg-white text-gray-900 dark:bg-neutral-900 dark:text-gray-100 leading-[1.5];
+    @apply text-base text-gray-900  dark:text-gray-100 leading-[1.5];
   }
   ul {
     @apply list-disc list-inside;
@@ -64,6 +58,7 @@ body {
   }
 }
 
+/* 코드블락 */
 pre {
   overflow-x: auto;
   padding: 1rem 0;
