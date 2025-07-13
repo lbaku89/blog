@@ -7,6 +7,9 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
 import rehypeSanitize from 'rehype-sanitize'
+import rehypeStringify from 'rehype-stringify'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeSlug from 'rehype-slug'
 
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params
@@ -30,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             <CalendarIcon className="size-5 text-blue-600"></CalendarIcon>
             <p className="text-center">{getYYYYMMDD(currentPost.frontMatter.date)}</p>
           </div>
-          <ul className="mb-4 flex gap-2 justify-center">
+          <ul className="mb-4 flex gap-2 justify-center list-none">
             {currentPost.frontMatter.tags.map((tag) => (
               <li key={tag}>
                 <Badge>{tag}</Badge>
@@ -40,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         </div>
       </div>
       {/* 컴포넌트 맵을 전달 */}
-      <div className="p-2">
+      <div className="p-2 prose  dark:prose-invert max-w-none">
         <MDXRemote
           source={currentPost.body}
           components={mdxComponents}
@@ -51,9 +54,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                 [
                   rehypePrettyCode,
                   {
-                    theme: 'one-dark-pro',
+                    theme: 'night-owl',
                   },
                   rehypeSanitize,
+                  rehypeStringify,
+                  /**
+                   * @todo 하단 2개 플러그인 적용 확인 필요
+                   */
+                  rehypeAutolinkHeadings,
+                  rehypeSlug,
                 ],
               ],
             },
