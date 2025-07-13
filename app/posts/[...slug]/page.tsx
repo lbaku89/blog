@@ -3,6 +3,11 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import { mdxComponents } from '@/utils/mdx-components'
 import { Badge } from '@/component/Badge'
 import { getYYYYMMDD } from '@/utils/date'
+import rehypePrettyCode from 'rehype-pretty-code'
+import remarkGfm from 'remark-gfm'
+import { CalendarIcon } from '@heroicons/react/24/solid'
+import rehypeSanitize from 'rehype-sanitize'
+
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params
   const slugPath = slug.join('/')
@@ -21,11 +26,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         <h1 className="text-center">{currentPost.frontMatter.title}</h1>
         <div className="flex flex-col gap-2">
           <h5 className="text-center">{currentPost.frontMatter.description}</h5>
-          <p className="text-center">{getYYYYMMDD(currentPost.frontMatter.date)}</p>
+          <div className="flex items-center justify-center gap-2">
+            <CalendarIcon className="size-5 text-blue-600"></CalendarIcon>
+            <p className="text-center">{getYYYYMMDD(currentPost.frontMatter.date)}</p>
+          </div>
           <ul className="mb-4 flex gap-2 justify-center">
             {currentPost.frontMatter.tags.map((tag) => (
-              <li>
-                <Badge key={tag}>{tag}</Badge>
+              <li key={tag}>
+                <Badge>{tag}</Badge>
               </li>
             ))}
           </ul>
@@ -33,7 +41,24 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       </div>
       {/* 컴포넌트 맵을 전달 */}
       <div className="p-2">
-        <MDXRemote source={currentPost.body} components={mdxComponents} />
+        <MDXRemote
+          source={currentPost.body}
+          components={mdxComponents}
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkGfm],
+              rehypePlugins: [
+                [
+                  rehypePrettyCode,
+                  {
+                    theme: 'one-dark-pro',
+                  },
+                  rehypeSanitize,
+                ],
+              ],
+            },
+          }}
+        />
       </div>
     </article>
   )
