@@ -1,0 +1,141 @@
+---
+title: 'Currying (커링)'
+description: '자바스크립트에서 커링(Currying) 함수의 개념 를 이해하고, 커링이 코드의 재사용성과 가독성을 어떻게 향상시키는지 알아봅니다.'
+date: '2025-05-10'
+tags: ['JavaScript', 'Functional Programming', 'Currying']
+published: true
+---
+
+## 📌Currying ( 커링 ) 
+
+수학과 컴퓨터 과학에서 커링(Currying)이란 다중 인수를 갖는 함수를 단일 인자를 받는 함수들의 함수열로 변환하는 것을 의미한다. 이해를 돕기위해 3개의 수를 입력받아 다 곱한 결과를 return 하는  3개의 인자를 필요로 하는데 단일인자를 갖는 함수들의 함수열로 표현해 보았다. 
+
+```js
+function multiply(a) {
+  return function (b) {
+    return function (c) {
+      return a * b * c
+    }
+  }
+}
+
+const result = multiply(2)(3)(4) // 2 * 3 * 4 =24
+console.log(result) //24
+```
+
+## 📌커링을 이용해서 가져갈 수 있는 장점 
+
+- 재사용성: 함수의 일부 인자를 미리 고정한 함수를 쉽게 생성가능
+- 가독성: 함수 호출을 더 직관적으로 표현할 수 있다.
+- 유연성: 함수의 일부 인자를 미리 설정하고 나중에 나머지 인자를 채울 수 있다
+
+## 📌활용하기
+
+커링을 이용하면 함수의 활용도와 가독성이 높아진다. 아래의 경우를 살펴보면 커링을 이용해서 하나의 logger함수로 errorLogger와 infoLogger 함수를 각각 만들어 활용하고 있다. 
+
+```tsx
+function logger(level) {
+  return function (message) {
+    console.log(`[${level.toUpperCase()}]: ${message}`)
+  }
+}
+
+const errorLogger = logger('error')
+const infoLogger = logger('info')
+
+errorLogger('An Error has occured') // [ERROR]: An Error has occured
+infoLogger('It is Important!') // [INFO]: It is Important!
+```
+
+ES6 화살표 함수로 표현할 수도 있다. 오히려 화살표함수가 코드칠게 더 적어서 편해보인다.
+
+```tsx
+const logger = (level) => (message) => {
+  console.log(`[${level.toUpperCase()}]: ${message}`)
+}
+
+// 사용 예시
+const infoLogger = logger('info')
+const errorLogger = logger('error')
+
+errorLogger('An Error has occured') // [ERROR]: An Error has occured
+infoLogger('It is Important!') // [INFO]: It is Important!
+```
+
+이번엔 이벤트 핸들러에서 사용한 예시이다. 하나의 커링함수로 form에 존재하는 모든필드 input 핸들러에 대응했다.
+
+```tsx
+import { ChangeEvent, useState } from 'react'
+
+export const Test = () => {
+  const [form, setForm] = useState({
+    name: '',
+    age: '',
+  })
+
+  const handleChange = (field: string) => (e: ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => {
+      return {
+        ...prev,
+        [field]: e.target.value,
+      }
+    })
+  }
+
+  return (
+    <form>
+      <label>이름</label>
+      <input value={form.name} onChange={handleChange('name')}></input>
+      <label>나이</label>
+      <input value={form.age} onChange={handleChange('age')}></input>
+    </form>
+  )
+}
+```
+
+위 코드를 이벤트 버블링을 이용하면 하나의 이벤트핸들러로 대응이 가능할 수 있지 않을까라는 생각이 들어 이벤트 버블링을 이용해 봤다. 동작은 제대로 작동하지만 from 내부의 input 에 onChange 없이 사용하는 것은 rerender를 유발할 수 있다고 경고가 떳다. 해당 에러만 해결하면 하나의 이벤트 핸들러로 다 대응할 수 있을 것 같다.
+
+```tsx
+import { ChangeEvent, FormEvent, useState } from 'react'
+
+export const Test = () => {
+  const [form, setForm] = useState({
+    name: '',
+    age: '',
+  })
+
+  const handleChange = (e: ChangeEvent<HTMLFormElement>) => {
+    setForm((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      }
+    })
+  }
+
+  return (
+    <form onChange={handleChange}>
+      <label>이름</label>
+      <input name="name" value={form.name}></input>
+      <label>나이</label>
+      <input name="age" value={form.age}></input>
+    </form>
+  )
+}
+```
+
+🔗Reference
+
+[https://f-lab.kr/insight/understanding-currying-in-javascript](https://f-lab.kr/insight/understanding-currying-in-javascript)
+
+[자바스크립트에서 커링(Currying) 함수의 이해와 활용
+
+자바스크립트에서 커링 함수의 개념을 이해하고, 커링이 코드의 재사용성과 가독성을 어떻게 향상시키는지 알아봅니다.
+
+f-lab.kr](https://f-lab.kr/insight/understanding-currying-in-javascript)
+
+[https://ko.javascript.info/currying-partials](https://ko.javascript.info/currying-partials)
+
+[커링
+
+ko.javascript.info](https://ko.javascript.info/currying-partials)
