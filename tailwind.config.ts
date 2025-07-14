@@ -7,6 +7,7 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './component/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './posts/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   plugins: [require('tailwindcss-animated'), require('@tailwindcss/typography')],
   theme: {

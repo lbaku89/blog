@@ -1,24 +1,9 @@
 import fs from 'fs'
 import frontMatter from 'front-matter'
 import { sync } from 'glob'
+import { type FrontMatter, type Post } from '@/types/post'
 
-const POST_PATH = `${process.cwd()}/posts`
-
-interface FrontMatter {
-  title: string
-  description: string
-  date: string
-  published: boolean
-  tags: string[]
-}
-interface Post {
-  frontMatter: Omit<FrontMatter, 'date'> & {
-    date: Date
-  }
-  body: string
-  slug: string
-  path: string
-}
+const POST_ENTRY_PATH = `${process.cwd()}/posts`
 
 export async function getAllPosts(): Promise<Post[]> {
   /**
@@ -27,7 +12,7 @@ export async function getAllPosts(): Promise<Post[]> {
    * '/Users/user/code/blog/posts/2025/05/10/currying.mdx',
    * ]
    */
-  const files = sync(`${POST_PATH}/**/*.md*`).reverse()
+  const files = sync(`${POST_ENTRY_PATH}/**/*.md*`).reverse()
 
   const posts: Post[] = []
 
@@ -44,7 +29,7 @@ export async function getAllPosts(): Promise<Post[]> {
        * @example '2025/07/progress-bar'
        */
       const slug = path
-        .slice(POST_PATH.length + 1)
+        .slice(POST_ENTRY_PATH.length + 1)
         .replaceAll('.mdx', '')
         .replaceAll('.md', '')
 
@@ -87,7 +72,7 @@ export async function getAllPosts(): Promise<Post[]> {
  */
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   // 직접 파일 경로로 접근
-  const filePath = `${POST_PATH}/${slug}.mdx`
+  const filePath = `${POST_ENTRY_PATH}/${slug}.mdx`
 
   try {
     const file = fs.readFileSync(filePath, { encoding: 'utf8' })
