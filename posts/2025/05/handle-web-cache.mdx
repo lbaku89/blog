@@ -1,0 +1,103 @@
+---
+title: 'web cache 다루기'
+description: '웹 성능을 높이는 데 있어 HTTP 캐시 전략은 굉장히 중요하다.'
+date: '2025-05-02'
+tags: ['web', 'performance', 'cache']
+published: true
+---
+
+## 📌배경
+
+웹 성능을 높이는 데 있어 HTTP 캐시 전략은 굉장히 중요하다. 캐시를 잘못 설정하면 불필요한 요청이 발생하거나, 반대로 변경된 리소스를 사용하지 못해 사용자 경험을 해치는 일이 발생할 수 있다.
+
+## 📌캐시의 생명주기 
+
+HTTP 캐시 전략에서 핵심은 리소스의 유효 기간을 얼마나, 어떤 조건으로 설정할지를 결정하는 것이다. 대표적인 설정값은 다음과 같다.
+
+- max-age=`seconds`: 캐시 유효 시간, 이 시간 동안은 서버에 요청하지 않고 캐시 사용
+- no-cache: 캐시를 저장하지만, 사용할 때마다 서버에 재검증 요청을 보냄
+- no-store: 캐시를 저장하지 않음. 로그인 정보나 민감한 리소스에 적합함
+
+로컬에서 간단하게 express 서버로 \`./public/script.js\` 를 1시간 ( max-age=3600 ) 동안 캐시처리해 봤다. 
+
+```js
+// 정적 파일: 1시간 캐시 (3600초)
+app.use(
+  '/static',
+  express.static(path.join(__dirname, 'public'), {
+    setHeaders: (res, filePath) => {
+      res.setHeader('Cache-Control', 'public, max-age=3600')
+    },
+  })
+)
+```
+
+처음에 \`http://localhost:3000/static/script.js\`를 들어가면 \`http://localhost:3000/static/script.js\` 자원에 대한 response가 200이 뜨지만 F5를 눌러 네트워크탭에서 다시 해당 자원을 확인해보면 200 OK(디스크 캐시에서) 가 뜸을 확인할 수 있다. max-age=3600 으로 설정했기 때문에 1시간동안은 캐시를 이용한다.
+
+![max-age=3600 캐시 결과](1.webp)
+
+이번엔 max-age=3600 이 아닌 max-age=0으로 처리해봤다. 서버를 껏다가 킨 뒤 다시
+\`http://localhost:3000/static/script.js\` 로 접속한 뒤 F5를 눌러 리로드 했을 시 304 Not Modified가 나타난다. 이는
+요청한 자원을 검증해봤는데 달라진게 없기때문에 그대로 캐시를 이용한다는 의미이다. max-age=3600과 다르게 \`검증\` 단계를
+거쳤다는 것을 알 수 있다. max-age=0은 사실상 \`no-cache\`와 동일하다 
+
+![no-cache 캐시 결과](2.webp)
+
+이번엔 \`no-store\` 로 설정하고 같은 동작을 반복해보았다. \`no-store\`는 \`no-cache\`와 검증 조차 하지 않고 매 요청마다 리소스를직접 서버로 요청하고 이를 로드한다. 그러기에 304 not-modified 도 200 ok ( 디스크 캐시에서 ) 도 뜨지 않고 200 OK만 뜬다.  
+
+![no-store 캐시 결과](3.webp)
+
+## 📌캐시 이후의 동작: 재검증
+
+max-age 시간이 지난 후 브라우저는 서버에 재검증 요청을 보낸다. 이 때 조건부 요청 헤더인 If-None-Match (ETag 기반) 또는 If-Modified-Since (Last-Modified 기반)를 사용한다. 서버는 변경이 없으면 304 Not Modified 응답을 내려주어 빠르게 응답할 수 있다. 
+
+## 📌브라우저 vs CDN 캐시
+
+HTTP 캐시는 여러 레이어에 저장된다.
+
+- 브라우저 캐시: 사용자의 디바이스에 저장됨
+- CDN 캐시: 중간 서버가 응답을 저장함
+
+이중 CDN 캐시는 CDN Invalidation을 통해 지울 수 있지만, 브라우저 캐시는 제어가 어렵기 때문에 Cache-Control 설정이 훨씬 더 중요하다.
+
+## 📌캐시 전략 예시
+
+#### ➕HTML 파일
+
+HTML은 배포마다 변경 가능성이 높기 때문에 항상 최신 파일을 받아야 한다. 하지만 CDN에서는 캐시할 수 있도록 아래처럼 설정한다.
+
+```
+Cache-Control: max-age=0, s-maxage=31536000
+```
+
+- 브라우저는 항상 재검증 요청을 보냄
+- CDN은 1년 동안 캐시 유지, 배포 시 CDN Invalidation으로 새 THML 확보
+
+#### ➕JS/CSS파일
+
+빌드 시 해시가 붙은 고유 파일명을 사용하기 때문에, 변경 가능성이 없다고 가정하고 아래처럼 강하게 캐시한다.
+
+```
+Cache-Control: public, max-age=31536000
+```
+
+- 브라우저와 CDN 모두 1년 동안 캐시 사용 가능
+- 변경 시 URL이 바뀌므로 캐시 충돌 없음
+
+#### ➕정리
+
+캐시는 강력한 도구이지만, 설정이 잘못되면 오히려 문제를 일으킬 수 있다. 리소스의 특성에 맞게 Cache-Control 헤더를 조절하면, 성능도 높이고 비용도 줄일 수 있다. 
+
+- 변경 가능성이 높은 HTML은 짧은 캐시 + CDN 캐시 분리
+- 내용 고정된 JS/CSS는 긴 캐시 +URL 버저닝
+- no-cache vs no-store의 차이를 명확히 이해하기
+
+## 📌참고
+
+> [https://toss.tech/article/smart-web-service-cache](https://toss.tech/article/smart-web-service-cache)
+
+ [웹 서비스 캐시 똑똑하게 다루기
+
+웹 성능을 위해 꼭 필요한 캐시, 제대로 설정하기 쉽지 않습니다. 토스 프론트엔드 챕터에서 올바르게 캐시를 설정하기 위한 노하우를 공유합니다.
+
+toss.tech](https://toss.tech/article/smart-web-service-cache)
