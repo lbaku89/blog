@@ -1,8 +1,8 @@
-import type { MDXComponents } from 'mdx/types'
-import { ProgressBar, ProgressBar2, ProgressBar3 } from './component/ProgressBar'
+import { ProgressBar, ProgressBar2, ProgressBar3 } from '@/component/ProgressBar'
 
-export function useMDXComponents(components: MDXComponents): MDXComponents {
-  return {
-    ...components,
-  }
+export const mdxComponents = {
+  ProgressBar,
+  ProgressBar2,
+  ProgressBar3,
+  // 필요한 다른 컴포넌트들 추가 가능
 }
