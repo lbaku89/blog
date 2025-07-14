@@ -1,6 +1,6 @@
 import { getAllPosts, getPostBySlug } from '@/utils/post'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { mdxComponents } from '@/utils/mdx-components'
+import { mdxComponents } from '@/mdx-components'
 import { Badge } from '@/component/Badge'
 import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
@@ -80,6 +80,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
 export async function generateStaticParams() {
   const posts = await getAllPosts()
 
+  /**
+   * @example [
+   * { slug: ['2025', '05', 'test'] },
+   * { slug: ['2025', '07', 'progress-bar'] },
+   * ]
+   */
   return posts.map((post) => ({
     slug: post.slug.split('/'),
   }))
