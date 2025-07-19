@@ -26,7 +26,7 @@ export const Pagination = ({ currentPage, totalPages }: { currentPage: number; t
 
   return (
     <nav>
-      <ul className="pagination flex gap-2 justify-center mt-4 list-none items-center">
+      <ul className="pagination flex gap-2 justify-center list-none items-center">
         <li>
           <Link href={`/pages/1`} className={cn(STYLE)}>
             <ChevronDoubleLeftIcon className="size-[15px]" />
