@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  /* scroll 부드럽게 처리*/
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* 스크롤로 이동시 상방 마진 줌 */
+  scroll-margin-top: 100px; /* or 원하는 값 */
+}
+
 body {
   @apply bg-white  dark:bg-neutral-900;
   font-family: Arial, Helvetica, sans-serif;
@@ -67,4 +82,40 @@ pre {
 
 pre [data-line] {
   padding: 0 1rem;
+}
+
+/* 
+참고용!
+Breakpoint prefix	Minimum width	CSS
+sm	640px	@media (min-width: 640px) { ... }
+md	768px	@media (min-width: 768px) { ... }
+lg	1024px	@media (min-width: 1024px) { ... }
+xl	1280px	@media (min-width: 1280px) { ... }
+2xl	1536px	@media (min-width: 1536px) { ... }
+*/
+
+/* toc contents css 처리 */
+@layer components {
+  .toc-container {
+    @apply hidden lg:block p-[20px] min-w-[250px] sticky top-[150px];
+  }
+  nav.toc {
+    @apply bg-transparent text-[14px];
+  }
+  nav.toc ul {
+    @apply list-none list-inside  text-gray-700 dark:text-gray-300;
+  }
+  nav.toc .toc-level {
+    @apply ml-[10px];
+  }
+  nav.toc .toc-level.toc-level-1 {
+    @apply ml-[2px];
+  }
+  nav.toc li {
+    @apply list-none;
+  }
+  nav.toc li a {
+    @apply hover:text-blue-600 dark:hover:text-blue-400 inline-block py-[2px];
+    /* @apply border-b border-gray-200 dark:border-neutral-700; */
+  }
 }
