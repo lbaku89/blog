@@ -1,0 +1,60 @@
+---
+title: 'javaScript Floating Point Error(소수점 오차)'
+description: '자바스크립트 소수점 연산결과 오류가 생기는 이유는 소수를 2진수로 정확히 표현할 수 없기 때문이다.'
+date: '2025-04-06'
+tags: ['javascript']
+published: true
+---
+
+## 배경
+
+프론트엔드 개발을 하다 아래와 같은 경우를 볼 수 있다.
+
+<img src="floating-point-error-img1.webp" alt="floating point error" className="w-full" />
+
+분명히 0.1+0.2는 0.3이어야 되는데 0.3000000... 4 인 이유가 뭘까? 
+
+그 이유는 자바스크립트는 IEEE754 64비트 \`부동소수점\` 방식으로  저장 되기 때문이다
+
+## 💡자바스크립트의 숫자 표현방식
+
+자바스크립트에서 모든 숫자는 내부적으로 IEEE754 64비트 부동소수점 방식으로 저장된다. 이 방식은 어떤 수를 저장하기 위해 64비트를 쓰며 항상 수를  1.??? \* 2^n 형태로 인식하고 ???는 가수부, n부분은 지수부로 보고 각각 11비트, 52비트를 이용하여 표현한다. 추가로 1비트는 양수/음수를 구분하기 위해 사용한다.
+
+- 부호부: 1비트 사용, 양수/음수 구분 (0:양수, 1:음수)
+- 지수부: 11비트 사용, 2의 거듭제곱을 표현 ( 실제 계산 시 bias: 1023을 뺌)
+- 가수부: 52비트 사용, 유효 숫자.  \`1.xxx\` 형태의 \`xxx\`만 저장
+
+하단은 몇가지 10진수가 IEEE754 64비트에 어떻게 담기는지 보여준다.
+
+<img src="floating-point-error-img2.webp" alt="floating point error" className="w-full" />
+
+## 🤔왜 오차가 생길까?
+
+10진수 \`0.1\`, \`0.2\`, \`0.3\`은 사람에겐 간단하지만 2진수로 정확히 표현할 수 없다. 
+
+예를들어서 0.1과 0.2는 2진수로 표현하면 아래와 같이 무한소수가 된다
+
+> 0.1 -> 0.0001100110011....(무한반복)  
+> 0.2 -> 0.00110011001100....(무한반복)
+
+컴퓨터는 무한한 비트를 저장할 수 없기 때문에 중간에서 잘라서 반올림하고 이 과정에서 아주 미세한 오차가 발생하고 그결과 아래와 같은 현상이 발생한다. 이 반올림 되는 방식에 대해 궁금하면 round to nearest even 에 대해 알아보자
+
+> 0.1 + 0.2 === 0.30000000000000004 // 실질적인 결과  
+> 0.1 + 0.2 === 0.3 // false 임
+
+## ➕(참고)10진수 정수를 2진수로 바꾸는 방법
+
+10진수 정수를 2진수로 바꾸는 방법은 간단하다. 몫이 0 이 나올때 까지 계속 2로 나눈 뒤 이제 각 단계에서 나온 나머지값을 역순으로 읽으면 된다. 아래에서 10진수 수 20을 2진수로 표현한 결과 10100 임을 확인 할 수 있다.
+
+<img src="floating-point-error-img3.webp" alt="floating point error" className="max-w-[550px] mx-auto" />
+
+## ➕(참고)10진수 소수를 2진수로 바꾸는 방법
+
+10진수 소수를 2진수로 바꾸는 방법은 소수부분이 0이 될 때까지 2를 곱한 뒤 각 단계에서 발생하는 정수부분의 수를 순서대로 읽으면 된다. 아래에서 0.5는 2진수로 0.1, 0.25는 0.01, 0.1은 0.00011001100110011 ... 임을 알 수 있다.
+
+<img src="floating-point-error-img4.webp" alt="floating point error" className="max-w-[730px] mx-auto" />
+
+## reference
+
+- [https://en.wikipedia.org/wiki/Double-precision_floating-point_format](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
+- [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Number](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Number)
