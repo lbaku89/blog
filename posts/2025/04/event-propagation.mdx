@@ -1,0 +1,149 @@
+---
+title: 'Event Propagation (bubbling & capturing)'
+description: '이벤트 버블링, 캡처링에 대해 정리해보자'
+date: '2025-04-06'
+tags: ['javascript']
+published: true
+---
+
+## Event Bubbling
+
+프론트엔드 개발자라면 당연히 알아야 되는 개념 중 하나로 DOM 요소 중 하나에 특정 이벤트가 발생했을 때 해당 이벤트가 부모요소 쪽으로 계속 전파되는 현상을 의미한다. 해당 현상을 기본적으로 일어나는 현상 중 하나이며 버블링을 막기 위해선 별도의 작업이 필요하다 
+
+궁금해서 어디까지 전파될까 눈으로 확인해보고 싶어 아래와 같은 코드를 이용해서 확인해봤다. 버튼을 클릭 하고 콘솔창을 확인해보니 해당 클릭이벤트가 쭉쭉 올라가 document를 거쳐 window까지 전파 됨을 확인 할 수 있었다.
+
+```html
+// index.html
+
+<button id="btn">button</button>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('click', () => {
+      console.log('window clicked!')
+    })
+    window.document.addEventListener('click', () => {
+      console.log('document.clicked!')
+    })
+    document.getElementById('btn').addEventListener('click', (e) => {
+      console.log('btn clicked!')
+    })
+  })
+</script>
+```
+
+그렇다면 여기서 전파를 못하게 하려면 어떻게 해야할까? 간단하다 이벤트 전파가 멈추길 바라는 요소에 \`e.stopPropagation()\` 를 걸면된다. 이렇게 적용했을 버튼의 부모요소에는 click 이벤트가 전파되지 않는다.
+
+```js
+document.getElementById('btn').addEventListener('click', (e) => {
+  console.log('btn clicked!')
+  e.stopPropagation()
+})
+```
+
+대부분의 이벤트가 버블링이 일어나지만 일부 이벤트는 버블링이 일어나지 않는다. 그런 요소중에 대표적인데 \`focus\` 이벤트가 있고 그 외에도 \`blur\` \`mouseenter\` \`scroll\` \`resize\` 등이 있다. 아래 코드를 이용해서 눈으로 확인해 보았다. 버튼 클릭 시 console창에 btn focused만 뜸을 볼 수 있었다.
+
+```html
+<button id="btn">button</button>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('focus', () => {
+      console.log('window focused!')
+    })
+    window.document.addEventListener('focus', () => {
+      console.log('document focused!')
+    })
+    document.getElementById('btn').addEventListener('focus', (e) => {
+      console.log('btn focused!')
+    })
+  })
+</script>
+```
+
+이벤트 버블링을 이용하면 이벤트를 더욱 편하게 처리 할 수 있다. 아래 예시를 보자 버블링을 이용하지 않는다면 저장, 삭제, 수정, 공유 각 버튼에 이벤트 핸들러를 붙여야 된다. 너무 불편하다. 지금은 버튼이 4개여서 망정이지 더욱 더 늘어난다면 버블링 없이는 매우 불편할 것이다.
+
+```html
+<div id="container">
+  <button data-action="save">저장</button>
+  <button data-action="delete">삭제</button>
+  <button data-action="edit">수정</button>
+  <button data-action="share">공유</button>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('container')
+    container.addEventListener('click', (e) => {
+      const action = e.target.dataset.action
+      switch (action) {
+        case 'save':
+          console.log('저장')
+          break
+        case 'delete':
+          console.log('삭제')
+          break
+        case 'edit':
+          console.log('수정')
+          break
+        case 'share':
+          console.log('공유')
+          break
+      }
+    })
+  })
+</script>
+```
+
+## Event Capturing 
+
+이벤트 캡처링은 이벤트 버블링의 반대라고 생각하면 된다. 이벤트 버블링은 이벤트가 발생한 요소로부터 부모요소로 이벤트가 전파됨을 의미한다면 이벤트 캡처링은 부모요소에서 이벤트가 발생한 요소쪽으로 이벤트가 전달되는 것을 의미한다. 이게 어떻게 가능할까 ? 브라우저에서는 이벤트는 아래와 같은 3단계 흐름을 따른다. 
+
+1\. 캡처링 단계 
+
+    :  window -> document -> ... -> 이벤트 타겟으로 이벤트가 전달
+
+2\. 타겟 단계 
+
+    : 이벤트가 실제로 발생한 요소에 도달한 순간 
+
+3 버블링 단계 
+
+    : 이벤트 타겟 -> 부모 요소 -> ... -> window 
+
+보통 우리가 설정하는 이벤트 핸들러는 버블링 단계에 전파되는 이벤트에 반응하여 동작하기 때문에 위와 같은 과정은 생소할 수 있다. 캡처링 단계에서 전파되는 이벤트에 핸들러가 작동하게 하기 위해선 특별한 처리가 필요하다.
+
+특별한 처리는 바로 이벤트 핸들러 설정 시 \`capture: true\` 옵션을 거는 것이다. 아래와 같이 window, document, button에 캡처링 단계에 반응하는 이벤트 핸들러를 설정하고 버튼을 클릭하고 console 창을 확인하면 window clicked -> document clicked -> btn clicked! 순으로 나타난다. 
+
+```html
+<button id="btn">button</button>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener(
+      'click',
+      () => {
+        console.log('window clicked!')
+      },
+      { capture: true }
+    )
+    window.document.addEventListener(
+      'click',
+      () => {
+        console.log('document clicked!')
+      },
+      { capture: true }
+    )
+    document.getElementById('btn').addEventListener(
+      'click',
+      (e) => {
+        console.log('btn clicked!')
+      },
+      { capture: true }
+    )
+  })
+</script>
+```
+
+## Reference
+
+- [https://ko.javascript.info/bubbling-and-capturing](https://ko.javascript.info/bubbling-and-capturing)
