@@ -2,6 +2,10 @@ import fs from 'fs'
 import frontMatter from 'front-matter'
 import { sync } from 'glob'
 import { type FrontMatter, type Post } from '@/types/post'
+import { compile } from '@mdx-js/mdx'
+import rehypeToc from '@jsdevtools/rehype-toc'
+import rehypeStringify from 'rehype-stringify'
+import { toHtml } from 'hast-util-to-html'
 
 const POST_ENTRY_PATH = `${process.cwd()}/posts`
 
@@ -101,4 +105,19 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     // 파일이 없거나 에러 발생시 null 반환
     return null
   }
+}
+
+/** @description mdx 에서 table of contents 추출하는 함수 */
+export async function getTocFromMdx(source: string) {
+  let tocHtml = ''
+  const customizeTOC = (toc: any) => {
+    tocHtml = toHtml(toc)
+    return false
+  }
+
+  await compile(source, {
+    rehypePlugins: [[rehypeToc, { headings: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], customizeTOC }], rehypeStringify],
+  })
+
+  return { tocHtml }
 }
