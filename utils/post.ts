@@ -6,6 +6,7 @@ import { compile } from '@mdx-js/mdx'
 import rehypeToc from '@jsdevtools/rehype-toc'
 import rehypeStringify from 'rehype-stringify'
 import { toHtml } from 'hast-util-to-html'
+import rehypeSlug from 'rehype-slug'
 
 const POST_ENTRY_PATH = `${process.cwd()}/posts`
 
@@ -116,7 +117,7 @@ export async function getTocFromMdx(source: string) {
   }
 
   await compile(source, {
-    rehypePlugins: [[rehypeToc, { headings: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], customizeTOC }], rehypeStringify],
+    rehypePlugins: [rehypeSlug, [rehypeToc, { headings: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], customizeTOC }]],
   })
 
   return { tocHtml }
