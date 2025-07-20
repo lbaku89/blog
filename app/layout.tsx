@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'Hyunwoo Dev Blog',
     images: [
       {
-        url: '/avatar.png',
+        url: './opengraph-image.webp',
         width: 1200,
         height: 630,
         alt: 'Hyunwoo Blog OpenGraph Image',
