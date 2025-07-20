@@ -26,6 +26,14 @@ export const metadata: Metadata = {
     description: '프론트엔드 개발자의 기술 블로그',
     url: 'https://kwonhyunwoo.dev',
     siteName: 'Hyunwoo Dev Blog',
+    images: [
+      {
+        url: '/opengraph-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Hyunwoo Blog OpenGraph Image',
+      },
+    ],
     locale: 'ko_KR',
     type: 'website',
   },
