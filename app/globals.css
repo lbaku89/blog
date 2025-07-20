@@ -14,7 +14,7 @@ h4,
 h5,
 h6 {
   /* 스크롤로 이동시 상방 마진 줌 */
-  scroll-margin-top: 100px; /* or 원하는 값 */
+  scroll-margin-top: 50px; /* or 원하는 값 */
 }
 
 body {

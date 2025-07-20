@@ -34,7 +34,11 @@ app.use(
 
 처음에 \`http://localhost:3000/static/script.js\`를 들어가면 \`http://localhost:3000/static/script.js\` 자원에 대한 response가 200이 뜨지만 F5를 눌러 네트워크탭에서 다시 해당 자원을 확인해보면 200 OK(디스크 캐시에서) 가 뜸을 확인할 수 있다. max-age=3600 으로 설정했기 때문에 1시간동안은 캐시를 이용한다.
 
-![max-age=3600 캐시 결과](1.webp)
+{/* ![max-age=3600 캐시 결과](1.webp) */}
+
+<img src="/public/posts/2025/05/1.webp" className="w-[250px] max-w-none" />
+<img src="/posts/2025/05/1.webp" className="w-[250px] max-w-none" />
+<img src="posts/2025/05/1.webp" className="w-[250px] max-w-none" />
 
 이번엔 max-age=3600 이 아닌 max-age=0으로 처리해봤다. 서버를 껏다가 킨 뒤 다시
 \`http://localhost:3000/static/script.js\` 로 접속한 뒤 F5를 눌러 리로드 했을 시 304 Not Modified가 나타난다. 이는

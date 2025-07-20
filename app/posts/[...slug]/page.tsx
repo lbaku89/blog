@@ -6,8 +6,8 @@ import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
-import rehypeSanitize from 'rehype-sanitize'
-import rehypeStringify from 'rehype-stringify'
+// import rehypeSanitize from 'rehype-sanitize'
+// import rehypeStringify from 'rehype-stringify'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 
@@ -56,10 +56,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                 mdxOptions: {
                   remarkPlugins: [remarkGfm],
                   rehypePlugins: [
-                    /** @description prevent xss */
-                    rehypeSanitize,
-                    /** @description rehype tree 를 최종 html로 변환 */
-                    rehypeStringify,
                     [rehypePrettyCode, { theme: 'tokyo-night' }],
 
                     /** @description add id to heading tag */
