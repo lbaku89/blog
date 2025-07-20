@@ -15,7 +15,7 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Hyunwoo Dev Blog',
+  title: 'Hyunwoo',
   description: 'Frontend 개발, Next.js, React, 그리고 기술 성장 이야기',
   keywords: ['Next.js', 'React', 'Frontend', '기술 블로그', 'Hyunwoo'],
   authors: [{ name: 'Hyunwoo Kwon', url: 'https://kwonhyunwoo.dev' }],

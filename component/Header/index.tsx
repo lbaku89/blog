@@ -7,7 +7,7 @@ export const Header = () => {
     <header className="flex justify-between items-center py-6 bg-transparent">
       <Link href="/" className="flex justify-start  items-center gap-2">
         <Image src="/avatar.webp" alt="권현우의 프로필 사진" width={40} height={40} className="rounded-full" />
-        <h3 className="inline-block text-[16px]">hyunu</h3>
+        <h3 className="inline-block text-[16px]">Hyunwoo</h3>
       </Link>
       <div className="flex gap-10">
         <nav className="flex gap-4 justify-between">
