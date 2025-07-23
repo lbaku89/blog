@@ -119,3 +119,19 @@ xl	1280px	@media (min-width: 1280px) { ... }
     /* @apply border-b border-gray-200 dark:border-neutral-700; */
   }
 }
+
+/* inline code block style */
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  display: none;
+}
+
+/* inline code block style */
+.prose :not(pre) > code {
+  background: rgba(135, 131, 120, 0.15) !important;
+  padding: 0.2em 0.4em !important;
+  line-height: normal;
+  margin-right: 0.2em !important;
+  display: inline-block !important;
+  @apply text-blue-500 dark:text-blue-400 rounded text-[85%] align-middle;
+}
