@@ -1,0 +1,112 @@
+---
+title: 'Business logic 분리하기'
+description: 'Business logic 어떻게 분리할까?'
+date: '2023-11-23'
+tags: ['react']
+published: true
+---
+
+## **비즈니스 로직 어떻게 분리할까?!**
+
+​
+리액트 컴포넌트에서 왜 비즈니스 로직을 분리하는지
+​
+그리고 분리를 하면 어떻게 하는지 예시를 통해 알아보려고 한다.
+​
+
+### **비즈니스 로직은 왜 분리할까!?**
+
+​
+비즈니스 로직을 왜 분리할까를 생각해보았다.. 생각하자 마자 떠오른 말은 관심사의 분리였다. 우리는 렌더링되는 ui와 비즈니스 로직(어떤 로직을 통해 ui가 바뀌고 렌더링 되는지)을 분리함으로써 코드의 유지보수 및 가독성이 올라간다! 실제로 여러 글을 참고하니 코드의 유지보수성과 가독성 이야기가 꼭 나와 있었다.
+​
+
+### **코드를 통해 알아보자**
+
+```jsx
+const Example = () => {
+  const [count,setCount] =useState(0)
+  const delayCount =() =>{
+    setTimeout(() => {
+      setCount((prev)=>prev+1)
+    }, 2000); // 2초 뒤 count 1 증가
+  }
+​
+  return (
+    <div>
+      <button onClick={delayCount}>Button</button> // 버튼
+      <p>클릭 횟수{count}</p>
+    </div>
+  )
+}
+```
+
+​
+버튼을 클릭하면 2초 딜레이 후 count가 1 증가하는 코드가 있다.
+​
+**hook을 통해 로직을 분리하지 않고 로직과 ui가 모두 컴포넌트 내에 함께 노출 되어 있다.**
+​
+그래서 로직을 완전히 분리해 보았다.
+​
+
+```jsx
+// custom hook
+const useTimer = () => {
+  const [count,setCount] =useState(0)
+  const delayCount =() =>{
+    setTimeout(() => {
+      setCount((prev)=>prev+1)
+    }, 2000);
+  }
+  return [count,delayCount]
+}
+
+​
+const Example = () => {
+  const [count,delayCount] = useTimer() // 로직을 완전히 분리
+  return (
+    <div>
+      <button onClick={delayCount}>Button</button> // 버튼
+      <p>클릭 횟수{count}</p>
+    </div>
+  )
+}
+```
+
+Example component를 보면 알 수 있듯이 로직을 완전 히 분리하면 위와 같이 컴포넌트 내부가 엄청 짧아진다. 하지만 여기서 문제가 발생한다. useTimer 내부의 로직을 거의 파악할 수 없게 된다. ( 딜레이가 몇초 동안 진행되는지, 초기 count 값은 얼마인지 와 같은 요소 들 )
+​
+이러면 우리는 useTimer 내부를 또 들여다 봐야하는 수고로움이 발생하고 이건 개발 리소스의 낭비이다.
+​
+충분히 로직을 파악할 수 있게 비즈니스 로직을 분리 할 수 있기 때문이다.
+​
+
+```jsx
+// custom hook
+const useTimer = ({ initialCount, delayTime }) => {
+  const [count, setCount] = useState(initialCount)
+  const delayCount = () => {
+    setTimeout(() => {
+      setCount((prev) => prev + 1)
+    }, delayTime)
+  }
+  return [count, delayCount]
+}
+
+const Example = () => {
+  const [count, delayCount] = useTimer({ initialCount: 0, delayTime: 2000 })
+  return (
+    <div>
+      <button onClick={delayCount}>Button</button> // button
+      <p>클릭 횟수{count}</p>
+    </div>
+  )
+}
+```
+
+​
+위 코드를 보면 이전 코드와는 다르게 커스텀훅에 파라미터를 전달하는 것을 확인 할 수 있다. 이 파라미터 들을 통해 우리는 count의 초기값이 뭔지 딜레이 시간은 얼마인지를 확인하게 되고 로직을 파악할 수 있게 된다. 전 코드와 확연한 차이가 있는 것이다. 이러면 useTimer 훅을 한번 더 볼 확률이 현저히 떨어지게 되며 가독성과 유지보수성 모두 잡을 수 있게 된다.
+​
+위 일련의 코드 변화를 통해 우리는 알 수 있다.
+​
+**핵심은 관심사의 분리를 하되 비즈니스 로직을 파악할 수 있도록 커스텀 훅을 활용하는 방법이 비즈니스 로직 분리의 핵심 이라는 것을!**
+​
+실제로 활용해 직접 코드를 작성하면 비즈니스 로직의 분리의 효과를 충분히 체감 할 수 있을 것이다.
