@@ -1,0 +1,90 @@
+---
+title: 'Stacking Context (쌓임 맥락)'
+description: 'z-index와 관련된 쌓임 맥락 정리하기'
+date: '2025-03-29'
+tags: ['dom', 'css', 'web']
+published: true
+---
+
+## Stacking Context ( 쌓임 맥락 ) 이해하기
+
+웹 개발을 하다 보면, 분명 \`z-index\`를 올렸는데도 요소가 가려지는 경우가 있다. "왜 애가 위에 안올라가지?" 이럴 때 등장하는 개념이 바로 **Stacking Context ( 쌓임 맥락 )** 이다.
+
+## 쌓임 맥락이란?
+
+쌓임 맥락은 브라우저가 요소들의 **쌓는 순서를 관리하는 독립적인 영역이다.** 같은 맥락에 있는 요소들끼리는 \`z-index\`로 순서를 조절할 수 있지만, **다른 쌓임 맥락에 있는 요소들은 서로 영향을 주지 못한다.**
+
+## 쌓임 맥락이 만들어지는 조건 
+
+쌓임 맥락은, 문서 어디에서나, 다음 조건을 만족하는 요소가 생성한다. 
+
+- 문서의 루트 요소. (html )
+- \`position\`이 \`absolute\`또는 \`relative\`이고 \`z-index\`가 \`auto\`가 아닌 요소
+- \`position\`이 \`fixed\` 또는 \`sticky\`인 요소. ( \`sticky\`는 모든 모바일 브라우저에서는 해당하지만 구형 데스크톱 브라우저에서는 해당하지 않음 )
+- container queries를 위한  \`container-type\` 이 \`size\` 또는 \`inline-size\`인 요소.
+- 플렉스 (\`flexbox\`) 컨테이너의 자식 중 \`z-index\`가 \`auto\`가 아닌 요소
+- 그리드 ( \`grid\` )  컨테이너의 자식 중 \`z-index\`가 \`auto\`가 아닌 요소
+- \`opacity\`가 1보다 작은 요소. 
+- \`mix-blend-mode\`가 \`normal\`이 아닌 요소
+- 다음 속성 중 하나라도 \`none\`이 아닌 값을 가진 요소.
+  - \`transform\`
+  - \`filter\`
+  - \`backdrop-filter\`
+  - \`perspective\`
+  - \`clip-path\`
+  - \`mask\` / \`mask-image\` / \`mask-border\`
+- \`isolation\`이 \`isolate\`인 요소
+- \`will-change\`의 값으로, 초깃값이 아닐 때 새로운 쌓임 맥락을 생성하는 속성을 지정한 요소.
+- \`contain\`이 \`layout\`, \`paint\`, 또는 둘 중 하나를 포함하는 값 (\`strict\`, \`content\` 등 ) 인 요소
+- top layer에 배치된 요소와 이에 상응하는 \`::backdrop\`
+
+> 위 조건을 보면 알겠지만 stacking context가 생성되는 조건이 굉장히 많다. 사실 작업하다보면 아래 세 조건을 주로 고려하게 되는 것 같다.  
+> \- 문서의 루트 요소. (html)   
+> \- \`position\`이 \`absolute\`또는 \`relative\`이고 \`z-index\`가 \`auto\`가 아닌 요소  
+> \- \`position\`이 \`fixed\` 또는 \`sticky\`인 요소. ( \`sticky\`는 모든 모바일 브라우저에서는 해당하지만 구형 데스크톱 브라우저에서는 해당하지 않음 )
+
+## 이해를 돕기 위한 예시
+
+<img src="stacking-context-1.webp" alt="Stacking Context Example" />
+mdn에 나와 있는 예시이며 각각 요소의 html에서 위치는 아래와 같다.
+
+- 루트(html)
+  - DIV #1
+  - DIV #2
+  - DIV #3
+    - DIV #4
+    - DIV #5
+    - DIV #6
+
+위 스크린샷에서 Element#4 의 z-index: 6 이지만 Element#1보다 z축상 아래 위치하는 것을 알 수 있다. 이는 Element#4가 속해있는 쌓임 맥락을 형성하는 Element#3가 html이 형성하는 쌓임맥락 상에서 Element#1보다 나즌 곳에 위치하기 때문이다. 즉 z-index는 같은 쌓임 맥락에서만 유효하다는 의미이다. 
+
+## 하나의 쌓임맥락 내에서 각 자식 요소들이 z-index 설정이 안되어 있을 경우
+
+만약 모든 엘리먼트들에 z-index가 지정되지 않았을 경우에는 엘리먼트들이 다음 순서로 아래에서부터 위로 쌓인다.
+
+1.  뿌리 엘리먼트의 배경과 테두리
+2.  자식 엘리먼트들은 HTML에서 등장하는 순서대로
+3.  position이 지정된 자식 엘리먼트들은 HTML에서 등장하는 순서대로 ( postion: static은 position이 지정됐다고 보지 않음 )
+
+## 예시
+
+<img src="stacking-context-2.webp" alt="Stacking Context Example" />
+
+mdn에 나와 있는 예시로 위 각 요소들의 html은 아래와 같다. div#1 ~ div#5 까지 순서대로 html 에 나오며 각 div들은 z-index가 별도로 설정되지 않았기에 html에 등장하는 순서대로 쌓인다. 하지만 div#5의 경우 position이 따로 설정되지 않았기에 ( static ) 포지션이 설정된 div#1~div#4보다 아래에 나타난다. 
+
+```html
+<div id="abs1" class="absolute"><strong>DIV #1</strong><br />position: absolute;</div>
+<div id="rel1" class="relative"><strong>DIV #2</strong><br />position: relative;</div>
+<div id="rel2" class="relative"><strong>DIV #3</strong><br />position: relative;</div>
+<div id="abs2" class="absolute"><strong>DIV #4</strong><br />position: absolute;</div>
+<div id="sta1" class="static"><strong>DIV #5</strong><br />position: static;</div>
+```
+
+## 추가설명
+
+쌓임 맥락에 따른 높낮이는 브라우저 렌더링과정 중 composite단계에서 반영된다
+
+## 참고
+
+- [https://developer.mozilla.org/ko/docs/Web/CSS/CSS_positioned_layout/Stacking_without_z-index](https://developer.mozilla.org/ko/docs/Web/CSS/CSS_positioned_layout/Stacking_without_z-index)
+- [https://developer.mozilla.org/ko/docs/Web/CSS/CSS_positioned_layout/Stacking_context](https://developer.mozilla.org/ko/docs/Web/CSS/CSS_positioned_layout/Stacking_context)
