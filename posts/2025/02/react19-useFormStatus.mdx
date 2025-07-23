@@ -1,0 +1,180 @@
+---
+title: 'React 19 useFormStatus'
+description: 'React 19 useFormStatus 살펴보기'
+date: '2025-02-26'
+tags: ['react19', 'react']
+published: true
+---
+
+## 🧩배경
+
+​
+react19 에 도입된 새로운 hook \`useFormStatus\` 학습
+​
+
+## 🧩useFormStatus
+
+​
+\`useFormStatus\`는 마지막 폼 제출 정보의 상태를 알려주는 hook 이다.
+​
+
+```jsx
+const { pending, data, method, action } = useFormStatus()
+```
+
+​
+와 같이 사용 한다.
+​
+
+## 🧩레퍼런스
+
+​
+아래는 사용 예시이다. 아래 보면 \`Submit()\` 컴포넌트 내부에서 \`useFormStatus()\` 가 사용되었고 그 \`Submit()\`컴포넌트는 form 태그 내부 배치되어 있다. 이처럼 useFormStatus를 사용하기 위해서는 form태그 내부에서 해당 코드가 존재해야 한다.
+​
+
+```jsx
+import { useFormStatus } from "react-dom";
+import action from './actions';
+​
+function Submit() {
+  const status = useFormStatus();
+  return <button disabled={status.pending}>Submit</button>
+}
+​
+export default function App() {
+  return (
+    <form action={action}>
+      <Submit />
+    </form>
+  );
+}
+```
+
+위 코드에서 form이 제출되는 동안 status.pending은 true가 되고 제출이 끝나면 false가 될 것이다. 개발자가 별도의 pending 상태를 state로 설정하는 것 없이 해당기능을 바로 사용할 수 있어서 매우 편해보인다.
+
+## 🧩파라미터
+
+위 예시코드에서 보았듯이 \`useFormStatus\`는 별도로 받는 파라미터가 존재하지 않는다. 요구 조건은 `form` 태그 내부에서의 호출 빼곤 없어보인다.
+
+## 🧩리턴값
+
+- pending : \`boolean\` type으로 true일 경우 parent `form`이 제출중인 상태이고 그 반대일 경우 false 이다.
+- data : [FormData](https://developer.mozilla.org/ko/docs/Web/API/FormData) 객체 형태로 parent `form`이 제출한 data를 포함하고 있다. 제출되지 않았거나 parent `form`이 없으면 \`null\` 로 대체된다.
+- method: \`string\` 타입으로 말그대로 get 아니면 post이다. submit 이 get 형태로 제출됐는지 post 형태로 제출됐는지 알 수 있으며 별도 설정이 없으면 디폴트로 설정된 get으로 나타날 것이다.
+- action: parent `form`에 전달된 action 속성을 나타낸다. 대신 parent `form`이 존재하지 않으면 \`null\` 값으로 대체된다. 그리고 action props에 url가 직접 전달되거나 아예 전달되는 것이 없으면 \`null\`값으로 대체된다. 이 외에는 action props에 전달된 함수가 action의 값으로 return 될 것이다.
+  ​
+
+## 🧩주의사항
+
+- \`useFormStatus\` Hook은 form 태그 내부에서 렌더되는 컴포넌트 내부에서 호출되어야 된다
+- \`useFromStatus\` 는 오로지 부모 form 태그를 위한 정보만을 return 한다. 같은 컴포넌트 내부에서 렌더되는 다른 form에 대한 정보는 리턴하지 않는다. ( 자식 컴포넌트 또한 마찬가지 )
+  ​
+
+## 🧩주의사항 예시 코드
+
+#### \`useFormStatus\` 는 같은 컴포넌트에서 렌더되는 form에 대한 정보 status를 return 하지 않는다.
+
+​
+\`useFormStatus\` Hook은 오직 parent form에 대한 정보 status만을 return 한다. 같은 컴포넌트 내부에서 render 되는 form에 대한 status는 return 하지 않는다.
+​
+
+```jsx
+function Form() {
+  // 🚩 `pending` will never be true
+  // useFormStatus does not track the form rendered in this component
+  const { pending } = useFormStatus()
+  return <form action={submit}></form>
+}
+```
+
+​
+위와 같이 사용하면 안되고 form 태그 내부에 존재하는 컴포넌트 내부에서 \`useFormStatus\`를 호출해야 한다. (아래 예시)
+​
+
+```jsx
+function Submit() {
+  // ✅ `pending` will be derived from the form that wraps the Submit component
+  const { pending } = useFormStatus();
+  return <button disabled={pending}>...</button>;
+}
+​
+function Form() {
+  // This is the <form> `useFormStatus` tracks
+  return (
+    <form action={submit}>
+      <Submit />
+    </form>
+  );
+}
+```
+
+## 🧩제출한 폼 데이터 읽기
+
+제출한 폼의 데이터를 알기 위해 우리는 \`useFromStatus\`에 의해 return 되는 값 중 \`data\`를 이용할 수 있다. 아래 예시는 사용자가 제출한 이름을 알 수 있도록 화면에 보여주는 예시이다.
+​
+
+```jsx
+// App.js
+import UsernameForm from './UsernameForm';
+import { submitForm } from "./actions.js";
+import {useRef} from 'react';
+​
+export default function App() {
+  const ref = useRef(null);
+  return (
+    <form ref={ref} action={async (formData) => {
+      await submitForm(formData);
+      ref.current.reset();
+    }}>
+      <UsernameForm />
+    </form>
+  );
+}
+```
+
+​
+위 코드에서 보면 알 수 있듯이 form 태그로 감싸져 있다. ( \`useFormStatus\`를 사용하기 위해 )
+​
+
+```jsx
+// UsernameForm.js
+import {useState, useMemo, useRef} from 'react';
+import {useFormStatus} from 'react-dom';
+​
+export default function UsernameForm() {
+  const {pending, data} = useFormStatus();
+​
+  return (
+    <div>
+      <h3>Request a Username: </h3>
+      <input type="text" name="username" disabled={pending}/>
+      <button type="submit" disabled={pending}>
+        Submit
+      </button>
+      <br />
+      <p>{data ? `Requesting ${data?.get("username")}...`: ''}</p>
+    </div>
+  );
+}
+```
+
+​
+\`UsernameForm\` 컴포넌트 내부에서 \`useFormStatus\`가 호출된다. 사용자가 submit 버튼을 클릭시 사용자가 input에 입력한 값은 FormData 객체에 name : '입력값\` 형태로 담기며 제출 될 것이다. 동시에 해당 FormData 객체정보는 \`useFormStatus\`를 통해 return 되는 값중 \`data\`로 접근 가능하다. 이 \`data\`를 이용하여 입력값을 화면에 출력 할 수 있다.
+​
+
+## ➕후기
+
+​
+공식문서를 쭉읽으면서 새로운 hook에 대해 파악해봤는데 19를 사용하게 되면 굉장히 편하게 이용할 수 있겠다는 생각이 들었다. 19의 다른 hook \`useActionState\`를 좀 자세히 공부하고 활용해봐서 그런지 쉽게 이해되고 눈에 잘 들어왔다.
+​
+
+## ⭐참고
+
+​
+[https://react.dev/reference/react-dom/hooks/useFormStatus](https://react.dev/reference/react-dom/hooks/useFormStatus)
+​
+[useFormStatus – React
+​
+The library for web and native user interfaces
+​
+react.dev](https://react.dev/reference/react-dom/hooks/useFormStatus)
