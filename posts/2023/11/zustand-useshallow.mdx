@@ -1,0 +1,130 @@
+---
+title: 'zustand useShallow 언제쓸까?'
+description: 'zustand의 useShallow는 불필요한 리렌더링을 방지하는 데 도움을 줍니다.'
+date: '2023-11-19'
+tags: ['javascript', 'zustand', 'react']
+published: true
+---
+
+## 기본적인 Store 사용
+
+```jsx
+import { create } from 'zustand'
+
+// store 생성
+const useStore = create((set) => ({
+  a: 'a',
+  b: 'b',
+  c: 'c',
+  d: 'd',
+}))
+
+const Coponent = () => {
+  // a,b,c,d state 구독
+  const a = useStore((state) => state.a)
+  const b = useStore((state) => state.b)
+  const c = useStore((state) => state.c)
+  const d = useStore((state) => state.d)
+
+  return (
+    <>
+      <p>a:{a} </p>
+      <p>b:{b} </p>
+      <p>c:{c} </p>
+      <p>d:{d} </p>
+    </>
+  )
+}
+```
+
+Zustand를 사용할 때 store의 여러 state를 구독 할때 위 코드내 13~16번째 줄 처럼같이 일일히 하나씩 받아옵니다. 하지만 만 뭔가 좀 무식해 보이지 않나요?
+
+## useShallow를 이용한 store 구독
+
+```jsx
+// a,b,c,d state 구독
+const [a, b, c, d] = useStore((state) => [state.a, state.b, sate.c, state.d])
+```
+
+그래서 위와 같이 한번에 가져 올 수 있습니다. 하지만 이렇게 한번에 가져올 시 문제가 생깁니다. 어떤 문제가 생기냐면 다른 컴포넌트에서 위와 같은 방식으로 여러 state를 구독했을 시 불필요한 리렌더링이 발 생 할 수 있습니다. 
+
+```jsx
+import { useEffect } from 'react'
+import { create } from 'zustand'
+
+const useStore = create((set) => ({
+  a: 'a',
+  b: 'b',
+  c: 'c',
+  setA: () => set((state) => ({ a: state.a })),
+}))
+
+export const Parent = () => {
+  return (
+    <>
+      <Child1></Child1>
+      <Child2></Child2>
+    </>
+  )
+}
+
+const Child1 = () => {
+  const [a, setA] = useStore((state) => [state.a, state.setA])
+  useEffect(() => {
+    console.log('<Child1> 렌더링')
+  })
+  return (
+    <button
+      onClick={() => {
+        console.log('버튼클릭됨')
+        setA()
+      }}
+    >
+      child1
+    </button>
+  ) // 버튼 클릭시
+}
+
+const Child2 = () => {
+  const [b, c] = useStore((state) => [state.b, state.c])
+  useEffect(() => {
+    console.log('<Child2> 렌더링')
+  })
+  return <p>child2</p>
+}
+```
+
+위 코드의 Child1 컴포넌트 내부에 button을 클릭시 store의 state 값 a가 변경됩니다. 그래서 a를 구독하고 있는 Child1 컴포넌트만 렌더링 될 것으로 예상되지만 실제로는 a를 구독하고 있지 않은 Child2의 컴포넌트도 렌더링이 됩니다. 이상하죠? 공식문서에서는 불필요한 리렌더링을 막기 위해 useShallow를 쓰라고 권장합니다. 
+
+```jsx
+import { useShallow } from 'zustand/react/shallow'
+...
+
+const Child1 = () => {
+  // useShallow로 감쌈
+  const [a, setA] = useStore(useShallow((state) => [state.a, state.setA]))
+    useEffect(()=>{
+        console.log("<Child1> 렌더링");
+    })
+    return(<button onClick={()=>{
+        console.log("버튼클릭됨");
+        setA()
+    }}>child1</button>) // 버튼 클릭시
+}
+
+const Child2 = ()=>{
+	// useShallow로 감쌈
+    const [b,c] = useStore(useShallow((state)=>([state.b,state.c])))
+    useEffect(()=>{
+        console.log("<Child2> 렌더링");
+    })
+    return(<p>child2</p>)
+}
+```
+
+요렇게 state를 가져올 때 useShallow로 가져 올 시 구독하지 않은 state가 변하지 않을 경우 재렌더링은 일어나지 않습니다. 물론 맨위에서 일일히 state를 가져오는 방법을 사용할 시 굳이 useShallow는 사용하지 않아도 리렌더링 문제는 발생하지 않습니다. 
+
+## 참고
+
+- [https://github.com/pmndrs/zustand](https://github.com/pmndrs/zustand)
+- [https://zustand-demo.pmnd.rs/](https://zustand-demo.pmnd.rs/)
