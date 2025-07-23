@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             </div>
           </div>
           {/* 포스팅 내용 */}
-          <div className="prose dark:prose-invert max-w-none p-2">
+          <div className="prose dark:prose-invert max-w-none p-2 post-wrapper">
             <MDXRemote
               source={currentPost.body}
               components={mdxComponents}
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         {/* toc영역 */}
         <div>
           <div className="toc-container">
-            <h4 className="mb-[10px] text-gray-900 dark:text-gray-100">Table of Content</h4>
+            <h3 className="mb-[10px] text-gray-900 dark:text-gray-100">Table of Content</h3>
             <div dangerouslySetInnerHTML={{ __html: tocHtml }} />
           </div>
         </div>
