@@ -1,7 +1,7 @@
 import { EnvelopeIcon } from '@heroicons/react/24/solid'
 export const Footer = () => {
   return (
-    <footer className="flex flex-col items-center gap-3 p-6 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+    <footer className="flex flex-col items-center gap-3 p-6 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 w-full">
       <p>© {new Date().getFullYear()} My Blog. All rights reserved.</p>
       <div className="flex gap-4">
         <a href="https://github.com/lbaku89" target="_blank">

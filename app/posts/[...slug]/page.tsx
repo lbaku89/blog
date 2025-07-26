@@ -47,6 +47,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
               </ul>
             </div>
           </div>
+          {/* upper toc */}
+          <div className="bg-gray-100 dark:bg-neutral-800 p-6 rounded-md mb-4 mt-10 2xl:hidden">
+            <div className="top-toc-container">
+              <h4 className="mb-[10px] text-gray-900 dark:text-neutral-400 ">목차</h4>
+              <hr className="mb-2 border-gray-300 dark:border-gray-600" />
+              <div className="dark:text-neutral-400 p-2" dangerouslySetInnerHTML={{ __html: tocHtml }} />
+            </div>
+          </div>
           {/* 포스팅 내용 */}
           <div className="prose dark:prose-invert max-w-none p-2 post-wrapper pt-[30px]">
             <MDXRemote
@@ -75,14 +83,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             />
           </div>
         </div>
-        {/* toc영역 */}
-        <div>
-          <div className="toc-container">
-            <h3 className="mb-[10px] text-gray-900 dark:text-gray-100">Table of Content</h3>
-            <div dangerouslySetInnerHTML={{ __html: tocHtml }} />
+        <div className="pl-4">
+          <div className="toc-container hidden 2xl:block">
+            <h3 className="mb-[10px] text-neutral-500 dark:text-neutral-400 ">Table of Content</h3>
+            <div className="dark:text-neutral-200" dangerouslySetInnerHTML={{ __html: tocHtml }} />
           </div>
         </div>
-        {/* </div> */}
       </div>
     </article>
   )

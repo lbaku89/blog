@@ -6,7 +6,7 @@ export const PostCard = ({ post }: { post: Post }) => {
   return (
     <article
       className="border border-gray-200 dark:border-gray-500 p-4 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 
-      hover:scale-105 transition-transform duration-200 ease-in-out"
+       transition-transform duration-200 ease-in-out"
       key={post.frontMatter.title}
     >
       <li>

@@ -97,7 +97,7 @@ xl	1280px	@media (min-width: 1280px) { ... }
 /* toc contents css 처리 */
 @layer components {
   .toc-container {
-    @apply hidden lg:block p-[20px] min-w-[250px] sticky top-[150px];
+    @apply hidden lg:block p-[20px] w-[250px] sticky top-[150px];
   }
   nav.toc {
     @apply bg-transparent text-[14px];
