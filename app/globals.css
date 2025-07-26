@@ -135,3 +135,13 @@ xl	1280px	@media (min-width: 1280px) { ... }
   display: inline-block !important;
   @apply text-blue-500 dark:text-blue-400 rounded text-[85%] align-middle;
 }
+
+.post-wrapper.prose h1 a {
+  font-weight: 800;
+}
+.post-wrapper.prose h2 a {
+  font-weight: 700;
+}
+.post-wrapper.prose h3 a {
+  font-weight: 600;
+}

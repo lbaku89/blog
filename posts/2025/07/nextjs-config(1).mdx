@@ -1,0 +1,113 @@
+---
+title: 'Nextjs Config (1)'
+description: 'Nextjs assetPrefix, basePath 설정'
+date: '2025-07-26'
+tags: ['nextjs', 'config']
+published: true
+---
+
+# Nextjs Config - assetPrefix
+
+> Vercel에서 Next.js 를 배포하면 프로젝트에 대한 글로벌 CDN이 자동으로 구성된다. 자산 프리픽스를 수동으로 설정할 필요가 없다.
+
+> "Good to know: Next.js 9.5+ added support for customizable `BasePath`, which is better suited for hosting your application on a sub-path like `/docs`. we do not suggest you use a custom Asset Prefix for this use case."
+> "sub path에 어플리케이션 배포하기 위해 assetPrefix를 사용하는 경우라면 basePath를 설정하는 걸 권장한다는 의미이다."
+
+CDN(콘텐츠 전송 네트워크)을 설정하려면 자산 프리픽스를 설정하고 CDN의 오리진을 Next.js가 호스팅되는 도메인으로 해결하도록 구성할 수 있다.
+
+```js
+const isProd = process.env.NODE_ENV === 'production'
+
+module.exports = {
+  // 배포시에만 cdn사용
+  assetPrefix: isProd ? 'https://cdn.example.com' : '',
+}
+```
+
+Next.js는 `/_next/` 경로 (`.next/static/` 폴더) 에서 로드되는 JavaScript 및 CSS 파일에 대해 자동으로 자산 프리픽스를 사용한다. 예를 들어, 위의 구성으로 JS 청크에 대한 다음 요청은:
+
+```
+/_next/static/chunks/4b9b41aaa062cbbfeff4add70f256968c51ece5d.4d708494b3aed70c04f0.js
+```
+
+대신 다음과 같이 된다.
+
+```
+https://cdn.mydomain.com/_next/static/chunks/4b9b41aaa062cbbfeff4add70f256968c51ece5d.4d708494b3aed70c04f0.js
+```
+
+특정 CDN에 파일을 업로드하는 정확한 구성은 선택한 CDN에 따라 다르다.
+CDN에 호스팅해야 하는 유일한 폴더는 `.next/static/`의 내용이며, 위의 URL 요청에서 나타내는 대로 `/_next/static/` 으로 업로드해야 한다.
+.next/폴더의 나머지 부분을 업로드하면 안된다. 서버 코드 및 기타 구성을 공개적으로 노출하게 되기 때문이다.
+
+`assetPreifx`는 `_next/static/` 에 대한 요청을 처리하지만 다음 경로에는 영향을 미치지 않는다.
+
+- 루트 디렉토리의 [public](https://nextjs-ko.org/docs/app/building-your-application/optimizing/static-assets) 폴더의 파일; 이러한 자산을 CDN에을 통해 제공하려면 프리픽스를 직접 도입해야 한다.
+
+# Nextjs Config - basePath
+
+Nextjs 애플리케이션을 도메인의 하위 경로에 배포하려면 `basePath` 구성 옵션을 사용할 수 있다.
+`basePath`를 사용하면 애플리케이션에 대한 경로 접두사를 설정 할 수 있다. 예를 들어, 기본값인 `''` (빈 문자열) 대신 `/docs` 를 사용하려면 `next.config.js`를 열고 열고 `basePath`를 다음과 같이 설정하면 된다.
+
+```js
+// next.config.js
+module.exports = {
+  basePath: '/docs',
+}
+```
+
+> 이 값은 빌드 시에 설정해야 하며 클라이언트 측 번들에 인라인으로 포함되기 때문에 다시 빌드하지 않고는 변경 할 수 없다.
+
+## Link (링크)
+
+`next/link` 및 `next/router`를 사용하여 다른 페이지에 링크할 때 `basePath`가 자동으로 적용된다.
+예를 들어, `/about` 을 사용하면 `basePath`가 `/docs`로 설정된 경우 '/docs/about'로 변환된다.
+
+```jsx
+import Link from 'next/link'
+
+export default function Home() {
+  return (
+    <div>
+      <h1>Welcome to My Docs</h1>
+      <Link href="/about">About</Link>
+    </div>
+  )
+}
+```
+
+출력 HTML:
+
+```html
+<a href="/docs/about">About</a>
+```
+
+이렇게 하면 `basePath`값을 변경할 때 애플리케이션의 모든 링크를 변경할 필요가 없다.
+
+## Image (이미지)
+
+`next/image` 컴포넌트를 사용할 때 `src` 앞에 `basePath`를 추가해야 한다.
+
+예를들어 `basePath`가 `/docs`로 설정되어 있고, 이미지가 `root/public/me.png` 에 존재한다면 src를 `/docs/me.png`로 설정해야 한다.
+
+```jsx
+import Image from 'next/image'
+
+function Home() {
+  return (
+    <>
+      <Image src="/docs/me.png" alt="My Image" width={500} height={300} />
+    </>
+  )
+}
+```
+
+# Key points
+
+- 만약 특정도메인의 sub-path에 Next.js 애플리케이션을 배포하려면 `basePath`를 사용하자 (assetPrefix가 아닌)
+- assetPrefix는 CDN을 통해 정적 자산을 제공할 때 사용한다. (`root/public` 폴더의 정적 자산은 assetPrefix가 적용되지 않는다.)
+
+# References
+
+- [Next.js Asset Prefix](https://nextjs.org/docs/app/api-reference/config/next-config-js/assetPrefix)
+- [Next.js Base Path](https://nextjs.org/docs/app/api-reference/config/next-config-js/basePath)
