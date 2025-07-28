@@ -1,0 +1,70 @@
+---
+title: 'Image Component loader prop'
+description: 'Image 컴포넌트의 이미지 로더 설정'
+date: '2025-07-28'
+tags: ['nextjs', 'image']
+published: true
+---
+
+import Image from 'next/image'
+
+## 배경
+
+Next.js 프로젝트를 하다 보면 렌더하려는 이미지의 경로를 제대로 찾지 못하는 경우가 있다. 실제로 프로젝트를 진행하면서 assetPrefix 설정으로 인해 이미지 경로가 잘못되어 이미지가 로드되지 않는 문제가 발생한 적이 있었다.
+
+이때 `Image` 컴포넌트의 `loader` prop을 설정하여 이미지 경로를 의도적으로 조정하여 문제를 해결한 적이 있다.
+
+## Image Component
+
+Next.js의 `Image` 컴포넌트는 이미지 최적화를 위해 html의 `<img>` 태그를 확장시킨 컴포넌트이다.
+
+`<Image>` 컴포넌트는 이미지를 webp 포맷으로 제공하여 페이지 로딩 속도를 향상시키고 사용자 경험을 개선한다.
+
+## loader 설정
+
+Image 컴포넌트를 이용해서 이미지를 제공하면 내부적으로 이지미 경로를 자동으로 생성한다.
+
+그러나 때때로 이미지 경로 문제나 CDN 설정으로 인해 이미지가 제대로 로드되지 않는 경우가 있다.
+
+이런 문제를 해결하기 위해 `Image` 컴포넌트의 `loader`를 설정하여 경로를 원하는대로 조정할 수 있다.
+
+예를들어 이미지 로더를 설정하여 이미지 경로를 조정하는 방법은 다음과 같다.
+
+```jsx
+'use client'
+
+import Image from 'next/image'
+
+const imageLoader = ({ src, width, quality }) => {
+  return `https://example.com/${src}?w=${width}&q=${quality || 75}`
+}
+
+export default function Page() {
+  return <Image loader={imageLoader} src="me.png" alt="Picture of the author" width={500} height={500} />
+}
+```
+
+이 예제에서 `imageLoader` 함수는 이미지의 `src`, `width`, `quality`를 받아서 원하는 URL 형식으로 반환하는데 이럴경우 해당 이미지의 경로를 `https://example.com/me.png?w=500&q=75`로 설정하게 된다.
+
+### src prop
+
+다음 중 하나여야 한다.
+
+- 정적 이미지 파일을 임포트한 경로 (예: `import me from './me.png'`)
+- 경로 문자열. 이는 loader prop에 따라 절대 외부 URL 또는 내부 경로일 수 있다.
+- 외부 URL을 사용하는 경우, 이를 next.config.js의 [remotePatterns](https://nextjs-ko.org/docs/pages/api-reference/components/image#remotepatterns)에 추가해야 한다.
+
+### width prop
+
+- width 속성은 픽셀 단위의 고유 이미지 너비를 지정한다.
+- 정적 이미지 또는 fill 속성을 사용하는 이미지의 경우 제외하고 필수
+
+### quality prop
+
+- default: 75 이며 1~100 사이의 값을 가질 수 있다.
+- 100에 가까울수록 이미지 품질이 높아지지만 파일 크기도 커진다.
+
+## references
+
+- https://nextjs.org/docs/app/api-reference/components/image#loader
+- https://nextjs.org/docs/app/api-reference/components/image#loaderfile
