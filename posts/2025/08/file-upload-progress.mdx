@@ -1,0 +1,101 @@
+---
+title: 'File upload progress 구현'
+description: 'file upload progress (진행상황- % 표시) 구현'
+date: '2025-08-11'
+tags: ['ui', 'react']
+published: false
+---
+
+# 배경
+
+만약 용량이 큰 파일을 클라우드 서버와 같은 특정 서버에 업로드 하게 되면 분명 업로드가 완료될 때 까지 지연시간이 발생할 것이다.
+이런 상황에서 업로드의 진행상황을 프로그래스바로 표시해주는게 ui/ux 측면에서 좋을 것 이다.
+이런 상황에서 우리는 `XMLHttpRequest.upload.onprogress` 이벤트를 사용하여 파일의 전체 용량과 전송된 용량의 byte를 추적하여 진행률을 계산할 수 있다.
+
+# 구현 코드
+
+> fetch API를 사용하여 업로드 진행률은 표기할 수 없기에, XMLHttpRequest를 사용해야 한다.
+> 참고로 다운로드 진행률은 fetch API를 사용하여 표기할 수 있다.
+
+참고로 하단 코드는 단일 파일 업로드 기준으로 작성되었다.
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+import { useRef } from 'react'
+
+const Page = () => {
+  const [progress, setProgress] = useState(0)
+  const [status, setStatus] = useState<'idle' | 'uploading' | 'canceled' | 'done' | 'error'>('idle')
+  const inputRef = useRef<HTMLInputElement>(null)
+  const xhrRef = useRef<XMLHttpRequest | null>(null)
+
+  const handleUpload = () => {
+    if (!inputRef.current?.files?.length) return alert('파일을 선택해주세요.')
+
+    setProgress(0)
+    setStatus('uploading')
+
+    // 여기서 실제 업로드할 URL을 설정 (서명 URL이나 Mock 서버)
+    const uploadUrl = 'api/test' // 예: Mock 서버 PUT 엔드포인트
+    const file = inputRef.current.files[0]
+    const xhr = new XMLHttpRequest()
+    xhrRef.current = xhr
+
+    xhr.open('PUT', uploadUrl)
+
+    /**
+     * @ref https://developer.mozilla.org/ko/docs/Web/API/XMLHttpRequest/upload
+     * @description 업로드 진행률 확인
+     */
+    xhr.upload.onprogress = (e) => {
+      /**
+       * @ref https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/lengthComputable
+       * @description progress를 측정 할 수 있는지
+       */
+      if (e.lengthComputable) {
+        const percentage = Math.floor((e.loaded / e.total) * 100)
+        setProgress(percentage)
+      }
+    }
+
+    /**
+     * @origin https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/load_event#syntax
+     * @description 성공 되었을 때
+     */
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        setProgress(100)
+        setStatus('done')
+      } else {
+        setStatus('error')
+      }
+    }
+
+    /**
+     * @description 요청 실패 되었을 때
+     */
+    xhr.onerror = () => setStatus('error')
+
+    /**
+     * @source https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/abort_event
+     * @description 요청이 취소 되었을 때 (XMLHttpRequest.abort() 가 호출되었을 때 trigger 됨)
+     */
+    xhr.onabort = () => setStatus('canceled')
+
+    /**
+     * @source https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/send#syntax
+     * @description formData 객체에 담아 보내는 방식이 아닌 바이너리 형태로 보내는 방식을 사용했음
+     */
+    xhr.send(file)
+  }
+  return (
+    <div>
+      <input ref={inputRef} type="file" multiple={false}></input>
+      <p>{progress}%</p>
+      <button onClick={handleUpload}>파일 업로드</button>
+    </div>
+  )
+}
+```
