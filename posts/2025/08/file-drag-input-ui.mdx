@@ -1,0 +1,90 @@
+---
+title: 'File drag and drop UI 구현'
+description: 'React 파일 드래그 앤 드롭 UI 구현'
+date: '2025-08-10'
+tags: ['ui', 'react']
+published: false
+---
+
+# 배경
+
+아래와 같이 파일(다수도 가능)을 드래그 앤드롭하여 업로드 하는 UI를 구현해보았다.
+![File drag and drop UI 구현](file-drag-input.webp)
+
+# 구현 코드
+
+코드 구현 시 참고사항
+
+- `input` 태그의 type은 file 로 설정하고 `multiple` 속성을 추가하여 다수의 파일을 업로드할 수 있도록 설정하자.
+- `input` 태그의 경우 ui가 예쁘지 않기에 hidden 설정하여 숨겨주고 `label` 과 연결하여 라벨 클릭시 파일 선택창이 열리도록 해주자.
+- `onDragOver` 와 `onDrop` 이벤트 리스너에 반드시 e.preventDefault()를 호출하여야 한다. 그래야 파일을 드롭했을 때 이미지 새창이 뜨지 않는다.
+- 라벨을 클릭하여 업로드된 파일과 드래그 앤 드롭으로 업로드된 파일들은 모두 handleChangeFiles 함수로 처리하고 event.type을 통해 분기처리한다.
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+
+interface IFileTypes {
+  id: string
+  data: File
+}
+
+export default function Uploader() {
+  const [files, setFiles] = useState<IFileTypes[]>([])
+
+  const handleChangeFiles = (e: React.ChangeEvent<HTMLInputElement> | any) => {
+    let selectedFiles: File[] = []
+    let tempFiles: IFileTypes[] = files
+
+    if (e.type === 'drop') {
+      // drop event로 들어온 파일
+      selectedFiles = e.dataTransfer.files
+    } else {
+      // 직접 input 선택 인터페이스로 들어온 파일들
+      selectedFiles = e.target.files
+    }
+
+    tempFiles = [...selectedFiles].map((file) => {
+      return {
+        id: crypto.randomUUID(),
+        data: file,
+      }
+    })
+
+    // file update
+    setFiles([...files, ...tempFiles])
+  }
+
+  return (
+    <div className="w-[600px]">
+      <input id="file-upload" className="hidden" type="file" onChange={handleChangeFiles} multiple></input>
+      <label
+        onDragEnter={(e) => {}}
+        onDragOver={(e) => {
+          e.preventDefault()
+        }}
+        onDragLeave={(e) => {}}
+        onDrop={(e) => {
+          e.preventDefault()
+          handleChangeFiles(e)
+        }}
+        htmlFor="file-upload"
+        className="boder flex items-center justify-center w-full h-[300px] border-gray-300 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded cursor-pointer"
+      >
+        파일을 업로드
+      </label>
+      <ul className="mt-2  list-disc list-inside">
+        <p>업로드 된 파일</p>
+        {files.map((file) => {
+          return (
+            <li key={file.id} className="list-disc overflow-hidden text-wrap text-ellipsis">
+              {file.data.name}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+```
