@@ -6,6 +6,7 @@ import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
+import { getMdxComponents } from '@/mdx-components'
 // import rehypeSanitize from 'rehype-sanitize'
 // import rehypeStringify from 'rehype-stringify'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -28,7 +29,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       {/* 컴포넌트 맵을 전달 */}
       <div className="flex gap-4">
         {/* 포스트 헤더 + 포스팅 */}
-        <div>
+        <div className="w-full">
           {/* 포스트 헤더 제목, 설명, 태그 등 */}
           <div className="flex flex-col gap-4">
             <h1 className="text-center">{currentPost.frontMatter.title}</h1>
@@ -56,10 +57,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             </div>
           </div>
           {/* 포스팅 내용 */}
-          <div className="prose dark:prose-invert max-w-none p-2 post-wrapper pt-[30px]">
+          <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-full">
             <MDXRemote
               source={currentPost.body}
-              components={mdxComponents}
+              components={getMdxComponents(slugPath)}
               options={{
                 mdxOptions: {
                   remarkPlugins: [remarkGfm],
