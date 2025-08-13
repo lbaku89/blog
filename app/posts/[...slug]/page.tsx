@@ -1,12 +1,11 @@
 import { getAllPosts, getPostBySlug, getTocFromMdx } from '@/utils/post'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-// import { mdxComponents } from '@/mdx-components'
+import { mdxComponents } from '@/mdx-components'
 import { Badge } from '@/component/Badge'
 import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
-import { getMdxComponents } from '@/mdx-components'
 // import rehypeSanitize from 'rehype-sanitize'
 // import rehypeStringify from 'rehype-stringify'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -60,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
           <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-max">
             <MDXRemote
               source={currentPost.body}
-              components={getMdxComponents(slugPath)}
+              components={mdxComponents}
               options={{
                 mdxOptions: {
                   remarkPlugins: [remarkGfm],
