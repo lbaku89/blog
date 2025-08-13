@@ -1,6 +1,6 @@
 import { getAllPosts, getPostBySlug, getTocFromMdx } from '@/utils/post'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { mdxComponents } from '@/mdx-components'
+// import { mdxComponents } from '@/mdx-components'
 import { Badge } from '@/component/Badge'
 import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             </div>
           </div>
           {/* upper toc */}
-          <div className="bg-gray-100 dark:bg-neutral-800 p-6 rounded-md mb-4 mt-10 2xl:hidden">
+          <div className="bg-gray-100 dark:bg-neutral-800 p-6 rounded-md mb-4 mt-10">
             <div className="top-toc-container">
               <h4 className="mb-[10px] text-gray-900 dark:text-neutral-400 ">목차</h4>
               <hr className="mb-2 border-gray-300 dark:border-gray-600" />
@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             </div>
           </div>
           {/* 포스팅 내용 */}
-          <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-full">
+          <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-max">
             <MDXRemote
               source={currentPost.body}
               components={getMdxComponents(slugPath)}
@@ -84,12 +84,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             />
           </div>
         </div>
-        <div className="pl-4">
+        {/* <div className="pl-4">
           <div className="toc-container hidden 2xl:block">
             <h3 className="mb-[10px] text-neutral-500 dark:text-neutral-400 ">Table of Content</h3>
             <div className="dark:text-neutral-200" dangerouslySetInnerHTML={{ __html: tocHtml }} />
           </div>
-        </div>
+        </div> */}
       </div>
     </article>
   )
