@@ -92,10 +92,10 @@ Promise.resolve('fulfilled')
 
 ### Promise.reject()
 
-Promise.resolve() -> 무조건 실패하는 promise로 바꿔줌,
+Promise.reject() -> 무조건 실패하는 promise로 바꿔줌,
 
 ```js
-Promise.resolve('fulfilled')
+Promise.reject('fulfilled')
   .then(() => {
     console.log('then')
   })
