@@ -56,7 +56,7 @@ export default async function Page() {
 
 결과는 다음과 같다.
 
-<img src="01.png" alt="rsc-cache" className="w-full h-auto" />
+<img src="01.png" alt="rsc-cache" className="w-full h-auto rounded-md" />
 
 `재요청`을 눌렀을 때 a는 10초 이내에 재요청하면 캐시된 값이 나오고, 10초가 지나면 새로운 값이 나오고, b는 `재요청`을 누를 때마다 매번 새로운 값이 나오는 것을 확인할 수 있었다.
 
@@ -91,3 +91,100 @@ export default async function Page() {
   )
 }
 ```
+
+## Server Fetching 한 데이터를 Context 에 주입하여 Client Component에서 사용하면?
+
+일단 TimeContext, TimeProvider를 만들었다.
+
+```tsx
+'use client'
+import { createContext } from 'react'
+export type TimeValue = { a: string; b: string }
+export const TimeContext = createContext<TimeValue | null>(null)
+
+export const TimeProvider = ({ initialValues, children }: { initialValues: TimeValue; children: React.ReactNode }) => {
+  return <TimeContext.Provider value={{ a: initialValues.a, b: initialValues.b }}>{children}</TimeContext.Provider>
+}
+```
+
+생성한 TimeProvider에 server fetching 한 데이터를 initialValues로 주입하였다. (Child 컴포넌트에서 TimeContext를 사용하여 값을 읽는다.)
+
+```tsx
+import Link from 'next/link'
+import { TimeProvider } from './_components/store'
+import { Child } from './_components/Child'
+
+export default async function Page() {
+  // A) 10초 캐시
+  const a = await fetch('http://localhost:3000/api/clock', {
+    next: { revalidate: 10 },
+  }).then((r) => r.json())
+
+  // B) 매번 새 요청
+  const b = await fetch('http://localhost:3000/api/clock', {
+    next: { revalidate: 0 },
+  }).then((r) => r.json())
+
+  return (
+    <div>
+      <TimeProvider
+        initialValues={{
+          a: String(a.now),
+          b: String(b.now),
+        }}
+      >
+        <>
+          <div style={{ padding: 20 }}>
+            <p>a: {JSON.stringify(a)}</p>
+            <p>b: {JSON.stringify(b)}</p>
+            <br />
+            <Link href={`/rsc-cache?ts=${Date.now()}`}>재요청</Link>
+          </div>
+          <div>
+            <Child />
+          </div>
+        </>
+      </TimeProvider>
+    </div>
+  )
+}
+```
+
+Child 컴포넌트는 다음과 같다. 그리고 router.refresh() 버튼을 만들어서 눌렀을 때 Context 값이 바뀌는지 확인해보았다.
+
+```tsx
+'use client'
+
+import { useContext } from 'react'
+import { TimeContext } from './store'
+import { useRouter } from 'next/navigation'
+
+export const Child = () => {
+  const time = useContext(TimeContext)
+  const router = useRouter()
+
+  return (
+    <div style={{ padding: 20 }}>
+      <p>a : {time?.a}</p>
+      <p>b : {time?.b}</p>
+      <br />
+      <button
+        onClick={() => {
+          router.refresh()
+        }}
+      >
+        router.refresh() 버튼
+      </button>
+    </div>
+  )
+}
+```
+
+결과는 다음과 같다.
+
+<img src="02.png" alt="rsc-cache-context" className="w-full h-auto rounded-md" />
+
+`router.refresh()` 버튼을 눌렀을 때 a는 10초 이내에 재요청하면 캐시된 값이 나오고, b는 `router.refresh()` 버튼을 누를 때마다 매번 새로운 값이 나오는 것을 확인할 수 있었다.
+즉, server fetching 한 데이터를 Context 에 주입하여 Client Component에서 사용해도 동일하게 동작하는 것을 확인할 수 있었다.
+
+{/* ## 그렇다면 Context의 값을 Client Component의 state에 복사하여 사용해도 동일하게 동작할까? */}
