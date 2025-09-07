@@ -1,0 +1,93 @@
+---
+title: 'Nextjs Server Fetching'
+description: 'Nextjs Server Fetching Test'
+date: '2025-09-07'
+tags: ['nextjs', 'react', 'framework']
+published: true
+---
+
+# Nextjs Server Side fetching cache test
+
+Nextjs Server Fetching cache를 실제로 테스트해보았다.
+
+일단 요청시점을 return 하는 api를 만들었다. (Nextjs의 api routes 기능을 사용)
+
+```tsx
+// app/api/clock route.ts
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  // 매 요청마다 값이 달라지는지 확인하기 위한 타임스탬프
+  return NextResponse.json({
+    now: new Date().toISOString(),
+  })
+}
+```
+
+그리고 위 api를 호출하는 페이지를 만들었다. a는 10초 캐시, b는 매번 새 요청을 하도록 설정했다.
+
+여기서 중요한 사항은 해당 작업은 server component에서만 가능하다.
+
+```tsx
+// app/rsc-cache/page.tsx
+import Link from 'next/link'
+
+export default async function Page() {
+  // A) 10초 캐시
+  const a = await fetch('http://localhost:3000/api/clock', {
+    next: { revalidate: 10 },
+  }).then((r) => r.json())
+
+  // B) 매번 새 요청
+  const b = await fetch('http://localhost:3000/api/clock', {
+    next: { revalidate: 0 },
+  }).then((r) => r.json())
+
+  return (
+    <div style={{ padding: 20 }}>
+      <p>a: {JSON.stringify(a, null, 2)}</p>
+      <p>b: {JSON.stringify(b, null, 2)}</p>
+      <br />
+      <Link href="/rsc-cache">재요청</Link>
+    </div>
+  )
+}
+```
+
+결과는 다음과 같다.
+
+<img src="01.png" alt="rsc-cache" className="w-full h-auto" />
+
+`재요청`을 눌렀을 때 a는 10초 이내에 재요청하면 캐시된 값이 나오고, 10초가 지나면 새로운 값이 나오고, b는 `재요청`을 누를 때마다 매번 새로운 값이 나오는 것을 확인할 수 있었다.
+
+## 그렇다면 Link 컴포넌트 요청 경로에 매번 query string을 다르게 주면 어떻게 될까?
+
+`<Link href={/rsc-cache?ts={Date.now()}}>재요청</Link>` 처럼 query string을 다르게 주어도 결과는 똑같았다.
+
+10초 캐시한 값은 여전히 10초 이내에 재요청하면 캐시된 값이 나오고, 10초가 지나면 새로운 값이 나오고, b는 `재요청`을 누를 때마다 매번 새로운 값이 나오는 것을 확인할 수 있었다.
+
+```tsx
+// app/rsc-cache/page.tsx
+import Link from 'next/link'
+
+export default async function Page() {
+  // A) 10초 캐시
+  const a = await fetch('http://localhost:3000/api/clock', {
+    next: { revalidate: 10 },
+  }).then((r) => r.json())
+
+  // B) 매번 새 요청
+  const b = await fetch('http://localhost:3000/api/clock', {
+    next: { revalidate: 0 },
+  }).then((r) => r.json())
+
+  return (
+    <div style={{ padding: 20 }}>
+      <p>a: {JSON.stringify(a, null, 2)}</p>
+      <p>b: {JSON.stringify(b, null, 2)}</p>
+      <br />
+      <Link href={`/rsc-cache?ts=${Date.now()}`}>재요청</Link>
+    </div>
+  )
+}
+```
