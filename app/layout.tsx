@@ -47,6 +47,8 @@ export default function RootLayout({
   return (
     <html lang="ko" className="bg-white dark:bg-[#121212]">
       <head>
+        {/* google analytics setting */}
+        <meta name="google-site-verification" content="GoOy_S38H-PIOfcU58pJ0js6_b44FEC5-3PzUri-IXI" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
