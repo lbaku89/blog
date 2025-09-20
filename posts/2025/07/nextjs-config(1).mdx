@@ -6,7 +6,7 @@ tags: ['nextjs', 'config']
 published: true
 ---
 
-# 배경
+## 배경
 
 Next.js 애플리케이션을 배포할 때 특정 도메인에 sub-path로 배포해야 되는 경우가 있다.
 
@@ -16,7 +16,7 @@ Next.js 애플리케이션을 배포할 때 특정 도메인에 sub-path로 배�
 
 그리고 `assetPrefix`는 CDN을 통해 정적 자산(이미지, CSS, JS 파일 등)을 제공할 때 사용한다.
 
-# assetPrefix
+## assetPrefix
 
 > Vercel에서 Next.js 를 배포하면 프로젝트에 대한 글로벌 CDN이 자동으로 구성된다. 자산 프리픽스를 수동으로 설정할 필요가 없다.
 
@@ -54,7 +54,7 @@ CDN에 호스팅해야 하는 유일한 폴더는 `.next/static/`의 내용이�
 
 - 루트 디렉토리의 [public](https://nextjs-ko.org/docs/app/building-your-application/optimizing/static-assets) 폴더의 파일; 이러한 자산을 CDN에을 통해 제공하려면 프리픽스를 직접 도입해야 한다.
 
-# basePath
+## basePath
 
 Nextjs 애플리케이션을 도메인의 하위 경로에 배포하려면 `basePath` 구성 옵션을 사용할 수 있다.
 `basePath`를 사용하면 애플리케이션에 대한 경로 접두사를 설정 할 수 있다. 예를 들어, 기본값인 `''` (빈 문자열) 대신 `/docs` 를 사용하려면 `next.config.js`를 열고 열고 `basePath`를 다음과 같이 설정하면 된다.
@@ -112,12 +112,12 @@ function Home() {
 }
 ```
 
-# Key points
+## Key points
 
 - 만약 특정도메인의 sub-path에 Next.js 애플리케이션을 배포하려면 `basePath`를 사용하자 (assetPrefix가 아닌)
 - assetPrefix는 CDN을 통해 정적 자산을 제공할 때 사용한다. (`root/public` 폴더의 정적 자산은 assetPrefix가 적용되지 않는다.)
 
-# References
+## References
 
 - [Next.js Asset Prefix](https://nextjs.org/docs/app/api-reference/config/next-config-js/assetPrefix)
 - [Next.js Base Path](https://nextjs.org/docs/app/api-reference/config/next-config-js/basePath)
