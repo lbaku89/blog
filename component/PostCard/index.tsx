@@ -13,7 +13,7 @@ export const PostCard = ({ post }: { post: Post }) => {
         <a href={`/posts/${post.slug}`} className="block mb-4">
           <h3 className="">{post.frontMatter.title}</h3>
 
-          <ul className="flex gap-2 mt-3 list-none">
+          <ul className="flex flex-wrap gap-2 mt-3 list-none">
             <p>{getYYYYMMDD(post.frontMatter.date)}</p>
             {post.frontMatter.tags.map((tag) => (
               <li key={tag}>
