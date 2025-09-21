@@ -23,7 +23,7 @@ const AboutPage = () => {
             </p>
             <ul className="pl-2">
               <li>디자인시스템 기반 UI공통컴포넌트 라이브러리 개발 및 유지보수 </li>
-              <li>Makeshop 입점 쇼핑몰 관리자들이 사용할 어드민 페이지 개발</li>
+              <li>Makeshop 입점 쇼핑몰 관리자들이 사용하는 어드민 서비스 개발</li>
             </ul>
           </div>
 
