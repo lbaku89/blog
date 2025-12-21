@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             </div>
           </div>
           {/* 포스팅 내용 */}
-          <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-max">
+          <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-full ">
             <MDXRemote
               source={currentPost.body}
               components={mdxComponents}
