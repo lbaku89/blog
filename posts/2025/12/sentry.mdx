@@ -86,9 +86,36 @@ Sentry.captureMessage('Something went wrong')
 Sentry.captureMessage('Something went wrong', 'warning')
 ```
 
----
-
 ### Source Maps
+
+런타임시 발생하는 에러가 리포팅 되면 우리는 스택트레이스를 통해 에러가 발생된 코드를 확인할 수 있다.  
+그런데 소스맵이 없다면 그 에러가 발생한 코드를 봐도 minified 되어 있기에 읽기가 불편하다.  
+참고로 소스맵에는 번들 파일의 특정 줄/컬럼 `<->` 원본 파일 몇 번째 줄, 파일 경로, 변수/함수명 같은 정보들이 있기에 번들링 되기 전 소스를 파악할 수 있다.
+
+`@sentry/nextjs` SDK를 설치하면 이런 소스맵은 자동으로 생성되기에 이런 불편함을 해소 할 수 있다.
+참고로 소스 맵은 프로덕션 빌드 중에만 생성된다, 즉 `next build`에서만 생성되고, 개발빌드 (next dev) 에서는 업로드용 소스 맵이 생성되지 않는다고 한다.  
+필자는 처음에 그런줄도 모르고 왜 Stack trace 정보가 minified 되어있어서 꽤 해메었다.
+
+필자가 직접 테스트해본 결과 소스맵 생성에 있어서 auth token 설정이 필요해 보인다.
+처음 sentry 설치시 `npx @sentry/wizard@latest -i nextjs` 를 통해 설치하면 자동으로 소스맵 생성을 위한 auth token 설정이 된다.(sentry 계정이 존재한다는 가정하에)
+
+만약 auth token 을 발급받지 못했다면 센트리에 접속하여 로그인 하고 좌측패널 `Settings` -> `Developer Settings` -> `Organization Tokens` 에 접속해서 `Create New Token` 버튼을 클릭하여 생성할 수 있다.  
+이렇게 생성된 생성된 auth token 을 환경변수에 넣어두고 아래와 같이 next.config.js 에 설정해주면 된다.
+
+```js
+// next.config.js
+const { withSentryConfig } = require("@sentry/nextjs");
+module.exports = withSentryConfig(
+  {
+    // your existing Next.js config
+  },
+  {
+    ...
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+
+  },
+);
+```
 
 ### Logs (!New)
 
