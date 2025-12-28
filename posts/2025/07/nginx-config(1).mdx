@@ -1,0 +1,288 @@
+---
+title: 'nginx config for frontend'
+description: 'Nextjs assetPrefix, basePath 설정'
+date: '2025-07-26'
+tags: ['nextjs', 'config']
+published: false
+---
+
+{/* 그때의 상황을 적어서 넣기 */}
+
+### 배경
+
+nextjs 프로젝트를 진행하는 와중에 작업물을 배포를 했는데 이미지 경로를 찾지 못하는 문제가 발생했다.
+
+이를 해결하기 위해서 프로젝트 내부에서 설정된 assetPrefix 를 확인하였고 배포환경에서 assetPrefix가 `/nm/` 으로 설정되어 있었다.
+
+이를 해결하기 위해서 image 컴포넌트의 이미지로더를 이용하여 요청 경로를 의도적으로 바꾸어 해결했었다.
+
+## SSL 인증서 관리
+
+SSL/TLS 설정은 보통 server 블록 안에서 진행.
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name example.com;
+
+    ssl_certificate /etc/nginx/ssl/example.crt;
+    ssl_certificate_key /etc/nginx/ssl/example.key;
+}
+```
+
+## 포트 숨김(보안)
+
+```
+location / {
+    proxy_pass http://127.0.0.1:3000;
+}
+```
+
+## 로드밸런싱
+
+nginx의 `upstream` 블록을 사용
+
+```nginx
+upstream app_servers {
+    server 127.0.0.1:3000;
+    server 127.0.0.1:3001;
+}
+
+server {
+    location / {
+        proxy_pass http://app_servers;
+    }
+}
+```
+
+## 정적 파일 캐싱
+
+```nginx
+location /static/ {
+    root /var/www;
+    expires 30d;
+    add_header Cache-Control "public";
+}
+```
+
+## 예시: 한 서버에서 여러 도메인 운영
+
+```nginx
+# example.com
+server {
+    listen 80;
+    server_name example.com www.example.com;
+
+    root /var/www/example;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+
+# test.com
+server {
+    listen 80;
+    server_name test.com www.test.com;
+
+    root /var/www/test;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+## 🤔 왜 Nginx를 써야 할까?
+
+프론트엔드 개발자라면 보통 `npm run dev`로 개발 서버를 실행하고,
+`localhost:3000`에서 개발하는 것에 익숙할 것입니다.
+
+하지만 실제 서비스에서는:
+
+- SSL 인증서 관리
+- 포트 숨김 (보안)
+- 로드밸런싱
+- 정적 파일 캐싱
+
+등의 이유로 Nginx를 앞단에 두고 프록시 설정을 합니다.
+
+오늘은 실제 프로젝트에서 사용된 Nginx 설정을
+프론트엔드 개발자 관점에서 하나씩 뜯어보겠습니다! 🔧
+
+## 🌐 전체 요청 흐름
+
+사용자 요청: example.com/nm/\_next/static/app.css ↓ Nginx (포트 80/443) ↓ URL 재작성 localhost:3003/\_next/static/app.css (Next.js) ↓ 응답 Nginx → 사용자
+
+> 즉, Nginx가 **중간 다리** 역할을 해줍니다!
+
+## 🔧 설정 파일 뜯어보기
+
+### 1️⃣ 요청 범위 지정
+
+```nginx
+location /nm/_next/ {
+```
+
+**의미**: URL이 `/nm/\_next/`로 시작하는 모든 요청을 처리합니
+
+**예시**
+
+- ✅ `example.com/nm/_next/static/app.css`
+- ✅ `example.com/nm/_next/image/logo.png`
+- ❌ `example.com/hi/nm/_next/app.css` (매칭 안됨)
+
+### 2️⃣ 포트 설정
+
+```nginx
+set $front_port 3003;
+if ($port_front) {
+set $front_port $port_front;
+}
+```
+
+**의미**:
+
+- 기본적으로 포트 3003 사용
+- 환경변수 `$port_front`가 있으면 그 값 사용
+- JavaScript로 치면 `port = port || 3003`
+
+### 3️⃣ URL 재작성 (핵심!)
+
+\```nginx
+rewrite ^/nm/\_next/(.\*)$ /\_next/$1 break;
+\```
+**의미**: URL 경로 변환
+
+- **입력**: `/nm/_next/static/app.css`
+- **출력**: `/_next/static/app.css`
+- **정규식**: `(.*)`로 뒷부분 캡처, `$1`으로 재사용
+
+### 4️⃣ 프록시 전달
+
+\```nginx
+proxy_pass http://127.0.0.1:$front_port;
+\```
+**의미**: 변환된 URL을 `localhost:3003`으로 전달
+
+### 5️⃣ 헤더 설정
+
+\```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+\```
+**의미**:
+
+- Next.js 서버가 원본 요청 정보를 알 수 있도록 헤더 전달
+- 특히 WebSocket (Hot Reload) 지원을 위한 설정 포함
+
+## 💼 실무에서는 이렇게 활용해요
+
+### 개발 환경
+
+npm run dev → localhost:3000 Nginx → /nm/\_next/ 요청을 localhost:3000으로 프록시
+
+### 프로덕션 환경
+
+### 왜 `/nm/` 프리픽스를 쓸까?
+
+- 여러 서비스를 한 도메인에서 서빙
+- `example.com/nm/` → Next.js 앱
+- `example.com/api/` → API 서버
+- `example.com/admin/` → 관리자 페이지
+
+npm run build && npm start → localhost:3003 Nginx → SSL, 캐싱, 로드밸런싱 + 프록시
+
+## 🚨 자주 만나는 문제들
+
+### 1. 404 에러
+
+**원인**: URL 매칭이 안됨  
+**해결**: `location` 경로 확인
+
+### 2. CSS/JS 로딩 실패
+
+**원인**: `rewrite` 규칙 오류  
+**해결**: 정규식과 `$1` 매핑 확인
+
+### 3. Hot Reload 안됨
+
+**원인**: WebSocket 헤더 누락  
+**해결**: `proxy_set_header Upgrade` 설정 확인
+
+## 🎯 정리
+
+Nginx 프록시 설정의 핵심은:
+
+1. **`location`**: 어떤 요청을 처리할지
+2. **`rewrite`**: URL을 어떻게 변환할지
+3. **`proxy_pass`**: 어디로 전달할지
+4. **헤더**: 어떤 정보를 함께 보낼지
+
+프론트엔드 개발자도 이 정도만 알면
+서버 개발자와 소통할 때 훨씬 수월해집니다! 😊
+
+다음 포스팅에서는 HTTPS 설정과 캐싱 전략을 다뤄보겠습니다.
+
+```text
+
+
+        # 정적 자산 프록시: /nm/_next → /_next
+
+
+        # 여기서 location은 nginx의 핵심 지시어로 /nm/_next/로 시작하는 모든 요청에 대해서는 이 블록 안의 규칙을 적용하겠다는 의미
+        # domain.com/nm/_next/로 시작하는 URL에 대해서만 이 블록이 적용된다. (domain.com/hi/nm/_next/는 적용되지 않음)
+        location /nm/_next/ {
+                # 기본 포트를 3003으로 설정 (Next.js 개발서버 포트)
+                # set $front_port 3003;은 Nginx에서 변수를 선언하고 값을 할당하는 문법입니다.
+                set $front_port 3003;
+
+                # 만약 $port_front 변수가 있으면 그 값을 사용
+                if ($port_front) {
+                        set $front_port $port_front;
+                }
+
+                # URL 재작성: /nm/_next/파일명 → /_next/파일명 으로 변경
+                # 예: /nm/_next/static/css/app.css → /_next/static/css/app.css
+                rewrite ^/nm/_next/(.*)$ /_next/$1 break;
+
+
+                # 변경된 URL을 localhost:3003으로 전달 (Next.js 서버)
+                proxy_pass http://127.0.0.1:$front_port;
+
+                # WebSocket 지원을 위한 헤더 설정 (Hot Reload 등)
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_http_version 1.1;
+
+                # 원본 요청 정보를 Next.js에 전달
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Cookie $http_cookie;
+        }
+
+        # /nm/ 위치 설정
+        location /nm {
+                # 동일하게 포트 3003 설정
+                set $front_port 3003;
+                if ($port_front) {
+                                set $front_port $port_front;
+                }
+
+
+                # /nm으로 시작하는 모든 요청을 Next.js 서버로 전달
+                # $request_uri는 전체 URL 경로를 그대로 전달
+                proxy_pass http://127.0.0.1:$front_port$request_uri;
+
+                # 위와 동일한 헤더 설정들
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Cookie $http_cookie;
+        }
+```
