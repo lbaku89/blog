@@ -1,16 +1,15 @@
 ---
 title: 'Sentry'
 description: 'Sentry 기능 정리'
-date: '2025-12-28'
+date: '2025-12-27'
 tags: ['sentry', 'issue tracking', 'monitoring']
 published: true
 ---
 
 ## 배경
 
-실제로 어떤 서비스를 운영하다 보면 런타임 에러가 발생할 수 있다.  
-이런 에러를 트래킹하고 모니터링하는 것은 서비스의 안정성을 보장하기 위해 필수적이다.  
-그래서 많은 회사들이 이슈 모니터링을 쓰고 있는데 요즘 Sentry를 많이 사용하고 있는 것 같아보이고 자세히 알아보고 싶어 정리하는 가졌다.
+실제로 어떤 서비스를 운영하다 보면 런타임 에러가 발생할 수 있다. 이런 에러를 트래킹하고 모니터링하는 것은 서비스의 안정성을 보장하기 위해 필수적이다.
+에러 트래킹 도구로 많이 사용하고 있는 Sentry에 대해 자세히 알아보고 싶어 정리하는 시간을 가졌다.
 
 ## 설치법
 
@@ -229,16 +228,10 @@ https://docs.sentry.io/platforms/javascript/guides/nextjs/profiling/
 주기적으로 실행되는 작업을 모니터링 할 수 있는 기능이다.
 예를들어 db 백업, 데이터 동기화 작업 등을 모니터링 할 수 있는 기능으로 이런 주기적인 작업들이 실패하면 원인에 대해 알람을 받을 수 있다.
 
-나중에 필요할때 아래를 참고하면 될 것 같다.
-https://docs.sentry.io/platforms/javascript/guides/nextjs/crons/
-
 ### 9.User Feedback
 
 내가 배포한 서비스에서 사용자가 직접 리포트를 낼 수 있는 기능이다.
 이 기능을 사용하기 위해서는 위젯을 깔아야 하고 꼭 에러가 발생하지 않아도 사용자가 애플리케이션에 대한 피드백을 보낼 수 있는 것으로 보인다.
-
-나중에 필요할때 아래를 참고하면 될 것 같다.
-https://docs.sentry.io/platforms/javascript/guides/nextjs/user-feedback/
 
 ## 느낀점
 
