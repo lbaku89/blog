@@ -1,8 +1,8 @@
 ---
 title: 'Sentry'
-description: 'Sentry를 이용한 런타임 에러 트래킹 및 모니터링'
-date: '2025-12-14'
-tags: ['sentry', 'logging']
+description: 'Sentry 기능 정리'
+date: '2025-12-28'
+tags: ['sentry', 'issue tracking', 'monitoring']
 published: true
 ---
 
@@ -10,7 +10,7 @@ published: true
 
 실제로 어떤 서비스를 운영하다 보면 런타임 에러가 발생할 수 있다.  
 이런 에러를 트래킹하고 모니터링하는 것은 서비스의 안정성을 보장하기 위해 필수적이다.  
-그래서 많은 회사들이 이슈 모니터링을 쓰고 있는데 요즘 Sentry를 많이 사용하고 있는 것 같아보이고 자세히 알아보고 싶어 정리하는 시간을 가지려고 한다.
+그래서 많은 회사들이 이슈 모니터링을 쓰고 있는데 요즘 Sentry를 많이 사용하고 있는 것 같아보이고 자세히 알아보고 싶어 정리하는 가졌다.
 
 ## 설치법
 
@@ -23,9 +23,9 @@ https://docs.sentry.io/platforms/javascript/guides/nextjs/ 를 보면 알 수 �
 
 ## FEATURES
 
-여러가지 기능에 대해 알아보자
+Sentry에서 제공하는 여러가지 기능에 대해 알아보았다.
 
-### Capturing Errors
+### 1.Capturing Errors - 오류포착
 
 Sentry SDK를 설치하고 나면 우리 에플리케이션의 런타임 시 발생하는 에러는 자동으로 캡쳐되어 보고된다.  
 즉, 에러를 캡쳐하는 별도의 코드가 필요없다는 이야기이다. 보고된 에러들은 우리 대시보드에서 확인 할 수 있다.
@@ -34,7 +34,7 @@ Sentry SDK를 설치하고 나면 우리 에플리케이션의 런타임 시 발
 
 SDK를 어플리케이션에 설치해도 우리는 직접적으로 에러를 아래 코드처럼 직접 캡쳐하여 보고 할 수 있다.  
 그리고 우리는 Error 객체 말고도 non-Error 객체나 string을 전달 할 수도 있다.
-대신 당연한 이야기이지만 에러가 아닌 객체나 string을 전달하면 stack trace 정보는 누락된다.
+대신 당연한 이야기이지만 에러가 아닌 객체나 string을 전달하면 stack trace 정보는 누락될 수 있다.
 
 ```js
 import * as Sentry from '@sentry/nextjs'
@@ -86,7 +86,7 @@ Sentry.captureMessage('Something went wrong')
 Sentry.captureMessage('Something went wrong', 'warning')
 ```
 
-### Source Maps
+### 2.Source Maps - 소스 맵
 
 런타임시 발생하는 에러가 리포팅 되면 우리는 스택트레이스를 통해 에러가 발생된 코드를 확인할 수 있다.  
 그런데 소스맵이 없다면 그 에러가 발생한 코드를 봐도 minified 되어 있기에 읽기가 불편하다.  
@@ -117,29 +117,149 @@ module.exports = withSentryConfig(
 );
 ```
 
-### Logs (!New)
+### 3.Logs (!New) - 로그
 
-### Session Replay
+런타임시 발생하는 이슈들을 리포팅하는 것 외에도 텍스트 기반 로그 정보를 의도적으로 전송할 수 있다.  
+그리고 그런 텍스트 기반 로그들을 텍스트 문자열로 검색하거나 개별 속성을 사용하여 검색 할 수 있다.
 
-### Tracing
+이 기능은 `9.41.0` Sentry SDK 버전 이상부터 사용할 수 있고 이를 사용하기 위해서는 `enableLogs` 옵션을 true로 설정해야 한다.
 
-### Metrics (Beta)
+#### 사용법
 
-### Profiling
+아래와 같이 다른 레벨의 로그를 전송할 수 있다. 6가지가 있다고 한다. ( trace, debug, info, warn, error, 및 fatal)
 
-### Crons
+```js
+Sentry.logger.error(Sentry.logger.fmt`Uh oh, something broke, here's the error: '${error}'`)
+Sentry.logger.info(Sentry.logger.fmt`'${user.username}' added '${product.name}' to cart.`)
+```
 
-### User Feedback
+여기서 보면 fmt를 이용하여 로그를 남기면 속성을 삽입하는 형태로 보고 대시보드 로그 UI에서 검색할 수 있고 별도의 열이 추가된다고 한다.
+즉, 저 fmt를 이용하지 않고 그냥 literal형태로 남기면 말한 기능들은 안되는 것 같다.
 
-### Feature Flags
+```js
+Sentry.logger.trace('Starting database connection', { database: 'users' })
+Sentry.logger.debug('Cache miss for user', { userId: 123 })
+Sentry.logger.info('Updated profile', { profileId: 345 })
+Sentry.logger.warn('Rate limit reached for endpoint', {
+  endpoint: '/api/results/',
+  isEnterprise: false,
+})
+Sentry.logger.error('Failed to process payment', {
+  orderId: 'order_123',
+  amount: 99.99,
+})
+Sentry.logger.fatal('Database connection pool exhausted', {
+  database: 'users',
+  activeConnections: 100,
+})
+```
 
-##
+그런데 굳이 fmt를 안써도 이렇게 파라미터로 넘겨주면 fmt를 이용하여 로그를 남긴것과 같은 효과를 줄 수 있다고 한다.
+결국 선택인 것 같다. 위와 같은 형태는 error message내에 속성들이 포함되진 않는다.
 
-## 에러 트래킹 vs 모니터링
+```js
+Sentry.getGlobalScope().setAttributes({
+  is_admin: true,
+  auth_provider: 'sentry',
+})
+Sentry.withScope((scope) => {
+  scope.setAttribute('step', 'authentication')
+  // scope attributes `is_admin`, `auth_provider` and `step` are added
+  Sentry.logger.info(`user ${user.id} logged in`, { activeSince: 100 })
+  Sentry.logger.info(`updated ${user.id} last activity`)
+})
+// scope attributes `is_admin` and `auth_provider` are added
+Sentry.logger.warn('stale website version, reloading page')
+```
+
+`10.32.0` 이상 부터는 위와 같이 스코프 API를 이용하여 특정 스코프내에서 전역적으로 모든 로그에 특정 속성을 설정할 수 있다고 한다.
+
+여기까지 주요 사용법이다. 이 외에도 여러가지 로깅관련 추가 기능들이 있는데 필요할때 https://docs.sentry.io/platforms/javascript/guides/nextjs/logs/ 를 참고하면 될 것 같다.
+
+### 4.Session Replay - 세션 다시보기
+
+세션 리플레이 기능은 오류가 발생했을 때의 사용자 행동을 비디오처럼 재현해주는 기능인데 요금을 많이 먹는다.
+딱히, 현재하는 프로젝트에서는 사용하지 않을 것 같아 자세히 보지는 않았다. 나중에 필요할때 아래를 참고하면 될 것 같다.
+https://docs.sentry.io/platforms/javascript/guides/nextjs/session-replay/
+
+### 5.Tracing - 추적
+
+트레이싱 기능은 에러 트래킹 보단 성능적인 모니터링을 위한 기능으로 보인다.  
+예를 들어 트랜잭션 단위 실행시간 측정 ( DB 쿼리, 페이지 로드, API호출 등 ) 등을 측정할 수 있을 것으로 보인다.
+모든 트랜잭션을 다 측정하기엔 너무 많기에 sample rate를 조정할 수 있다고 한다.
+추후 프로젝트를 고도화 할 때 사용해보면 좋을 것 같다. (https://docs.sentry.io/platforms/javascript/guides/nextjs/tracing/)
+
+### 6.Metrics (Beta) - 메트릭
+
+이 기능 역시 이슈 트래킹 보단 성능 모니터링을 위한 기능으로 보인다.
+내용을 확인하면 아래와 같은 기능들로 구성되어 있고 여러 준비된 계측 api를 이용하여 애플리케이션의 성능을 수치적으로 측정할 수 있다.
+아직은 베타 버전이라고 한다.
+
+Counter - 버튼이 몇번 눌렀는지와 같은 정보 카운팅
+
+```js
+Sentry.metrics.count('button_click', 1)
+```
+
+Gauge - 현재 메모리 사용량과 같은 정보 측정
+
+```js
+Sentry.metrics.gauge('queue_depth', 42)
+```
+
+Distribution - 특정 request 단위 성능 측정
+
+```js
+Sentry.metrics.distribution('response_time', 187.5)
+```
+
+이 기능 역시 현재 프로젝트에서는 사용되진 않을 것 같고 나중에 필요할때 아래를 참고하면 될 것 같다.  
+https://docs.sentry.io/platforms/javascript/guides/nextjs/metrics/
+
+### 7.Profiling - 프로파일링 (브라우저 프로파일링)
+
+우리는 웹 성능을 확인하거나 디버깅할 때 브라우저 개발자 도구를 열고 프로파일링을 할 수 있는데 여기서 말하는 프로파일링도 동일한 의미로 사용된 것이다.
+센트리에서 실제 사용자 데이터를 수집하여 사용자환경으로 프로파일링 기능을 제공할수 있다고 한다.
+즉, 사용자 환경에서의 성능 모니터링을 할 수 있다는 이야기이다. 참고로 브라우저 프로파일링 API는 현재 크로미움 기반 브라우저에서만 구현되어 있기 크로미움 기반 브라우저 사용자들의 데이터만 수집할 수 있다고 한다.
+데이터 수집 샘플링 비율은 설정가능하다고 한다. 나중에 필요할때 아래를 참고하면 될 것 같다.
+https://docs.sentry.io/platforms/javascript/guides/nextjs/profiling/
+
+### 8.Crons
+
+주기적으로 실행되는 작업을 모니터링 할 수 있는 기능이다.
+예를들어 db 백업, 데이터 동기화 작업 등을 모니터링 할 수 있는 기능으로 이런 주기적인 작업들이 실패하면 원인에 대해 알람을 받을 수 있다.
+
+나중에 필요할때 아래를 참고하면 될 것 같다.
+https://docs.sentry.io/platforms/javascript/guides/nextjs/crons/
+
+### 9.User Feedback
+
+내가 배포한 서비스에서 사용자가 직접 리포트를 낼 수 있는 기능이다.
+이 기능을 사용하기 위해서는 위젯을 깔아야 하고 꼭 에러가 발생하지 않아도 사용자가 애플리케이션에 대한 피드백을 보낼 수 있는 것으로 보인다.
+
+나중에 필요할때 아래를 참고하면 될 것 같다.
+https://docs.sentry.io/platforms/javascript/guides/nextjs/user-feedback/
+
+## 느낀점
+
+처음에 Sentry가 이슈 트래킹 도구로만 사용되는 줄 알았는데 알고보니 모니터링 도구로도 사용될 수 있다는 것을 알게 되었다.
+아직 실제 서비스에 붙여서 운영해본적이 없는데 얼른 적용해서 에러 트래킹과 모니터링을 해보고 싶다.
+
+## 참고
+
+- https://tech.kakaopay.com/post/frontend-sentry-monitoring/
+- https://techblog.woowahan.com/21604/
+- https://www.postype.com/@team/post/18407805
+- https://engineering.linecorp.com/ko/blog/log-collection-system-sentry-on-premise
+- https://docs.sentry.io/platforms/javascript/guides/nextjs/
+
+## 번외
+
+### 에러 트래킹 vs 모니터링
 
 에러 트래킹(Error Tracking)과 모니터링(Monitoring)은 비슷해 보이지만 다른 개념이다.
 
-### 에러 트래킹 (Error Tracking)
+#### 에러 트래킹 (Error Tracking)
 
 - **목적**: 특정 에러가 발생했을 때 이를 추적하고 기록하는 것에 초점
 - **범위**: 에러 발생 시점, 스택 트레이스, 사용자 컨텍스트 등 에러 자체에 대한 정보
@@ -148,25 +268,18 @@ module.exports = withSentryConfig(
   - 에러 발생 빈도 추적
   - 에러별 그룹핑 및 중복 제거
 
-### 모니터링 (Monitoring)
+#### 모니터링 (Monitoring)
 
 - **목적**: 애플리케이션의 전반적인 상태를 지속적으로 관찰
-- **범위**: 성능 메트릭, 리소스 사용량, API 응답 시간, 비즈니스 메트릭 등
+- **범위**: 성능 메트릭, 리소스 사용량, API 응답 시간등
 - **예시**:
   - 서버 CPU/메모리 사용률
   - API 엔드포인트 응답 시간
   - 사용자 세션 추적
   - 트랜잭션 성능 분석
 
-### 관계
+#### 관계
 
 에러 트래킹은 모니터링의 한 부분이다. 모니터링이 더 넓은 개념이며, 에러 트래킹은 그 중에서도 에러에 특화된 부분이다.
 
 Sentry는 주로 **에러 트래킹** 도구로 알려져 있지만, 최근에는 Performance Monitoring 기능도 추가되어 전반적인 모니터링도 가능하다.
-
-### 참고
-
-- https://tech.kakaopay.com/post/frontend-sentry-monitoring/
-- https://techblog.woowahan.com/21604/
-- https://www.postype.com/@team/post/18407805
-- https://engineering.linecorp.com/ko/blog/log-collection-system-sentry-on-premise
