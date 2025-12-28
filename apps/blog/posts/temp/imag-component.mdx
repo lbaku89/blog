@@ -1,0 +1,46 @@
+---
+title: 'Nextjs Config (1)'
+description: 'Nextjs assetPrefix, basePath 설정'
+date: '2025-07-26'
+tags: ['nextjs', 'config']
+published: false
+---
+
+Image 컴포넌트도 추가하기!!!!!
+
+## Static Assets in public
+
+Next.js는 루트 디렉토리 `public` 폴더 아래에서 이미지와 같은 정적 파일을 제공할 수 있다. `public` 내부의 파일은 기본 URL(`/`) 에서 시작하여 코드에 참조할 수 있다.
+
+예를 들어, `public/avatars/me.png` 파일은 `/avatars/me.png` 경로로 확인할 수 있다. 해당 이미지를 표시하는 코드는 다음과 같다.
+
+> 여기서 주의할점은 root 디렉토리의 public 폴더에 한해서 적용되는 것이다.
+
+```jsx
+import Image from 'next/image'
+
+export function Avatar({ id, alt }) {
+  return <Image src={`/avatars/${id}.png`} alt={alt} width="64" height="64" />
+}
+
+export function AvatarOfMe() {
+  return <Avatar id="me" alt="A portrait of me" />
+}
+```
+
+### Caching
+
+Next.js는 `public` 폴더의 자산을 안전하게 캐시할 수 없다. 이는 변경될 수 있기 때문이다. 기본 캐싱 헤더는 다음과 같다.
+
+```
+Cache-Control: public, max-age=0
+```
+
+### Robots, Favicons, and others
+
+`robots.tsx`, `favicon.ico` 등과 같은 정적 메타데이터 파일의 경우,`app` 폴더 내의 특별한 메타데이터 파일을 사용해야 한다.
+
+> 알아두면 좋은점
+>
+> - 디렉토리 이름은 반드시 `public`이어야 한다. 이름을 변경할 수 없으며 정적 자산을 제공하는 데 사용되는 유일한 디렉토리 이다.
+> - 빌드 시점에 `public` 디렉토리에 있는 자산만 Next.js에 의해 제공된다. 요청 시점에 추가된 파일은 사용할 수 없다. 영구 파일 저장소에는 [Vercel Blob](https://vercel.com/docs/vercel-blob?utm_source=next-site&utm_medium=docs&utm_campaign=next-website)과 같은 타사 서비스를 사용하는 것이 좋다.
