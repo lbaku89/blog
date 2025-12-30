@@ -1,7 +1,7 @@
 import { getAllPosts, getPostBySlug, getTocFromMdx } from '@/utils/post'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { mdxComponents } from '@/mdx-components'
-import { Badge } from '@/component/Badge'
+import { Badge } from '@common-ui'
 import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'

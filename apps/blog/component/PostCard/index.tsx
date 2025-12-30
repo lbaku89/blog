@@ -1,6 +1,6 @@
 import { type Post } from '@/types/post'
 import { getYYYYMMDD } from '@/utils/date'
-import { Badge } from '@/component/Badge'
+import { Badge } from '@common-ui'
 
 export const PostCard = ({ post }: { post: Post }) => {
   return (
