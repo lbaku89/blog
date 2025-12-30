@@ -1,0 +1,59 @@
+{
+  "compilerOptions": {
+    // 컴파일된 JavaScript의 타겟 버전 (ES2020 = ES11)
+    "target": "ES2020",
+
+    // 사용할 타입 정의 라이브러리
+    // - ES2020: ES2020 기능들 (Optional chaining, Nullish coalescing 등)
+    // - DOM: 브라우저 DOM API 타입
+    // - DOM.Iterable: DOM의 반복 가능한 객체 타입 (NodeList 등)
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // JSX 변환 방식
+    // "react-jsx": React 17+ 새로운 JSX 변환 (import React 불필요)
+    "jsx": "react-jsx",
+
+    // 모듈 시스템 (ESNext = 최신 ES 모듈)
+    "module": "ESNext",
+
+    // 모듈 해석 방식
+    // "bundler": 번들러(webpack, vite 등)를 위한 해석 방식
+    "moduleResolution": "bundler",
+
+    // 기본 경로 설정 (상대 경로 해석의 기준점)
+    "baseUrl": ".",
+
+    // JSON 파일을 모듈로 import 가능하게 함
+    "resolveJsonModule": true,
+
+    // JavaScript 파일도 TypeScript로 체크
+    "allowJs": true,
+
+    // 엄격한 타입 체크 활성화 (모든 strict 옵션 포함)
+    "strict": true,
+
+    // CommonJS와 ES 모듈 간 상호 운용성 허용
+    "esModuleInterop": true,
+
+    // 선언 파일(.d.ts)의 타입 체크 건너뛰기 (빌드 속도 향상)
+    "skipLibCheck": true,
+
+    // 파일명 대소문자 일관성 강제 (대소문자 구분 파일시스템 대응)
+    "forceConsistentCasingInFileNames": true,
+
+    // 각 파일을 독립적으로 컴파일 (트랜스파일러 최적화)
+    "isolatedModules": true,
+
+    // .d.ts 선언 파일 생성 (타입 정의 파일)
+    "declaration": true,
+
+    // 선언 파일의 소스맵 생성 (.d.ts.map)
+    "declarationMap": true
+  },
+
+  // 컴파일할 파일/디렉토리
+  "include": ["src/**/*"],
+
+  // 제외할 파일/디렉토리
+  "exclude": ["node_modules"]
+}
