@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* shadcn CSS 변수는 layout.tsx에서 import됨 */
+
 html {
   /* scroll 부드럽게 처리*/
   scroll-behavior: smooth;

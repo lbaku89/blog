@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
               <ul className="mb-4 flex gap-2 justify-center list-none">
                 {currentPost.frontMatter.tags.map((tag) => (
                   <li key={tag}>
-                    <Badge>{tag}</Badge>
+                    <Badge variant="secondary">{tag}</Badge>
                   </li>
                 ))}
               </ul>

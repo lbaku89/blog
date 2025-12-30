@@ -22,6 +22,11 @@
 
     // 기본 경로 설정 (상대 경로 해석의 기준점)
     "baseUrl": ".",
+    
+    // 경로 별칭 설정 (shadcn에서 @/components, @/lib/utils 사용)
+    "paths": {
+      "@/*": ["./src/*"]
+    },
 
     // JSON 파일을 모듈로 import 가능하게 함
     "resolveJsonModule": true,

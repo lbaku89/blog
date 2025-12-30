@@ -17,7 +17,7 @@ export const PostCard = ({ post }: { post: Post }) => {
             <p>{getYYYYMMDD(post.frontMatter.date)}</p>
             {post.frontMatter.tags.map((tag) => (
               <li key={tag}>
-                <Badge variant="basic">{tag}</Badge>
+                <Badge variant="secondary">{tag}</Badge>
               </li>
             ))}
           </ul>
