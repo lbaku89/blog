@@ -147,3 +147,23 @@ xl	1280px	@media (min-width: 1280px) { ... }
 .post-wrapper.prose h3 a {
   font-weight: 600;
 }
+
+pre code {
+  counter-reset: line;
+}
+
+pre code > span[data-line] {
+  counter-increment: line;
+  display: block;
+  padding-left: 2.5rem; /* 번호 공간 */
+  position: relative;
+}
+
+pre code > span[data-line]::before {
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  width: 1.5rem;
+  text-align: right;
+  color: #6b7280; /* gray */
+}
