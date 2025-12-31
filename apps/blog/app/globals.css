@@ -194,3 +194,8 @@ pre code > span[data-line]::before {
     background-color: var(--shiki-dark-bg);
   }
 }
+
+/* 코드 블락 타이틀 스타일 추가 */
+figcaption[data-rehype-pretty-code-title] {
+  margin-bottom: 4px;
+}
