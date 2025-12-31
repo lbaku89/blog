@@ -2,6 +2,7 @@
 
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid'
 import { useThemeStore } from '@/store/theme'
+import { Button } from '@common-ui/'
 export const ThemeToggleBtn = () => {
   const { theme, toggleTheme } = useThemeStore()
 
@@ -10,12 +11,8 @@ export const ThemeToggleBtn = () => {
   }
 
   return (
-    <button onClick={handleClickBtn}>
-      {theme === 'dark' ? (
-        <MoonIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-      ) : (
-        <SunIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-      )}
-    </button>
+    <Button onClick={handleClickBtn} variant="outline" size="icon">
+      {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
+    </Button>
   )
 }
