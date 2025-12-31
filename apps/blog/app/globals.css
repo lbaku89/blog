@@ -199,3 +199,12 @@ pre code > span[data-line]::before {
 figcaption[data-rehype-pretty-code-title] {
   margin-bottom: 4px;
 }
+
+/* 코드 라인 하이라이트 */
+span[data-highlighted-line] {
+  background: rgba(255, 221, 0, 0.15);
+}
+
+.dark span[data-highlighted-line] {
+  background: rgba(96, 165, 250, 0.18);
+}
