@@ -71,6 +71,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                           light: 'one-light',
                           dark: 'github-dark',
                         },
+                        defaultLanguage: { block: 'plaintext', inline: 'plaintext' },
                       },
                     ],
 
