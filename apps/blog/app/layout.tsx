@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+// shadcn CSS 변수 import (packages/ui에서 재사용)
+import '@common-ui/src/styles/variables.css'
 import './globals.css'
 import { Footer } from '@/component/Footer'
 import { Header } from '@/component/Header'

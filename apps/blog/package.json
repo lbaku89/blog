@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@common-ui": "workspace:*",
+    "@giscus/react": "^3.1.0",
     "@heroicons/react": "^2.2.0",
     "@jsdevtools/rehype-toc": "^3.0.2",
     "@mdx-js/loader": "^3.1.0",
@@ -19,7 +21,7 @@
     "clsx": "^2.1.1",
     "front-matter": "^4.0.2",
     "hast-util-to-html": "^9.0.5",
-    "next": "14.2.30",
+    "next": "14.2.35",
     "next-mdx-remote": "^5.0.0",
     "react": "^18",
     "react-dom": "^18",
@@ -30,7 +32,8 @@
     "remark-gfm": "^4.0.1",
     "shiki": "^3.7.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animated": "^2.0.0"
+    "tailwindcss-animated": "^2.0.0",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",

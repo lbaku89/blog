@@ -1,6 +1,7 @@
 import { ThemeToggleBtn } from '../ThemeToggleBtn'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Button } from '@common-ui/'
 
 export const Header = () => {
   return (
@@ -9,14 +10,18 @@ export const Header = () => {
         <Image src="/avatar.webp" alt="권현우의 프로필 사진" width={40} height={40} className="rounded-full" />
         <h3 className="inline-block text-[16px]">Hyunwoo</h3>
       </Link>
-      <div className="flex gap-10">
+      <div className="flex gap-4 items-center">
         <nav className="flex gap-4 justify-between">
-          <ul className="flex gap-4 list-none">
+          <ul className="flex list-none">
             <li>
-              <Link href="/pages/1">Post</Link>
+              <Button asChild variant="link">
+                <Link href="/pages/1">Post</Link>
+              </Button>
             </li>
             <li>
-              <Link href="/about">About</Link>
+              <Button asChild variant="link">
+                <Link href="/about">About</Link>
+              </Button>
             </li>
           </ul>
         </nav>

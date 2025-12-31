@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* shadcn CSS 변수는 layout.tsx에서 import됨 */
+
 html {
   /* scroll 부드럽게 처리*/
   scroll-behavior: smooth;
@@ -144,4 +146,65 @@ xl	1280px	@media (min-width: 1280px) { ... }
 }
 .post-wrapper.prose h3 a {
   font-weight: 600;
+}
+
+/* code line 추가 */
+pre code {
+  counter-reset: line;
+}
+
+pre code > span[data-line] {
+  counter-increment: line;
+  display: block;
+  padding-left: 2.5rem; /* 번호 공간 */
+  position: relative;
+}
+
+pre code > span[data-line]::before {
+  content: counter(line);
+  position: absolute;
+  left: 0;
+  width: 1.5rem;
+  text-align: right;
+  color: #6b7280; /* gray */
+}
+
+/* code theme 추가 */
+
+:root {
+  /* 텍스트 색/배경색을 light theme 변수에 연결 */
+  code[data-theme],
+  code[data-theme] span {
+    color: var(--shiki-light);
+  }
+
+  figure[data-rehype-pretty-code-figure] pre {
+    background-color: var(--shiki-light-bg);
+  }
+}
+
+/* ✅ 다크 모드 (.dark 클래스가 html/body에 붙어 있을 때) */
+.dark {
+  code[data-theme],
+  code[data-theme] span {
+    color: var(--shiki-dark);
+  }
+
+  figure[data-rehype-pretty-code-figure] pre {
+    background-color: var(--shiki-dark-bg);
+  }
+}
+
+/* 코드 블락 타이틀 스타일 추가 */
+figcaption[data-rehype-pretty-code-title] {
+  margin-bottom: 4px;
+}
+
+/* 코드 라인 하이라이트 */
+span[data-highlighted-line] {
+  background: rgba(255, 221, 0, 0.15);
+}
+
+.dark span[data-highlighted-line] {
+  background: rgba(96, 165, 250, 0.18);
 }

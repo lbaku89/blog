@@ -1,11 +1,13 @@
 import { getAllPosts, getPostBySlug, getTocFromMdx } from '@/utils/post'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { mdxComponents } from '@/mdx-components'
-import { Badge } from '@/component/Badge'
+import { Badge } from '@common-ui'
 import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
+import { PostComments } from '@/component/PostComments'
+
 // import rehypeSanitize from 'rehype-sanitize'
 // import rehypeStringify from 'rehype-stringify'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -41,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
               <ul className="mb-4 flex gap-2 justify-center list-none">
                 {currentPost.frontMatter.tags.map((tag) => (
                   <li key={tag}>
-                    <Badge>{tag}</Badge>
+                    <Badge variant="secondary">{tag}</Badge>
                   </li>
                 ))}
               </ul>
@@ -64,7 +66,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                 mdxOptions: {
                   remarkPlugins: [remarkGfm],
                   rehypePlugins: [
-                    [rehypePrettyCode, { theme: 'tokyo-night' }],
+                    [
+                      rehypePrettyCode,
+                      {
+                        theme: {
+                          light: 'one-light',
+                          dark: 'github-dark',
+                        },
+                        defaultLanguage: { block: 'plaintext', inline: 'plaintext' },
+                      },
+                    ],
 
                     /** @description add id to heading tag */
                     rehypeSlug,
@@ -81,6 +92,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                 },
               }}
             />
+          </div>
+          <div className="mt-10">
+            <PostComments />
           </div>
         </div>
         {/* <div className="pl-4">

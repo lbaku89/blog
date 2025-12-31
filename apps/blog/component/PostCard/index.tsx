@@ -1,6 +1,6 @@
 import { type Post } from '@/types/post'
 import { getYYYYMMDD } from '@/utils/date'
-import { Badge } from '@/component/Badge'
+import { Badge } from '@common-ui'
 
 export const PostCard = ({ post }: { post: Post }) => {
   return (
@@ -17,7 +17,7 @@ export const PostCard = ({ post }: { post: Post }) => {
             <p>{getYYYYMMDD(post.frontMatter.date)}</p>
             {post.frontMatter.tags.map((tag) => (
               <li key={tag}>
-                <Badge variant="basic">{tag}</Badge>
+                <Badge variant="secondary">{tag}</Badge>
               </li>
             ))}
           </ul>
