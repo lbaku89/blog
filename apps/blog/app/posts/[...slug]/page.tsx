@@ -64,7 +64,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                 mdxOptions: {
                   remarkPlugins: [remarkGfm],
                   rehypePlugins: [
-                    [rehypePrettyCode, { theme: 'tokyo-night' }],
+                    [
+                      rehypePrettyCode,
+                      {
+                        theme: {
+                          light: 'one-light',
+                          dark: 'github-dark',
+                        },
+                      },
+                    ],
 
                     /** @description add id to heading tag */
                     rehypeSlug,

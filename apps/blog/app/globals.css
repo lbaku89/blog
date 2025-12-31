@@ -148,6 +148,7 @@ xl	1280px	@media (min-width: 1280px) { ... }
   font-weight: 600;
 }
 
+/* code line 추가 */
 pre code {
   counter-reset: line;
 }
@@ -166,4 +167,30 @@ pre code > span[data-line]::before {
   width: 1.5rem;
   text-align: right;
   color: #6b7280; /* gray */
+}
+
+/* code theme 추가 */
+
+:root {
+  /* 텍스트 색/배경색을 light theme 변수에 연결 */
+  code[data-theme],
+  code[data-theme] span {
+    color: var(--shiki-light);
+  }
+
+  figure[data-rehype-pretty-code-figure] pre {
+    background-color: var(--shiki-light-bg);
+  }
+}
+
+/* ✅ 다크 모드 (.dark 클래스가 html/body에 붙어 있을 때) */
+.dark {
+  code[data-theme],
+  code[data-theme] span {
+    color: var(--shiki-dark);
+  }
+
+  figure[data-rehype-pretty-code-figure] pre {
+    background-color: var(--shiki-dark-bg);
+  }
 }
