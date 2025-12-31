@@ -1,8 +1,11 @@
 'use client'
 
 import Giscus from '@giscus/react'
+import { useThemeStore } from '@/store/theme'
 
 export const PostComments = () => {
+  const { theme } = useThemeStore()
+
   return (
     <Giscus
       id="comments"
@@ -14,7 +17,7 @@ export const PostComments = () => {
       reactionsEnabled="1" // ← 👍 등 리액션 활성화
       emitMetadata="0" // ← 메타데이터 숨김
       inputPosition="bottom"
-      theme="preferred_color_scheme"
+      theme={theme}
       lang="ko"
       loading="lazy"
     />
