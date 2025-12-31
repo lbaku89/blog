@@ -6,6 +6,8 @@ import { getYYYYMMDD } from '@/utils/date'
 import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
+import { PostComments } from '@/component/PostComments'
+
 // import rehypeSanitize from 'rehype-sanitize'
 // import rehypeStringify from 'rehype-stringify'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -90,6 +92,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                 },
               }}
             />
+          </div>
+          <div className="mt-10">
+            <PostComments />
           </div>
         </div>
         {/* <div className="pl-4">
