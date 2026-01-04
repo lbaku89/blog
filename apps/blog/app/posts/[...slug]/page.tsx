@@ -7,6 +7,7 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
 import { PostComments } from '@/component/PostComments'
+import { SideToc } from '@/component/SideToc'
 
 // import rehypeSanitize from 'rehype-sanitize'
 // import rehypeStringify from 'rehype-stringify'
@@ -96,27 +97,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
               />
             </div>
             {/* 오른쪽 사이드 TOC: xl 이상에서만 표시, 700px 밖에 위치 */}
-            <aside className="xl:absolute w-64 shrink-0 top-0 left-[100%] h-full">
-              <div className="sticky top-[150px] p-6">
-                <p className="text-sm font-medium text-gray-900 dark:text-neutral-400 mb-2">목차</p>
-                <div
-                  className="text-neutral-400 p-2 text-xs leading-snug space-y-1"
-                  dangerouslySetInnerHTML={{ __html: tocHtml }}
-                />
-              </div>
-            </aside>
+            <SideToc tocHtml={tocHtml} />
           </div>
 
           <div className="mt-10">
             <PostComments />
           </div>
         </div>
-        {/* <div className="pl-4">
-          <div className="toc-container hidden 2xl:block">
-            <h3 className="mb-[10px] text-neutral-500 dark:text-neutral-400 ">Table of Content</h3>
-            <div className="dark:text-neutral-200" dangerouslySetInnerHTML={{ __html: tocHtml }} />
-          </div>
-        </div> */}
       </div>
     </article>
   )
