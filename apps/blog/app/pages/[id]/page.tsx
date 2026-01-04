@@ -27,7 +27,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   const posts = allPosts.slice(startIndex, endIndex)
 
   return (
-    <div>
+    <div className="max-w-[800px] mx-auto">
       <ul className="list-none list-inside mt-4 flex flex-col gap-5">
         {posts.map((post) => (
           <li key={post.slug}>

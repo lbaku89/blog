@@ -1,7 +1,7 @@
 import Image from 'next/image'
 const AboutPage = () => {
   return (
-    <section>
+    <section className="max-w-5xl mx-auto">
       <h1>About Me</h1>
       <hr className="my-[8px]" />
       <div className="grid grid-cols-3 gap-4">

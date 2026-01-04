@@ -14,7 +14,7 @@ export default async function Home() {
           <li>Main libraries/frameworks : Next.js, React.js</li>
         </ul>
       </div> */}
-      <div className="mt-8">
+      <div className="mt-8 max-w-[800px] mx-auto">
         <h1>Recent Posts</h1>
         <ul className="list-none list-inside mt-4 flex flex-col gap-5">
           {allPosts.map((post) => {
