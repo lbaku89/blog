@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   return (
     <article>
       {/* 컴포넌트 맵을 전달 */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 mx-auto max-w-[750px]">
         {/* 포스트 헤더 + 포스팅 */}
         <div className="w-full">
           {/* 포스트 헤더 제목, 설명, 태그 등 */}
@@ -50,49 +50,63 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             </div>
           </div>
           {/* upper toc */}
-          <div className="bg-gray-100 dark:bg-neutral-800 p-6 rounded-md mb-4 mt-10">
+          <div className="bg-gray-100 dark:bg-neutral-800 p-6 rounded-md mb-4 mt-10 xl:hidden">
             <div className="top-toc-container">
               <h4 className="mb-[10px] text-gray-900 dark:text-neutral-400 ">목차</h4>
               <hr className="mb-2 border-gray-300 dark:border-gray-600" />
               <div className="dark:text-neutral-400 p-2" dangerouslySetInnerHTML={{ __html: tocHtml }} />
             </div>
           </div>
-          {/* 포스팅 내용 */}
-          <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-full ">
-            <MDXRemote
-              source={currentPost.body}
-              components={mdxComponents}
-              options={{
-                mdxOptions: {
-                  remarkPlugins: [remarkGfm],
-                  rehypePlugins: [
-                    [
-                      rehypePrettyCode,
-                      {
-                        theme: {
-                          light: 'one-light',
-                          dark: 'github-dark',
-                        },
-                        defaultLanguage: { block: 'plaintext', inline: 'plaintext' },
-                      },
-                    ],
 
-                    /** @description add id to heading tag */
-                    rehypeSlug,
-                    [
-                      rehypeAutolinkHeadings,
-                      {
-                        behavior: 'wrap',
-                        properties: {
-                          className: ['no-underline hover:text-blue-700 dark:hover:text-blue-400'],
+          <div className="relative">
+            {/* 포스팅 내용 */}
+            <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-full ">
+              <MDXRemote
+                source={currentPost.body}
+                components={mdxComponents}
+                options={{
+                  mdxOptions: {
+                    remarkPlugins: [remarkGfm],
+                    rehypePlugins: [
+                      [
+                        rehypePrettyCode,
+                        {
+                          theme: {
+                            light: 'one-light',
+                            dark: 'github-dark',
+                          },
+                          defaultLanguage: { block: 'plaintext', inline: 'plaintext' },
                         },
-                      },
+                      ],
+
+                      /** @description add id to heading tag */
+                      rehypeSlug,
+                      [
+                        rehypeAutolinkHeadings,
+                        {
+                          behavior: 'wrap',
+                          properties: {
+                            className: ['no-underline hover:text-blue-700 dark:hover:text-blue-400'],
+                          },
+                        },
+                      ],
                     ],
-                  ],
-                },
-              }}
-            />
+                  },
+                }}
+              />
+            </div>
+            {/* 오른쪽 사이드 TOC: xl 이상에서만 표시, 700px 밖에 위치 */}
+            <aside className="xl:absolute w-64 shrink-0 top-0 left-[100%] h-full">
+              <div className="sticky top-[150px] p-6">
+                <p className="text-sm font-medium text-gray-900 dark:text-neutral-400 mb-2">목차</p>
+                <div
+                  className="text-neutral-400 p-2 text-xs leading-snug space-y-1"
+                  dangerouslySetInnerHTML={{ __html: tocHtml }}
+                />
+              </div>
+            </aside>
           </div>
+
           <div className="mt-10">
             <PostComments />
           </div>
