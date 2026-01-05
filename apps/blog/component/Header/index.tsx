@@ -2,8 +2,15 @@ import { ThemeToggleBtn } from '../ThemeToggleBtn'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@common-ui/'
+import { AdminAuthButton } from '../AdminAuthButton'
+import { cookies } from 'next/headers'
+import { verifyAdminAuthToken } from '@/lib/auth'
+import { ADMIN_COOKIE_NAME } from '@/constant'
 
 export const Header = () => {
+  const token = cookies().get(ADMIN_COOKIE_NAME)?.value
+  const initialIsLoggedIn = verifyAdminAuthToken(token)
+
   return (
     <header className="flex justify-between items-center py-6 bg-transparent max-w-[1200px] px-4 mx-auto">
       <Link href="/" className="flex justify-start  items-center gap-2">
@@ -25,6 +32,7 @@ export const Header = () => {
             </li>
           </ul>
         </nav>
+        <AdminAuthButton initialIsLoggedIn={initialIsLoggedIn} />
         <ThemeToggleBtn />
       </div>
     </header>
