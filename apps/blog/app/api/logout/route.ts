@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { ADMIN_COOKIE_NAME } from '@/constant'
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   // 홈으로 돌려보내면서 쿠키 만료
   const res = NextResponse.redirect(new URL('/', req.url))
 
