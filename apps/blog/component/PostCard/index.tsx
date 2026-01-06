@@ -1,6 +1,7 @@
 import { type Post } from '@/types/post'
 import { getYYYYMMDD } from '@/utils/date'
 import { Badge } from '@common-ui'
+import { TypographyH3, TypographyP } from '@common-ui'
 
 export const PostCard = ({ post }: { post: Post }) => {
   return (
@@ -11,17 +12,17 @@ export const PostCard = ({ post }: { post: Post }) => {
     >
       <li>
         <a href={`/posts/${post.slug}`} className="block mb-4">
-          <h3 className="">{post.frontMatter.title}</h3>
+          <TypographyH3 className="">{post.frontMatter.title}</TypographyH3>
 
           <ul className="flex flex-wrap gap-2 mt-3 list-none">
-            <p>{getYYYYMMDD(post.frontMatter.date)}</p>
+            <TypographyP>{getYYYYMMDD(post.frontMatter.date)}</TypographyP>
             {post.frontMatter.tags.map((tag) => (
               <li key={tag}>
                 <Badge variant="secondary">{tag}</Badge>
               </li>
             ))}
           </ul>
-          <p className="mt-3">{post.frontMatter.description}</p>
+          <TypographyP className="mt-3">{post.frontMatter.description}</TypographyP>
         </a>
       </li>
     </article>

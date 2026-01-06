@@ -6,6 +6,7 @@ import { AdminAuthButton } from '../AdminAuthButton'
 import { cookies } from 'next/headers'
 import { verifyAdminAuthToken } from '@/lib/auth'
 import { ADMIN_COOKIE_NAME } from '@/constant'
+import { TypographyH3 } from '@common-ui'
 
 export const Header = () => {
   const token = cookies().get(ADMIN_COOKIE_NAME)?.value
@@ -15,7 +16,7 @@ export const Header = () => {
     <header className="flex justify-between items-center py-6 bg-transparent max-w-[1200px] px-4 mx-auto">
       <Link href="/" className="flex justify-start  items-center gap-2">
         <Image src="/avatar.webp" alt="권현우의 프로필 사진" width={40} height={40} className="rounded-full" />
-        <h3 className="inline-block text-[16px]">Hyunwoo</h3>
+        <TypographyH3 className="inline-block text-[16px]">Hyunwoo</TypographyH3>
       </Link>
       <div className="flex gap-4 items-center">
         <nav className="flex gap-4 justify-between">

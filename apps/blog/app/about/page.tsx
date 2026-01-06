@@ -1,8 +1,10 @@
 import Image from 'next/image'
+import { TypographyH1 } from '@common-ui'
+
 const AboutPage = () => {
   return (
     <section className="max-w-5xl mx-auto">
-      <h1>About Me</h1>
+      <TypographyH1 className="text-left">About Me</TypographyH1>
       <hr className="my-[8px]" />
       <div className="grid grid-cols-3 gap-4">
         <div className="col-span-3 md:col-span-1 relative h-[300px] flex flex-col items-center pt-[20px]">
@@ -21,7 +23,7 @@ const AboutPage = () => {
               현재 ConnectWave, 메이크샵 사업부에서 프론트엔드 개발자로 재직 중이며, 아래와 같은 업무를 담당하고
               있습니다.
             </p>
-            <ul className="pl-2">
+            <ul className="pl-2 list-disc list-inside">
               <li>디자인시스템 기반 UI공통컴포넌트 라이브러리 개발 및 유지보수 </li>
               <li>Makeshop 입점 쇼핑몰 관리자들이 사용하는 어드민 서비스 개발</li>
             </ul>

@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm'
 import { CalendarIcon } from '@heroicons/react/24/solid'
 import { PostComments } from '@/component/PostComments'
 import { SideToc } from '@/component/SideToc'
-
+import { TypographyH1, TypographyH4 } from '@common-ui'
 // import rehypeSanitize from 'rehype-sanitize'
 // import rehypeStringify from 'rehype-stringify'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         <div className="w-full">
           {/* 포스트 헤더 제목, 설명, 태그 등 */}
           <div className="flex flex-col gap-4">
-            <h1 className="text-center">{currentPost.frontMatter.title}</h1>
+            <TypographyH1 className="text-center">{currentPost.frontMatter.title}</TypographyH1>
             <div className="flex flex-col gap-2">
               <h5 className="text-center">{currentPost.frontMatter.description}</h5>
               <div className="flex items-center justify-center gap-2">
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
           {/* upper toc */}
           <div className="bg-gray-100 dark:bg-neutral-800 p-6 rounded-md mb-4 mt-10 xl:hidden">
             <div className="top-toc-container">
-              <h4 className="mb-[10px] text-gray-900 dark:text-neutral-400 ">목차</h4>
+              <TypographyH4 className="mb-[10px] text-gray-900 dark:text-neutral-400 ">목차</TypographyH4>
               <hr className="mb-2 border-gray-300 dark:border-gray-600" />
               <div className="dark:text-neutral-400 p-2" dangerouslySetInnerHTML={{ __html: tocHtml }} />
             </div>
