@@ -13,17 +13,18 @@ published: true
 
 ## 장점
 
-### 디스크 공간 절약 (Saving disk space)
+### 디스크 공간 절약
 
 npm 대신 pnpm을 사용하면 디스크 공간을 절약할 수 있다.
 예를 들어 react 를 쓰는 프로젝트가 100개 이고 npm을 사용한다면 100개의 프로젝트 마다`/node_modules`하위에 react 사본이 생성되고
 이는 디스크 공간을 잡아먹는다.
-하지만 pnpm을 사용한다면 실제로 각 프로젝트마다 사본을 생성하지 않고 content-addressable 저장소에 깔려있는 react를 참조하기만 한다.
-그렇다면 content-addressable 저장소는 어디에 그 실체가 있을까? 내 맥북으로 pnpm을 설치하고 `pnpm store path` 명령어를 실행하여 확인해보았다.
-`/Users/user/Library/pnpm/store/v10` 이라는 디렉토리를 확인할 수 있었다. 즉, 중앙에 설치된 저장소에서 깔려있는 패키지를 참조하기만 한다는 걸 알수 있었다.
-이런 구조라면 프로젝트의 수가 많아지면 많아질 수록 디스크 공간을 절약할 수 있는 효과가 더 커질 것이다.
 
-### 설치 속도가 빠름 (Boosting installation speed)
+하지만 pnpm을 사용한다면 실제로 각 프로젝트마다 사본을 생성하지 않고 content-addressable 저장소에 깔려있는 react를 참조하기만 한다.
+
+그렇다면 content-addressable 저장소는 어디에 그 실체가 있을까? 내 맥북으로 pnpm을 설치하고 `pnpm store path` 명령어를 실행하여 확인해보았다.
+`/Users/user/Library/pnpm/store/v10` 이라는 디렉토리를 확인할 수 있었다. 즉, 중앙에 설치된 저장소에서 깔려있는 패키지를 참조하기만 한다는 걸 알수 있었다. 이런 구조라면 프로젝트의 수가 많아지면 많아질 수록 디스크 공간을 절약할 수 있는 효과가 더 커질 것이다.
+
+### 빠른 설치 속도
 
 pnpm은 설치 속도가 기존의 전통적인 패키지 설치 방식보다 빠르다.
 왜 빠를까? 에 대한 공식적인 문서를 찾지 못했지만 프로젝트에 필요한 모든 패키지를 설치하지 않고 이미 디스크에 존재하는 패키지라면
@@ -38,7 +39,7 @@ pnpm은 설치 속도가 기존의 전통적인 패키지 설치 방식보다 �
 3. 의존성 링크 작업
    -> 스토어에 있는 패키지를 node_modules 디렉토리에 링크 (연결)
 
-### 평탄하지 않은 node_modules 디렉토리 생성 (Creating a non-flat node_modules directory)
+### 직관적인 의존성 트리
 
 기본적으로`npm` 또는 `yarn` 클래식을 통해 패키지를 설치할 때,
 모든 패키지는 node_modules 디렉토리의 루트에 그 의존성들이 설치된다. 따라서 package.json에 명시되지 않은 의존성들도
