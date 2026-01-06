@@ -1,6 +1,7 @@
 // import Image from 'next/image'
 import { getAllPosts } from '@/utils/post'
 import { PostCard } from '@/component/PostCard'
+import { TypographyH1 } from '@common-ui'
 export default async function Home() {
   const allPosts = await getAllPosts()
   return (
@@ -15,7 +16,7 @@ export default async function Home() {
         </ul>
       </div> */}
       <div className="mt-8 max-w-[800px] mx-auto">
-        <h1>Recent Posts</h1>
+        <TypographyH1 className="text-left">Recent Posts</TypographyH1>
         <ul className="list-none list-inside mt-4 flex flex-col gap-5">
           {allPosts.map((post) => {
             return <PostCard post={post} key={post.slug} />

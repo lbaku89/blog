@@ -1,4 +1,30 @@
 export { Badge } from './components/badge/index'
 export { Button } from './components/button/index'
+export {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+  DialogClose,
+} from './components/Dialog/index'
+export { Input } from './components/Input/index'
+export { Label } from './components/Label/index'
+export {
+  TypographyH1,
+  TypographyH2,
+  TypographyH3,
+  TypographyH4,
+  TypographyP,
+  TypographyBlockquote,
+  TypographyInlineCode,
+  TypographyMuted,
+  TypographySmall,
+  TypographyLarge,
+  TypographyLead,
+} from './components/Typography/index'
+// utils
 
 export { cn } from './lib/utils'

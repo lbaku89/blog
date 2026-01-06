@@ -11,7 +11,9 @@ const config: Config = {
     './component/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './posts/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@common-ui/**/*.{js,ts,jsx,tsx,mdx}',
+
+    // 모노레포 이므로 '@common-ui' 패키지 원본을 감지하도록 변경 (node_modules 로 할 경우 성능상 이슈 발생)
+    '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   plugins: [tailwindcssAnimated, typography],
   theme: {

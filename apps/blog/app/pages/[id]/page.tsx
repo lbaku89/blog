@@ -1,7 +1,6 @@
 import { getAllPosts } from '@/utils/post'
 import { POSTS_PER_PAGE } from '@/constants/post'
 import { PostCard } from '@/component/PostCard'
-export const dynamic = 'error'
 import { Pagination } from '@/component/Pagination'
 
 /**

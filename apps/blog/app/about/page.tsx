@@ -1,19 +1,21 @@
 import Image from 'next/image'
+import { TypographyH1 } from '@common-ui'
+
 const AboutPage = () => {
   return (
     <section className="max-w-5xl mx-auto">
-      <h1>About Me</h1>
+      <TypographyH1 className="text-left">About Me</TypographyH1>
       <hr className="my-[8px]" />
       <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-1 relative h-[300px] flex flex-col items-center pt-[20px]">
+        <div className="col-span-3 md:col-span-1 relative h-[300px] flex flex-col items-center pt-[20px]">
           <Image src="/avatar.webp" alt="profile" width={200} height={200} className="rounded-full" />
           <p className="font-semibold py-2">Hyunwoo</p>
           <p>Frontend Developer</p>
           <span>Seoul, Korea</span>
         </div>
-        <div className="col-span-2 pt-[20px] flex flex-col gap-4">
+        <div className="col-span-3 md:col-span-2 pt-[20px] flex flex-col gap-4">
           <p>
-            안녕하세요, 4년차 프론트엔드 개발자 권현우입니다. <br />
+            안녕하세요, 프론트엔드 개발자 권현우입니다. <br />
             제가 짠 코드로 유용한 서비스,프로그램을 만들수 있다는 매력에 빠져 개발자로 일하고 있습니다.
           </p>
           <div>
@@ -21,7 +23,7 @@ const AboutPage = () => {
               현재 ConnectWave, 메이크샵 사업부에서 프론트엔드 개발자로 재직 중이며, 아래와 같은 업무를 담당하고
               있습니다.
             </p>
-            <ul className="pl-2">
+            <ul className="pl-2 list-disc list-inside">
               <li>디자인시스템 기반 UI공통컴포넌트 라이브러리 개발 및 유지보수 </li>
               <li>Makeshop 입점 쇼핑몰 관리자들이 사용하는 어드민 서비스 개발</li>
             </ul>

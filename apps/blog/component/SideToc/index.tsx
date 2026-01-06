@@ -89,7 +89,7 @@ export function SideToc({ tocHtml }: Props) {
   }, [activeId])
 
   return (
-    <aside className="xl:absolute w-64 shrink-0 top-0 left-[100%] h-full">
+    <aside className="hidden xl:block xl:absolute w-64 shrink-0 top-0 left-[100%] h-full">
       <div className="sticky top-[150px] p-6">
         <p className="text-sm font-medium text-gray-900 dark:text-neutral-400 mb-2">목차</p>
         <div
