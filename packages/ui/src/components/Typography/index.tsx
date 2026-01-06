@@ -49,7 +49,7 @@ type TypographyH4Props = React.ComponentProps<'h4'> & {
 export function TypographyH4({ children, className, ...props }: TypographyH4Props) {
   return (
     <h4 className={cn('scroll-m-20 text-xl font-semibold tracking-tight', className)} {...props}>
-      People stopped telling jokes
+      {children}
     </h4>
   )
 }
