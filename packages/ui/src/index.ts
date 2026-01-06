@@ -12,6 +12,19 @@ export {
 } from './components/Dialog/index'
 export { Input } from './components/Input/index'
 export { Label } from './components/Label/index'
-
+export {
+  TypographyH1,
+  TypographyH2,
+  TypographyH3,
+  TypographyH4,
+  TypographyP,
+  TypographyBlockquote,
+  TypographyInlineCode,
+  TypographyMuted,
+  TypographySmall,
+  TypographyLarge,
+  TypographyLead,
+} from './components/Typography/index'
 // utils
+
 export { cn } from './lib/utils'
