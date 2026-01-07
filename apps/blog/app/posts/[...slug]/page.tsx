@@ -14,6 +14,9 @@ import { TypographyH1, TypographyH4 } from '@common-ui'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 
+// Next.js 15에서 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 방지
+export const dynamic = 'force-static'
+
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params
   const slugPath = slug.join('/')
