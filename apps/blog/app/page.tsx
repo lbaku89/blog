@@ -2,6 +2,10 @@
 import { getAllPosts } from '@/utils/post'
 import { PostCard } from '@/component/PostCard'
 import { TypographyH1 } from '@common-ui'
+
+// Next.js 15에서 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 방지
+export const dynamic = 'force-static'
+
 export default async function Home() {
   const allPosts = await getAllPosts()
   return (

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import frontMatter from 'front-matter'
 import { sync } from 'glob'
 import { type FrontMatter, type Post } from '@/types/post'
@@ -8,7 +9,9 @@ import rehypeStringify from 'rehype-stringify'
 import { toHtml } from 'hast-util-to-html'
 import rehypeSlug from 'rehype-slug'
 
-const POST_ENTRY_PATH = `${process.cwd()}/posts`
+// Next.js 15에서는 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 발생
+// 상대 경로를 사용하여 해결
+const POST_ENTRY_PATH = path.join(process.cwd(), 'posts')
 
 export async function getAllPosts(): Promise<Post[]> {
   /**
@@ -102,7 +105,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       slug,
       path: filePath,
     }
-  } catch (error) {
+  } catch {
     // 파일이 없거나 에러 발생시 null 반환
     return null
   }

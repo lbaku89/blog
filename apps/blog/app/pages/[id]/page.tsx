@@ -3,6 +3,9 @@ import { POSTS_PER_PAGE } from '@/constants/post'
 import { PostCard } from '@/component/PostCard'
 import { Pagination } from '@/component/Pagination'
 
+
+export const dynamic = 'force-static'
+
 /**
  * @returns [{slug:1}, {slug:2}, ...]
  */
