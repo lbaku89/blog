@@ -1,13 +1,16 @@
 // import Image from 'next/image'
-import { getAllPosts } from '@/utils/post'
-import { PostCard } from '@/component/PostCard'
-import { TypographyH1 } from '@common-ui'
+import { getAllPosts, getTagStats } from '@/utils/post'
+import { TagList } from '@/component/TagList'
+import { FilteredPosts } from '@/component/FilteredPosts'
+import { Suspense } from 'react'
 
 // Next.js 15에서 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 방지
 export const dynamic = 'force-static'
 
 export default async function Home() {
   const allPosts = await getAllPosts()
+  const tagStats = getTagStats(allPosts)
+  
   return (
     <>
       {/* <div className="p-8 rounded-md border border-gray-200 dark:border-gray-700">
@@ -19,14 +22,24 @@ export default async function Home() {
           <li>Main libraries/frameworks : Next.js, React.js</li>
         </ul>
       </div> */}
-      <div className="mt-8 max-w-[800px] mx-auto">
-        <TypographyH1 className="text-left">Recent Posts</TypographyH1>
-        <ul className="list-none list-inside mt-4 flex flex-col gap-5">
-          {allPosts.map((post) => {
-            return <PostCard post={post} key={post.slug} />
-          })}
-        </ul>
+      <div className="mt-8 max-w-[1200px] mx-auto px-4">
+        <div className="flex flex-col lg:flex-row gap-8 justify-center">
+          {/* 좌측: 포스트 목록 */}
+          <div className="flex-1 max-w-[800px] min-w-0 order-2 lg:order-1">
+            <Suspense fallback={<div>로딩 중...</div>}>
+              <FilteredPosts allPosts={allPosts} />
+            </Suspense>
+          </div>
+          
+          {/* 우측: 태그 목록 */}
+          <aside className="w-full lg:w-[250px] flex-shrink-0 order-1 lg:order-2">
+            <Suspense fallback={<div>로딩 중...</div>}>
+              <TagList tags={tagStats} />
+            </Suspense>
+          </aside>
+        </div>
       </div>
     </>
   )
 }
+

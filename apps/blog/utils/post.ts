@@ -125,3 +125,33 @@ export async function getTocFromMdx(source: string) {
 
   return { tocHtml }
 }
+
+/**
+ * @description 모든 포스트에서 태그 통계를 계산하는 함수
+ * @returns 태그 이름과 해당 태그를 가진 포스트 개수를 담은 객체 배열
+ */
+export function getTagStats(posts: Post[]): Array<{ tag: string; count: number }> {
+  const tagMap = new Map<string, number>()
+
+  posts.forEach((post) => {
+    post.frontMatter.tags.forEach((tag) => {
+      const trimmedTag = tag.trim()
+      tagMap.set(trimmedTag, (tagMap.get(trimmedTag) || 0) + 1)
+    })
+  })
+
+  return Array.from(tagMap.entries())
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count) // 개수 내림차순 정렬
+}
+
+/**
+ * @description 특정 태그로 포스트를 필터링하는 함수
+ * @param posts - 필터링할 포스트 배열
+ * @param tag - 필터링할 태그 이름
+ * @returns 해당 태그를 가진 포스트 배열
+ */
+export function getPostsByTag(posts: Post[], tag: string): Post[] {
+  const trimmedTag = tag.trim()
+  return posts.filter((post) => post.frontMatter.tags.some((t) => t.trim() === trimmedTag))
+}
