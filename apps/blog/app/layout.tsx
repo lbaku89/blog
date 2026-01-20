@@ -5,6 +5,7 @@ import '@common-ui/src/styles/variables.css'
 import './globals.css'
 import { Footer } from '@/component/Footer'
 import { Header } from '@/component/Header'
+import { ScrollToTop } from '@/component/ScrollToTop'
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -77,6 +78,7 @@ export default function RootLayout({
           <div className="py-[30px] flex-1">{children}</div>
         </div>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   )
