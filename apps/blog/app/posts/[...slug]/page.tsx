@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   }
 
   return (
-    <article>
+    <article className='px-4'>
       {/* 컴포넌트 맵을 전달 */}
       <div className="flex gap-4 mx-auto max-w-[750px]">
         {/* 포스트 헤더 + 포스팅 */}
@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
 
           <div className="relative">
             {/* 포스팅 내용 */}
-            <div className="prose dark:prose-invert p-2 post-wrapper pt-[30px] max-w-full ">
+            <div className="prose dark:prose-invert post-wrapper pt-[30px] max-w-full ">
               <MDXRemote
                 source={currentPost.body}
                 components={mdxComponents}
