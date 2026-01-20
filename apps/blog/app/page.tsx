@@ -1,6 +1,7 @@
 // import Image from 'next/image'
-import { getAllPosts } from '@/utils/post'
+import { getAllPosts, getTagStats } from '@/utils/post'
 import { InfiniteScrollPosts } from '@/component/InfiniteScrollPosts'
+import { TagList } from '@/component/TagList'
 import { TypographyH1 } from '@common-ui'
 
 // Next.js 15에서 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 방지
@@ -11,6 +12,7 @@ export default async function Home() {
   // 초기 5개만 로드
   const initialPosts = allPosts.slice(0, 5)
   const hasMore = allPosts.length > 5
+  const tagStats = getTagStats(allPosts)
   
   return (
     <>
@@ -23,9 +25,19 @@ export default async function Home() {
           <li>Main libraries/frameworks : Next.js, React.js</li>
         </ul>
       </div> */}
-      <div className="mt-8 max-w-[800px] mx-auto">
-        <TypographyH1 className="text-left">Recent Posts</TypographyH1>
-        <InfiniteScrollPosts initialPosts={initialPosts} initialHasMore={hasMore} />
+      <div className="mt-8 max-w-[1200px] mx-auto px-4">
+        <div className="flex gap-8 justify-center">
+          {/* 좌측: 포스트 목록 */}
+          <div className="flex-1 max-w-[800px] min-w-0">
+            <TypographyH1 className="text-left">Recent Posts</TypographyH1>
+            <InfiniteScrollPosts initialPosts={initialPosts} initialHasMore={hasMore} />
+          </div>
+          
+          {/* 우측: 태그 목록 */}
+          <aside className="hidden lg:block w-[250px] flex-shrink-0">
+            <TagList tags={tagStats} />
+          </aside>
+        </div>
       </div>
     </>
   )
