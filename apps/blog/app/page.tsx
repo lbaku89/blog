@@ -1,6 +1,6 @@
 // import Image from 'next/image'
 import { getAllPosts } from '@/utils/post'
-import { PostCard } from '@/component/PostCard'
+import { InfiniteScrollPosts } from '@/component/InfiniteScrollPosts'
 import { TypographyH1 } from '@common-ui'
 
 // Next.js 15에서 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 방지
@@ -8,6 +8,10 @@ export const dynamic = 'force-static'
 
 export default async function Home() {
   const allPosts = await getAllPosts()
+  // 초기 5개만 로드
+  const initialPosts = allPosts.slice(0, 5)
+  const hasMore = allPosts.length > 5
+  
   return (
     <>
       {/* <div className="p-8 rounded-md border border-gray-200 dark:border-gray-700">
@@ -21,11 +25,7 @@ export default async function Home() {
       </div> */}
       <div className="mt-8 max-w-[800px] mx-auto">
         <TypographyH1 className="text-left">Recent Posts</TypographyH1>
-        <ul className="list-none list-inside mt-4 flex flex-col gap-5">
-          {allPosts.map((post) => {
-            return <PostCard post={post} key={post.slug} />
-          })}
-        </ul>
+        <InfiniteScrollPosts initialPosts={initialPosts} initialHasMore={hasMore} />
       </div>
     </>
   )
