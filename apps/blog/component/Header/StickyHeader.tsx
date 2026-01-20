@@ -55,7 +55,7 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
             <ul className="flex list-none">
               <li>
                 <Button asChild variant="link">
-                  <Link href="/pages/1">Post</Link>
+                  <Link href="/">Post</Link>
                 </Button>
               </li>
               <li>
