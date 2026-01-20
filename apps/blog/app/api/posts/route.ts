@@ -1,12 +1,18 @@
 import { NextResponse } from 'next/server'
-import { getAllPosts } from '@/utils/post'
+import { getAllPosts, getPostsByTag } from '@/utils/post'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const page = parseInt(searchParams.get('page') || '1', 10)
   const limit = parseInt(searchParams.get('limit') || '5', 10)
+  const tag = searchParams.get('tag')
 
-  const allPosts = await getAllPosts()
+  let allPosts = await getAllPosts()
+  
+  // 태그 필터링
+  if (tag) {
+    allPosts = getPostsByTag(allPosts, tag)
+  }
   
   const startIndex = (page - 1) * limit
   const endIndex = startIndex + limit

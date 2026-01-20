@@ -7,9 +7,10 @@ import { type Post } from '@/types/post'
 interface InfiniteScrollPostsProps {
   initialPosts: Post[]
   initialHasMore?: boolean
+  tag?: string
 }
 
-export const InfiniteScrollPosts = ({ initialPosts, initialHasMore = true }: InfiniteScrollPostsProps) => {
+export const InfiniteScrollPosts = ({ initialPosts, initialHasMore = true, tag }: InfiniteScrollPostsProps) => {
   const [posts, setPosts] = useState<Post[]>(initialPosts)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(initialHasMore)
@@ -22,7 +23,8 @@ export const InfiniteScrollPosts = ({ initialPosts, initialHasMore = true }: Inf
     setIsLoading(true)
     try {
       const nextPage = page + 1
-      const response = await fetch(`/api/posts?page=${nextPage}&limit=5`)
+      const tagParam = tag ? `&tag=${encodeURIComponent(tag)}` : ''
+      const response = await fetch(`/api/posts?page=${nextPage}&limit=5${tagParam}`)
       const data = await response.json()
 
       if (data.posts && data.posts.length > 0) {
@@ -47,7 +49,7 @@ export const InfiniteScrollPosts = ({ initialPosts, initialHasMore = true }: Inf
     } finally {
       setIsLoading(false)
     }
-  }, [page, isLoading])
+  }, [page, isLoading, tag])
 
   useEffect(() => {
     const observer = new IntersectionObserver(

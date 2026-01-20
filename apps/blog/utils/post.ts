@@ -144,3 +144,14 @@ export function getTagStats(posts: Post[]): Array<{ tag: string; count: number }
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count) // 개수 내림차순 정렬
 }
+
+/**
+ * @description 특정 태그로 포스트를 필터링하는 함수
+ * @param posts - 필터링할 포스트 배열
+ * @param tag - 필터링할 태그 이름
+ * @returns 해당 태그를 가진 포스트 배열
+ */
+export function getPostsByTag(posts: Post[], tag: string): Post[] {
+  const trimmedTag = tag.trim()
+  return posts.filter((post) => post.frontMatter.tags.some((t) => t.trim() === trimmedTag))
+}
