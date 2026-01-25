@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   return (
     <article className='px-4'>
       {/* 컴포넌트 맵을 전달 */}
-      <div className="flex gap-4 mx-auto max-w-[750px]">
+      <div className="flex gap-4 mx-auto max-w-[700px]">
         {/* 포스트 헤더 + 포스팅 */}
         <div className="w-full">
           {/* 포스트 헤더 제목, 설명, 태그 등 */}
