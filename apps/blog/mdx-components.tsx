@@ -1,9 +1,11 @@
 import { ProgressBar, ProgressBar2, ProgressBar3 } from '@/component/ProgressBar'
+import { InfoCard } from '@/component/InfoCard'
 import Image from 'next/image'
 export const mdxComponents = {
   ProgressBar,
   ProgressBar2,
   ProgressBar3,
+  InfoCard,
   Image: (props: React.ComponentPropsWithoutRef<typeof Image>) => {
     return <Image {...props} />
   },
