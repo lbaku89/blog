@@ -9,6 +9,7 @@ interface Props {
 export function SideToc({ tocHtml }: Props) {
   const [activeId, setActiveId] = useState<string | null>(null)
   const tocRef = useRef<HTMLDivElement | null>(null)
+  const indicatorRef = useRef<HTMLDivElement | null>(null)
 
   // 1) 헤딩들 관찰해서 activeId 갱신
   useEffect(() => {
@@ -55,7 +56,7 @@ export function SideToc({ tocHtml }: Props) {
          * 목차 링크 클릭 시 헤딩이 상단 150px 아래로 이동하므로,
          * 그 위치를 기준으로 active 상태를 판단
          * 하단 마진을 크게 설정하여 헤딩이 상단 근처에 있을 때만 active 처리
-         * 
+         *
          * xl 브레이크포인트 이상에서만 표시되므로 작은 화면 고려 불필요
          */ rootMargin: '-150px 0px -70% 0px',
         /**
@@ -71,34 +72,60 @@ export function SideToc({ tocHtml }: Props) {
     return () => observer.disconnect()
   }, [])
 
-  // 2) activeId 바뀔 때마다 TOC DOM에 클래스 토글
+  // 2) activeId 바뀔 때마다 TOC DOM에 클래스 토글 및 바 위치 업데이트
   useEffect(() => {
-    if (!tocRef.current) return
+    if (!tocRef.current || !indicatorRef.current) return
     const links = Array.from(tocRef.current.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'))
+
+    let activeListItem: HTMLLIElement | null = null
 
     links.forEach((link) => {
       const hrefId = link.getAttribute('href')?.slice(1) // "#id" -> "id"
       if (!hrefId) return
 
-      if (hrefId === activeId) {
-        link.classList.add('text-blue-500', 'font-semibold')
-        link.classList.remove('text-neutral-400')
-      } else {
-        link.classList.remove('text-blue-500', 'font-semibold')
-        link.classList.add('text-neutral-400')
+      const listItem = link.closest('li') as HTMLLIElement | null
+      if (listItem) {
+        if (hrefId === activeId) {
+          link.classList.add('text-blue-500', 'font-semibold')
+          link.classList.remove('text-neutral-400')
+          activeListItem = listItem
+        } else {
+          link.classList.remove('text-blue-500', 'font-semibold')
+          link.classList.add('text-neutral-400')
+        }
       }
     })
+
+    // 바 위치 업데이트 (수직으로만 이동)
+    const tocContainer = tocRef.current
+    if (activeListItem && indicatorRef.current && tocContainer) {
+      const itemTop = (activeListItem as HTMLLIElement).offsetTop - tocContainer.offsetTop
+      const itemHeight = (activeListItem as HTMLLIElement).offsetHeight
+
+      indicatorRef.current.style.transform = `translateY(${itemTop}px)`
+      indicatorRef.current.style.height = `${itemHeight}px`
+      indicatorRef.current.style.opacity = '1'
+    } else if (indicatorRef.current) {
+      indicatorRef.current.style.opacity = '0'
+    }
   }, [activeId])
 
   return (
     <aside className="hidden xl:block xl:absolute w-64 shrink-0 top-0 left-[100%] h-full">
       <div className="sticky top-[150px] p-6">
         <p className="text-sm font-medium text-gray-900 dark:text-neutral-400 mb-2">목차</p>
-        <div
-          ref={tocRef}
-          className="text-neutral-400 p-2 text-xs leading-snug space-y-1"
-          dangerouslySetInnerHTML={{ __html: tocHtml }}
-        />
+        <div className="relative">
+          <div
+            ref={indicatorRef}
+            className="absolute left-0 w-0.5 bg-blue-400 dark:bg-blue-500 opacity-0 transition-all duration-300 ease-in-out"
+            style={{ transform: 'translateY(0px)', height: '0px' }}
+          />
+          <div
+            ref={tocRef}
+            className="text-neutral-400 p-2 text-xs leading-snug space-y-1 relative"
+            dangerouslySetInnerHTML={{ __html: tocHtml }}
+          />
+        </div>
       </div>
     </aside>
   )
