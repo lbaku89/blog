@@ -138,6 +138,11 @@ xl	1280px	@media (min-width: 1280px) { ... }
   @apply text-blue-500 dark:text-blue-400 rounded text-[85%] align-middle;
 }
 
+/* 포스팅 이미지 rounded 스타일 */
+.prose img {
+  @apply rounded-lg;
+}
+
 .post-wrapper.prose h1 a {
   font-weight: 800;
 }
