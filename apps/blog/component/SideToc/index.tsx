@@ -48,17 +48,19 @@ export function SideToc({ tocHtml }: Props) {
          * "뷰포트 전체"를 기준으로 intersect 여부를 계산하지만
          *
          * 아래처럼 margin을 적용하면
-         * - 화면 위쪽 40%
-         * - 화면 아래쪽 50%
-         * 을 제외한 ‘가운데 영역’에서만 감지되도록 조정 가능
+         * - 화면 위쪽 150px (scroll-margin-top과 동일)
+         * - 화면 아래쪽 70%
+         * 을 제외한 영역에서 감지되도록 조정
          *
-         * 즉, heading이 화면 중앙 부근에 왔을 때 active 처리됨
-         */ rootMargin: '-40% 0px -50% 0px',
+         * 목차 링크 클릭 시 헤딩이 상단 150px 아래로 이동하므로,
+         * 그 위치를 기준으로 active 상태를 판단
+         * 하단 마진을 크게 설정하여 헤딩이 상단 근처에 있을 때만 active 처리
+         * 
+         * xl 브레이크포인트 이상에서만 표시되므로 작은 화면 고려 불필요
+         */ rootMargin: '-150px 0px -70% 0px',
         /**
          * threshold
          * 0 = 요소의 일부라도 걸쳐있으면 intersect true
-         *
-         * rootMargin과 조합해서 "중앙 근처에서만 true"가 되도록 설정
          */
         threshold: 0,
       }
