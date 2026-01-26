@@ -1,0 +1,133 @@
+---
+title: 'How do Server and Client Components work in Next.js?'
+description: 'Nextjs 에서 서버컴포넌트와 클라이언트컴포넌트가 어떻게 렌더링 되는지 알아보기 ( RSC Payload 이해하기 )'
+date: '2026-01-21'
+tags: ['nextjs', 'react', 'server-component']
+published: true
+private: false
+---
+
+## 배경
+
+요즘 많은 개발자들이 React의 프레임워크인 Next.js를 쓰고 있고 나 역시도 마찬가지다.
+최근에 Nextjs에서 어떻게 서버컴포넌트가 서버사이드 렌더링이 일어나고
+동시에 서버에서 패칭한 데이터가 클라이언트 컴포넌트에 전달되는지에 대한 생각을 해봤는데 구체적으로 설명을 할 수 없었다.
+그래서 공식문서를 찾아봤고 역시 이에 대해 기재되어 있었다.
+그래서 이번 기회에 공식문서를 바탕으로 정리하려고 한다.
+
+<InfoCard variant="info">
+  본 포스팅은 Next.js 16 App router 공식문서를 읽으면서 의미를 파악하고 해석하는 방식으로 작성하였습니다. [공식문서
+  링크](https://nextjs.org/docs/app/getting-started/server-and-client-components#how-do-server-and-client-components-work-in-nextjs)
+</InfoCard>
+
+## How do Server and Client Components work in Next.js?
+
+Nextjs 서버컴포넌트와 클라이언트 컴포넌트가 각각 서버에서, 그리고 클라이언트(브라우저)에서
+어떤 과정을 거쳐 어떤 방식으로 렌더링되어 우리가 화면을 볼 수 있는지 전반적으로 설명하고 있다.
+그리고 그 설명 중 RSC Payload 라는 특별한 포맷에 대해서도 언급되어 있다.
+
+### On the server
+
+서버에서 일어나는 일
+
+> On the server, Next.js uses React's APIs to orchestrate rendering. The rendering work is split into chunks, by individual route segments ([layouts and pages](https://nextjs.org/docs/app/getting-started/layouts-and-pages)):
+
+서버에서 Nextjs는 React API를 렌더링할 때 사용한다.
+( React를 사용한다고 이해하면 된다, 어찌보면 React의 프레임워크이니 당연한 이야기다 )
+렌더링 작업은 라우트 ( 레이아웃, 페이지 ) 별로 청크들로 나뉜다고 하는데
+여기서 말하는 청크는 rendering work 단위로 이해하면 될 것 같다.
+
+> **Server Components** are rendered into a special data format called the React Server Component Payload (RSC Payload).
+
+서버컴포넌트는 React Server Component Payload ( RSC payload ) 로 렌더링 된다
+
+> **Client Components** and the RSC Payload are used to [pre-render](https://nextjs.org/docs/app/guides/caching#rendering-strategies) HTML.
+
+client component와 RSC payload 를 이용하여 HTML을 `pre-render` 한다.
+그런데 `pre-render` 가 무엇일까?
+여기서 pre-render는 인터렉티브한 페이지가 아닌 단순 빠른 뷰를 위한 HTML을 만드는 행위라고 보여진다.
+
+<InfoCard variant="default">
+> **What is the React Server Component Payload (RSC)?**
+
+RSC Payload 가 무엇일까?
+
+> The RSC Payload is a compact binary representation of the rendered React Server Components tree.
+
+RSC Payload는 렌더링된 React Server Components 트리의 compact한 이진 표현입니다.
+
+> It's used by React on the client to update the browser's DOM. The RSC Payload contains:
+
+RSC Payload는 클라이언트에서 browser’s의 DOM을 업데이트 하기 위해 사용되며 아래와 같은 항목들을 포함하고 있다.
+
+> 1.The rendered result of Server Components  
+> 2.Placeholders for where Client Components should be rendered and references to their JavaScript files  
+> 3.Any props passed from a Server Component to a Client Component
+
+1. 서버컴포넌트의 렌더링 결과
+2. 어디에 클라이언트 컴포넌트가 렌더링 되어야 되는지에 대한 placeholder - 공간,
+   그 컴포넌트에 대한 자바스크립트 지침
+3. 서버컴포넌트에서 클라이언트로 전달되는 props
+
+</InfoCard>
+
+**서버에서 일어나는 일을 요약하자면**
+
+Nextjs 렌더링 작업은 layout, page 별로 나뉘어서 진행되고 이 렌더링을 위해 React를 이용한다고 한다.
+( Nextjs가 React의 프레임워크이니 어찌보면 당연한 이야기이다. )
+
+서버에서 서버컴포넌트는 RSC payload로 렌더링되고,
+이 RSC payload와 Client컴포넌트를 이용하여 HTML을 pre-render한다.
+참고로 RSC payload는 클라이언트로 전달되고 아래와 같이 추상화 할 수 있다.
+
+![rsc-payload](https://pub-a578dcd164ef4e9fb8b9c1c67f7468ed.r2.dev/posts/2026/01/nextjs-server-client-components/rsc.png)
+
+### On the client ( first load )
+
+첫 로드시 클라이언트에서 일어나는 프로세스를 설명해주고 있다.
+여기서 **first load**, 즉 첫 화면 진입 시 라는 점을 염두하고 보자.
+
+> Then, on the client:
+>
+> 1. **HTML** is used to immediately show a fast non-interactive preview of the route to the user.
+> 2. **RSC Payload** is used to reconcile the Client and Server Component trees.
+> 3. **JavaScript** is used to hydrate Client Components and make the application interactive.
+
+1. 인터렉션이 불가능한 화면을 즉시 보여준다 ( preview )
+2. RSC Payload가 클라이언트 컴포넌트와 서버컴포넌트 트리를 reconcile 하기 위해 사용된다
+3. 자바스크립트는 클라이언트 컴포넌트를 hydrate하여 interactive한 애플리케이션을 완성한다
+
+<InfoCard variant="default">
+> **What is hydration?**
+> Hydration is React's process for attaching [event handlers](https://react.dev/learn/responding-to-events) to the DOM, to make the static HTML interactive.
+
+하이드레이션이란?
+하이드레이션 이란 이벤트 핸들러를 DOM에 붙여 정적인 HTML을 인터렉티브하게 만드는 과정을 의미
+
+</InfoCard>
+
+**첫 로드시 클라이언트에서 일어나는 일을 요약하자면**
+
+pre-render된 html이 정적인 형태로 화면에 바로 보여지고 RSC payload를 이용하여 서버컴포넌트 트리에 클라이언트 컴포넌트가 reconcile 되고
+클라이언트 컴포넌트는 js 파일에 의해 하이드레이션 되어 인터렉티브한 화면이 완성된다
+
+### Subsequent Navigations
+
+여기서 말하는 subsequent navigations 는 Link나 router.push를 통해
+처음 진입한 페이지 이후에 이동하는 모든 페이지를 의미하는 것이다.
+
+> On subsequent navigations:
+>
+> 1. The **RSC Payload** is prefetched and cached for instant navigation.
+> 2. **Client Components** are rendered entirely on the client, without the server-rendered HTML.
+
+1. 화면에 Link 컴포넌트 같은 요소들이 있을 때 서버컴포넌트의 실행결과인 RSC payload를 프리패치 해서 빠른 화면전환이 진행된다는 의미이다.
+   내 생각엔 이 이점을 살리려면 서버에서 진행되는 데이터패칭 같은 경우 캐싱이 되는 조건으로 가야 할 것 같다.
+2. 클라이언트 컴포넌트의 경우 첫로드시와 다르게 서버에서 렌더링을 통한 HTML 생성과정 없이 클라이언트에서 컴포넌트가
+   렌더링 되는 것은 아마 서버에서 pre-render를 하는 것 보단 이미 첫 로드시 만들어진 dom에 변경사항만 반영하는게 클라이언트 사이드에서 반영하는게 효율적이서 그런것으로 추측된다.
+
+## 참고
+
+- https://nextjs.org/docs/app/getting-started/server-and-client-components#how-do-server-and-client-components-work-in-nextjs
+- https://nextjs-ko.org/docs/app/building-your-application/rendering/server-components
+- https://www.youtube.com/watch?v=XdiMjKSCOfc

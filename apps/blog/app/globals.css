@@ -16,7 +16,7 @@ h4,
 h5,
 h6 {
   /* 스크롤로 이동시 상방 마진 줌 */
-  scroll-margin-top: 50px; /* or 원하는 값 */
+  scroll-margin-top: 150px; /* or 원하는 값 */
 }
 
 body {
@@ -136,6 +136,11 @@ xl	1280px	@media (min-width: 1280px) { ... }
   margin-right: 0.2em !important;
   display: inline-block !important;
   @apply text-blue-500 dark:text-blue-400 rounded text-[85%] align-middle;
+}
+
+/* 포스팅 이미지 rounded 스타일 */
+.prose img {
+  @apply rounded-lg;
 }
 
 .post-wrapper.prose h1 a {
