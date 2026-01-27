@@ -4,11 +4,13 @@ import { Button, Label, Input } from '@common-ui'
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@common-ui'
 import { LogIn, LogOut } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: boolean }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [loginInputs, setLoginInputs] = useState({ id: '', password: '' })
+  const pathname = usePathname()
 
   const handleLogin = () => {
     fetch('/api/login', {
@@ -19,6 +21,10 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
         if (response.ok) {
           setIsLoggedIn(true)
           setDialogOpen(false)
+          // 홈페이지(/)에 있으면 서버 컴포넌트를 다시 렌더링하기 위해 페이지 새로고침
+          if (pathname === '/') {
+            window.location.reload()
+          }
         } else if (response.status === 401) {
           alert('아이디 또는 비밀번호가 일치하지 않습니다.')
         }
@@ -32,6 +38,10 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
     fetch('/api/logout')
       .then(() => {
         setIsLoggedIn(false)
+        // 홈페이지(/)에 있으면 서버 컴포넌트를 다시 렌더링하기 위해 페이지 새로고침
+        if (pathname === '/') {
+          window.location.reload()
+        }
       })
       .catch((error) => {
         alert('로그아웃 실패: ' + error.message)

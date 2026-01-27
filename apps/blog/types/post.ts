@@ -4,6 +4,7 @@ export interface FrontMatter {
   date: string
   published: boolean
   tags: string[]
+  adminOnly?: boolean
 }
 export interface Post {
   frontMatter: Omit<FrontMatter, 'date'> & {

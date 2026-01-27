@@ -13,9 +13,11 @@ import { TypographyH1, TypographyH4 } from '@common-ui'
 // import rehypeStringify from 'rehype-stringify'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
+import { isAdminAuthenticated } from '@/lib/auth'
+import { notFound } from 'next/navigation'
 
 // Next.js 15에서 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 방지
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params
@@ -23,11 +25,20 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
 
   // 개별 포스트만 조회 (더 효율적)
   const currentPost = await getPostBySlug(slugPath)
-  const { tocHtml } = await getTocFromMdx(currentPost?.body || '')
-
+  
   if (!currentPost) {
-    return <div>Post not found</div>
+    notFound()
   }
+
+  // admin 전용 포스팅인 경우 권한 체크
+  if (currentPost.frontMatter.adminOnly) {
+    const isAdmin = await isAdminAuthenticated()
+    if (!isAdmin) {
+      notFound()
+    }
+  }
+
+  const { tocHtml } = await getTocFromMdx(currentPost.body)
 
   return (
     <article className='px-4'>
@@ -45,6 +56,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
                 <p className="text-center">{getYYYYMMDD(currentPost.frontMatter.date)}</p>
               </div>
               <ul className="mb-4 flex gap-2 justify-center list-none">
+                {/* admin 전용 포스팅이면 "admin-only" 태그 추가 */}
+                {currentPost.frontMatter.adminOnly && (
+                  <li key="admin-only">
+                    <Badge variant="secondary">admin-only</Badge>
+                  </li>
+                )}
+                {/* 일반 태그 표시 */}
                 {currentPost.frontMatter.tags.map((tag) => (
                   <li key={tag}>
                     <Badge variant="secondary">{tag}</Badge>
