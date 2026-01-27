@@ -16,6 +16,13 @@ export const PostCard = ({ post }: { post: Post }) => {
 
           <ul className="flex flex-wrap gap-2 mt-3 list-none">
             <TypographyP>{getYYYYMMDD(post.frontMatter.date)}</TypographyP>
+            {/* admin 전용 포스팅이면 "admin-only" 태그 추가 */}
+            {post.frontMatter.adminOnly && (
+              <li key="admin-only">
+                <Badge variant="secondary">admin-only</Badge>
+              </li>
+            )}
+            {/* 일반 태그 표시 */}
             {post.frontMatter.tags.map((tag) => (
               <li key={tag}>
                 <Badge variant="secondary">{tag}</Badge>

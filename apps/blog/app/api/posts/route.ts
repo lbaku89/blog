@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { getAllPosts, getPostsByTag } from '@/utils/post'
+import { getAllPosts, getPostsByTag, filterPostsByAdminAccess } from '@/utils/post'
+import { isAdminAuthenticated } from '@/lib/auth'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
@@ -8,6 +9,10 @@ export async function GET(req: Request) {
   const tag = searchParams.get('tag')
 
   let allPosts = await getAllPosts()
+  
+  // admin 권한 체크 및 필터링
+  const isAdmin = await isAdminAuthenticated()
+  allPosts = filterPostsByAdminAccess(allPosts, isAdmin)
   
   // 태그 필터링
   if (tag) {

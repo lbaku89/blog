@@ -3,7 +3,6 @@
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { InfiniteScrollPosts } from '@/component/InfiniteScrollPosts'
-import { ProfileSection } from '@/component/ProfileSection'
 import { TypographyH1 } from '@common-ui'
 import { type Post } from '@/types/post'
 
@@ -17,7 +16,26 @@ export const FilteredPosts = ({ allPosts }: FilteredPostsProps) => {
 
   // 태그로 필터링
   const filteredPosts = useMemo(() => {
-    return tag ? allPosts.filter((post) => post.frontMatter.tags.some((t) => t.trim() === tag.trim())) : allPosts
+    if (!tag) return allPosts
+    
+    const trimmedTag = tag.trim()
+    
+    // "admin-only" 태그는 admin 전용 포스팅을 필터링
+    if (trimmedTag === 'admin-only') {
+      return allPosts.filter((post) => post.frontMatter.adminOnly === true)
+    }
+    
+    // admin 권한이 있는지 확인 (allPosts에 admin 전용 포스팅이 포함되어 있으면 admin 권한이 있음)
+    const hasAdminAccess = allPosts.some((post) => post.frontMatter.adminOnly)
+    
+    // 일반 태그는 실제 태그 배열에서 찾기
+    return allPosts.filter((post) => {
+      // admin 권한이 있으면 admin 전용 포스팅도 포함, 없으면 제외
+      if (post.frontMatter.adminOnly && !hasAdminAccess) {
+        return false
+      }
+      return post.frontMatter.tags.some((tag) => tag.trim() === trimmedTag)
+    })
   }, [allPosts, tag])
 
   // 초기 5개만 로드
@@ -26,7 +44,6 @@ export const FilteredPosts = ({ allPosts }: FilteredPostsProps) => {
 
   return (
     <>
-      {!tag && <ProfileSection />}
       <TypographyH1 className="text-left">
         {tag ? <span className="text-blue-600 dark:text-blue-400">#{tag}</span> : 'Recent Posts'}
       </TypographyH1>

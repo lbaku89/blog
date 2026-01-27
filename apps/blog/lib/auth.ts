@@ -1,5 +1,7 @@
 // crypto 해시 / 암호화 / HMAC 등을 제공하는 표준 라이브러리
 import crypto from 'crypto'
+import { cookies } from 'next/headers'
+import { ADMIN_COOKIE_NAME } from '@/constant'
 
 const PASSWORD = process.env.BLOG_ADMIN_PASSWORD!
 const SECRET = process.env.BLOG_SESSION_SECRET!
@@ -27,4 +29,14 @@ export function verifyAdminAuthToken(token?: string | null) {
   // 비교 시간 = “항상 동일”
   // 그래서 “얼마나 맞췄는지”를 시간으로 추측할 수 없음
   // return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(valid))
+}
+
+/**
+ * @description 서버 사이드에서 현재 요청이 admin 권한을 가지고 있는지 확인
+ * @returns admin 권한이 있으면 true, 없으면 false
+ */
+export async function isAdminAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get(ADMIN_COOKIE_NAME)?.value
+  return verifyAdminAuthToken(token)
 }

@@ -1,15 +1,17 @@
-import { getAllPosts } from '@/utils/post'
+import { getAllPosts, filterPostsByAdminAccess } from '@/utils/post'
 import { POSTS_PER_PAGE } from '@/constants/post'
 import { PostCard } from '@/component/PostCard'
 import { Pagination } from '@/component/Pagination'
+import { isAdminAuthenticated } from '@/lib/auth'
 
-
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 /**
  * @returns [{slug:1}, {slug:2}, ...]
  */
 export async function generateStaticParams() {
+  // 정적 생성 시에는 admin 권한을 체크할 수 없으므로 모든 포스트를 기준으로 생성
+  // 실제 렌더링 시에는 필터링됨
   const posts = await getAllPosts()
 
   /**
@@ -21,7 +23,12 @@ export async function generateStaticParams() {
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params
-  const allPosts = await getAllPosts()
+  const allPostsRaw = await getAllPosts()
+
+  // admin 권한 체크 및 필터링
+  const isAdmin = await isAdminAuthenticated()
+  const allPosts = filterPostsByAdminAccess(allPostsRaw, isAdmin)
+
   const pageNo = parseInt(params.id)
 
   const [startIndex, endIndex] = [(pageNo - 1) * POSTS_PER_PAGE, pageNo * POSTS_PER_PAGE]
