@@ -1,0 +1,72 @@
+---
+description: 코드 작성 시 과도한 축약어 사용 금지
+alwaysApply: true
+---
+
+# 축약어 사용 규칙
+
+코드를 작성할 때 과도한 축약어 사용을 피하고, 의미가 명확한 전체 단어를 사용하세요.
+
+## 금지되는 축약어 예시
+
+### 변수명
+```typescript
+// ❌ BAD
+const pct = 0
+const initRes = await fetch(...)
+const compRes = await fetch(...)
+const xhr = new XMLHttpRequest()
+const ref = useRef(null)
+const btn = document.querySelector('button')
+
+// ✅ GOOD
+const percentage = 0
+const initResponse = await fetch(...)
+const completeResponse = await fetch(...)
+const httpRequest = new XMLHttpRequest()
+const elementRef = useRef(null)
+const button = document.querySelector('button')
+```
+
+### 함수명
+```typescript
+// ❌ BAD
+function calcTotal() {}
+function getUsrInfo() {}
+function updStatus() {}
+
+// ✅ GOOD
+function calculateTotal() {}
+function getUserInfo() {}
+function updateStatus() {}
+```
+
+### 타입/인터페이스
+```typescript
+// ❌ BAD
+type PartState = {
+  pct: number
+  etag?: string
+}
+
+// ✅ GOOD
+type PartState = {
+  percentage: number
+  eTag?: string
+}
+```
+
+## 허용되는 축약어
+
+다음과 같은 경우는 축약어 사용이 허용됩니다:
+
+1. **업계 표준 축약어**: `id`, `url`, `api`, `http`, `https`, `json`, `xml`, `html`, `css`, `js`, `ts`, `tsx`, `jsx`
+2. **일반적으로 사용되는 축약어**: `max`, `min`, `len` (length), `str` (string), `num` (number), `arr` (array), `obj` (object)
+3. **루프 변수**: `i`, `j`, `k` (인덱스), `idx` (index)
+4. **짧은 스코프의 임시 변수**: 함수 내부에서만 사용되고 의미가 명확한 경우
+
+## 원칙
+
+- **가독성 우선**: 코드를 읽는 사람이 즉시 이해할 수 있어야 합니다
+- **명확성**: 축약어로 인한 모호함이 없어야 합니다
+- **일관성**: 프로젝트 내에서 일관된 네이밍을 유지하세요
