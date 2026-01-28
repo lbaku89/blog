@@ -1,6 +1,6 @@
 ---
-title: 'React 렌더링 최적화에 어느 시점에?!'
-description: 'React 렌더링 최적화에 어느 시점에 해야 할까? 공식 문서에서 그 답을 찾을 수 있었다.'
+title: 'React 렌더링 최적화작업, 어느 시점에?!'
+description: 'React 렌더링 최적화 작업, 어느 시점에 해야 할까? 공식 문서에서 그 답을 찾을 수 있었다.'
 date: '2026-01-28'
 tags: ['performance', 'react']
 published: true
@@ -22,20 +22,22 @@ React 컴포넌트의 렌더링은 재귀적으로 일어나기 때문에, 컴�
 
 ## 성급하게 최적화하지 마라
 
-공식 문서의 성능 최적화 관련 내용에서는 "Don't optimize prematurely!" 라고 말하고 있다.
+아래 내용은 공식문서에서 발췌한 내용이다. [링크](https://react.dev/learn/render-and-commit#optimizing-performance)
+
+> **Optimizing performance**
+>
+> The default behavior of rendering all components nested within the updated component is not optimal for performance if the updated component is very high in the tree. If you run into a performance issue, there are several opt-in ways to solve it described in the [Performance](https://reactjs.org/docs/optimizing-performance.html) section. Don't optimize prematurely!
+
+위 내용에서 **"Don't optimize prematurely!"** 라고 말하고 있다.
 여기서 *prematurely*라는 단어의 의미가 중요한데, 찾아보면 "성급하게", "너무 이르게", "조기에"라는 뜻을 가진다.
 
 즉, **아직 성능 문제가 드러나지 않았음에도 불구하고 미리 최적화를 진행하지 말라**는 의미이다.
 다시 말해, 실제로 성능 문제를 맞닥뜨렸을 때 그 원인을 파악한 후 최적화를 진행하라는 뜻이다.
 
-하단은 공식 문서에서 발췌한 내용이다.
-
-> **Optimizing performance**
-
-> The default behavior of rendering all components nested within the updated component is not optimal for performance if the updated component is very high in the tree. If you run into a performance issue, there are several opt-in ways to solve it described in the [Performance](https://reactjs.org/docs/optimizing-performance.html) section. Don't optimize prematurely!
-
-역시 항상 생각하는 건데, 공식 문서가 나에게 주는 신뢰성과 명쾌함을 이루 말할 수 없다.
+이 문장을 보고 나의 갈증은 해결 되었다.
+왜냐하면 컴포넌트 작업을 하면서 항상 머리 한켠에 렌더링 최적화를 지금 적용해야 될까? 라는 점을 가지고 있었는데
+이제는 이런 고민을 덜어내고 다른 작업에 더 집중할 수 있게 되었기 때문이다.
 
 ## 참고
 
-[https://react.dev/learn/render-and-commit#optimizing-performance](https://react.dev/learn/render-and-commit#optimizing-performance)
+- [https://react.dev/learn/render-and-commit#optimizing-performance](https://react.dev/learn/render-and-commit#optimizing-performance)
