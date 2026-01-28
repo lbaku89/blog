@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
 
   // 개별 포스트만 조회 (더 효율적)
   const currentPost = await getPostBySlug(slugPath)
-  
+
   if (!currentPost) {
     notFound()
   }
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   const { tocHtml } = await getTocFromMdx(currentPost.body)
 
   return (
-    <article className='px-4'>
+    <article className="px-4">
       {/* 컴포넌트 맵을 전달 */}
       <div className="flex gap-4 mx-auto max-w-[700px]">
         {/* 포스트 헤더 + 포스팅 */}
@@ -121,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
             <SideToc tocHtml={tocHtml} />
           </div>
 
-          <div className="mt-10">
+          <div className="my-[40px]">
             <PostComments />
           </div>
         </div>

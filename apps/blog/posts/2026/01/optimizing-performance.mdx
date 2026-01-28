@@ -1,0 +1,41 @@
+---
+title: 'React 렌더링 최적화에 어느 시점에?!'
+description: 'React 렌더링 최적화에 어느 시점에 해야 할까? 공식 문서에서 그 답을 찾을 수 있었다.'
+date: '2026-01-28'
+tags: ['performance', 'react']
+published: true
+---
+
+<InfoCard variant="info">
+  본 포스팅은 React19 공식 문서를 기반으로 작성하였습니다.
+  [링크](https://nextjs.org/docs/app/getting-started/server-and-client-components#how-do-server-and-client-components-work-in-nextjs)
+</InfoCard>
+
+## 배경
+
+React 컴포넌트의 렌더링은 재귀적으로 일어나기 때문에, 컴포넌트 트리에서 너무 상단에 있는 컴포넌트의 리렌더링은 하위의 수많은 자식 컴포넌트들의 재렌더링을 유발할 수 있다는 사실을 많은 개발자들이 알고 있다.
+
+나 역시 이러한 사실을 인지하고 있는데, 그렇다면 처음 간단한 UI를 개발할 때부터 이런 렌더링 최적화를 진행해야 할까?
+아니면 어느 시점에 렌더링 최적화를 해야 할까? 라는 의문이 있었고, 이에 대한 명쾌한 답을 찾지 못했다.
+
+그러던 중 공식 문서에서 이에 대한 답을 찾을 수 있었다!
+
+## 성급하게 최적화하지 마라
+
+공식 문서의 성능 최적화 관련 내용에서는 "Don't optimize prematurely!" 라고 말하고 있다.
+여기서 *prematurely*라는 단어의 의미가 중요한데, 찾아보면 "성급하게", "너무 이르게", "조기에"라는 뜻을 가진다.
+
+즉, **아직 성능 문제가 드러나지 않았음에도 불구하고 미리 최적화를 진행하지 말라**는 의미이다.
+다시 말해, 실제로 성능 문제를 맞닥뜨렸을 때 그 원인을 파악한 후 최적화를 진행하라는 뜻이다.
+
+하단은 공식 문서에서 발췌한 내용이다.
+
+> **Optimizing performance**
+
+> The default behavior of rendering all components nested within the updated component is not optimal for performance if the updated component is very high in the tree. If you run into a performance issue, there are several opt-in ways to solve it described in the [Performance](https://reactjs.org/docs/optimizing-performance.html) section. Don't optimize prematurely!
+
+역시 항상 생각하는 건데, 공식 문서가 나에게 주는 신뢰성과 명쾌함을 이루 말할 수 없다.
+
+## 참고
+
+[https://react.dev/learn/render-and-commit#optimizing-performance](https://react.dev/learn/render-and-commit#optimizing-performance)
