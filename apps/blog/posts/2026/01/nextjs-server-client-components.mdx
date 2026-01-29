@@ -47,6 +47,14 @@ client component와 RSC payload 를 이용하여 HTML을 `pre-render` 한다.
 그런데 `pre-render` 가 무엇일까?
 여기서 pre-render는 인터렉티브한 페이지가 아닌 단순 빠른 뷰를 위한 HTML을 만드는 행위라고 보여진다.
 
+client component와 RSC payload를 이용하여 만들어진 HTML은 클라이언트로 전송되고 사용자는 바로 화면을 볼 수 있다.
+여기서 중요한 점은 이 과정은 애플리케이션에 처음 진입했을때만 생성된다. 이후 다른 라우트로 이동할 때는 이 과정을 거치지 않고
+클라이언트 사이드에서 바로 DOM을 업데이트하여 화면을 보여준다.
+
+#### **RSC Payload** 는 무엇일까?
+
+이쯤에 RSC가 뭔지 구체적으로 궁금할 수 있는데, 아래 내용이 RSC payload에 대한 공식문서 설명이다.
+
 <InfoCard variant="default">
 > **What is the React Server Component Payload (RSC)?**
 
@@ -71,6 +79,9 @@ RSC Payload는 클라이언트에서 browser’s의 DOM을 업데이트 하기 �
 
 </InfoCard>
 
+내가 이해한 내용으로 RSC Payload를 추상해 보면 다음과 같다.
+![rsc-payload](https://pub-a578dcd164ef4e9fb8b9c1c67f7468ed.r2.dev/posts/2026/01/nextjs-server-client-components/rsc.png)
+
 **서버에서 일어나는 일을 요약하자면**
 
 Nextjs 렌더링 작업은 layout, page 별로 나뉘어서 진행되고 이 렌더링을 위해 React를 이용한다고 한다.
@@ -78,9 +89,6 @@ Nextjs 렌더링 작업은 layout, page 별로 나뉘어서 진행되고 이 렌
 
 서버에서 서버컴포넌트는 RSC payload로 렌더링되고,
 이 RSC payload와 Client컴포넌트를 이용하여 HTML을 pre-render한다.
-참고로 RSC payload는 클라이언트로 전달되고 아래와 같이 추상화 할 수 있다.
-
-![rsc-payload](https://pub-a578dcd164ef4e9fb8b9c1c67f7468ed.r2.dev/posts/2026/01/nextjs-server-client-components/rsc.png)
 
 ### On the client ( first load )
 
