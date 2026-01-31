@@ -57,7 +57,7 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
         isHidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >
-      <header className="flex justify-between items-center bg-transparent mx-auto max-w-[1200px] px-4 py-3">
+      <header className="flex justify-between items-center bg-transparent mx-auto max-w-[1100px] px-4 py-3">
         <Link href="/" className="flex justify-start items-center gap-2">
           <Image src="/avatar.webp" alt="권현우의 프로필 사진" width={40} height={40} className="rounded-full" />
           <TypographyH3 className="inline-block font-bold text-sm sm:text-base md:text-lg">HyunwooTech</TypographyH3>
