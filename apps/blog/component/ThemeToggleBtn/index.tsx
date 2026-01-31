@@ -21,14 +21,14 @@ export const ThemeToggleBtn = () => {
   // 마운트되기 전까지는 기본 아이콘만 렌더링
   if (!mounted) {
     return (
-      <Button onClick={handleClickBtn} variant="outline" size="icon">
+      <Button onClick={handleClickBtn} variant="secondary" size="icon">
         <SunIcon />
       </Button>
     )
   }
 
   return (
-    <Button onClick={handleClickBtn} variant="outline" size="icon">
+    <Button onClick={handleClickBtn} variant="secondary" size="icon">
       {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
     </Button>
   )

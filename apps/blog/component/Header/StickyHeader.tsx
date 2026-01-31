@@ -50,16 +50,16 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
           <Image src="/avatar.webp" alt="권현우의 프로필 사진" width={40} height={40} className="rounded-full" />
           <TypographyH3 className="inline-block font-bold text-sm sm:text-base md:text-lg">HyunwooTech</TypographyH3>
         </Link>
-        <div className="flex gap-4 items-center">
-          <nav className="flex gap-4 justify-between">
-            <ul className="flex list-none">
+        <div className="flex gap-2 items-center">
+          <nav className="flex gap-2 justify-between">
+            <ul className="flex list-none gap-2">
               <li>
-                <Button asChild variant="link">
+                <Button asChild variant="secondary">
                   <Link href="/">Post</Link>
                 </Button>
               </li>
               <li>
-                <Button asChild variant="link">
+                <Button asChild variant="secondary">
                   <Link href="/about">About</Link>
                 </Button>
               </li>

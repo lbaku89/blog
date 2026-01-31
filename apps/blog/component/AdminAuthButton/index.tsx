@@ -78,7 +78,7 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
     <>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
-          <Button size="icon" variant="outline" onClick={handleClickAuthBtn}>
+          <Button size="icon" variant="secondary" onClick={handleClickAuthBtn}>
             {isLoggedIn ? <LogOut /> : <LogIn />}
           </Button>
         </DialogTrigger>
