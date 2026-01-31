@@ -3,7 +3,7 @@ import { TypographyH1 } from '@common-ui'
 
 const AboutPage = () => {
   return (
-    <section className="max-w-5xl mx-auto">
+    <section className="max-w-5xl mx-auto px-[20px]">
       <TypographyH1 className="text-left">About Me</TypographyH1>
       <hr className="my-[8px]" />
       <div className="grid grid-cols-3 gap-4">

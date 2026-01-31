@@ -3,7 +3,19 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { Button, TypographyH3, cn } from '@common-ui'
+import {
+  Button,
+  TypographyH3,
+  cn,
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerTrigger,
+  DrawerClose,
+} from '@common-ui'
+import { Bars3Icon } from '@heroicons/react/24/outline'
 
 import { AdminAuthButton } from '../AdminAuthButton'
 import { ThemeToggleBtn } from '../ThemeToggleBtn'
@@ -51,7 +63,7 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
           <TypographyH3 className="inline-block font-bold text-sm sm:text-base md:text-lg">HyunwooTech</TypographyH3>
         </Link>
         <div className="flex gap-2 items-center">
-          <nav className="flex gap-2 justify-between">
+          <nav className="hidden gap-2 justify-between md:flex">
             <ul className="flex list-none gap-2">
               <li>
                 <Button asChild variant="secondary">
@@ -65,8 +77,37 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
               </li>
             </ul>
           </nav>
-          <AdminAuthButton initialIsLoggedIn={initialIsLoggedIn} />
-          <ThemeToggleBtn />
+          <div className="flex gap-2 items-center">
+            <AdminAuthButton initialIsLoggedIn={initialIsLoggedIn} />
+            <ThemeToggleBtn />
+          </div>
+          <div className="md:hidden">
+            <Drawer direction="right">
+              <DrawerTrigger asChild>
+                <Button size="icon" variant="secondary" aria-label="메뉴 열기">
+                  <Bars3Icon className="w-5 h-5" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>메뉴</DrawerTitle>
+                  <DrawerDescription>네비게이션 메뉴를 선택하세요.</DrawerDescription>
+                </DrawerHeader>
+                <div className="flex flex-col gap-2 p-4">
+                  <DrawerClose asChild>
+                    <Button asChild variant="secondary" className="w-full justify-start">
+                      <Link href="/">Post</Link>
+                    </Button>
+                  </DrawerClose>
+                  <DrawerClose asChild>
+                    <Button asChild variant="secondary" className="w-full justify-start">
+                      <Link href="/about">About</Link>
+                    </Button>
+                  </DrawerClose>
+                </div>
+              </DrawerContent>
+            </Drawer>
+          </div>
         </div>
       </header>
     </div>
