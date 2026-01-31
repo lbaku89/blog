@@ -2,7 +2,15 @@
 
 import { Button, Label, Input } from '@common-ui'
 import { useState } from 'react'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@common-ui'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from '@common-ui'
 import { LogIn, LogOut } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
@@ -61,41 +69,48 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
     setLoginInputs((prev) => ({ ...prev, [name]: value }))
   }
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    handleLogin()
+  }
+
   return (
     <>
-      <Dialog open={dialogOpen}>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
-          <Button size="icon" variant="outline" onClick={handleClickAuthBtn}>
+          <Button size="icon" variant="secondary" onClick={handleClickAuthBtn}>
             {isLoggedIn ? <LogOut /> : <LogIn />}
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]" onClickCloseButton={() => setDialogOpen(false)}>
           <DialogHeader>
             <DialogTitle>Admin Login</DialogTitle>
+            <DialogDescription>관리자 계정으로 로그인하세요.</DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4">
-            <div className="grid gap-3">
-              <Label htmlFor="아이디">아이디</Label>
-              <Input id="id" name="id" defaultValue={loginInputs.id} onChange={handleChangeInput} />
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-4">
+              <div className="grid gap-3">
+                <Label htmlFor="id">아이디</Label>
+                <Input id="id" name="id" value={loginInputs.id} onChange={handleChangeInput} required />
+              </div>
+              <div className="grid gap-3">
+                <Label htmlFor="password">비밀번호</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  value={loginInputs.password}
+                  onChange={handleChangeInput}
+                  type="password"
+                  required
+                />
+              </div>
             </div>
-            <div className="grid gap-3">
-              <Label htmlFor="비밀번호">비밀번호</Label>
-              <Input
-                id="password"
-                name="password"
-                defaultValue={loginInputs.password}
-                onChange={handleChangeInput}
-                type="password"
-              />
-            </div>
-          </div>
-          <DialogFooter className="mt-4">
-            {/* <DialogClose asChild> */}
-            <Button type="button" className="w-full" onClick={handleLogin}>
-              로그인
-            </Button>
-            {/* </DialogClose> */}
-          </DialogFooter>
+            <DialogFooter className="mt-4">
+              <Button type="submit" className="w-full">
+                로그인
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>

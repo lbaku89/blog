@@ -13,6 +13,16 @@ export {
 export { Input } from './components/Input/index'
 export { Label } from './components/Label/index'
 export {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerTrigger,
+  DrawerClose,
+} from './components/Drawer/index'
+export {
   TypographyH1,
   TypographyH2,
   TypographyH3,

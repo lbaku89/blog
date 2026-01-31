@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko" className="bg-white dark:bg-[#121212]">
+    <html lang="ko" className="bg-white dark:bg-[#121212]" suppressHydrationWarning>
       <head>
         {/* google analytics setting */}
         <meta name="google-site-verification" content="GoOy_S38H-PIOfcU58pJ0js6_b44FEC5-3PzUri-IXI" />
@@ -71,9 +71,7 @@ export default function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-screen">
-        <div
-          className={`${geistSans.variable} ${geistMono.variable} antialiased w-full max-w-full mx-auto flex-1`}
-        >
+        <div className={`${geistSans.variable} ${geistMono.variable} antialiased w-full max-w-full mx-auto flex-1`}>
           <Header />
           <div className="py-[30px] flex-1">{children}</div>
         </div>
