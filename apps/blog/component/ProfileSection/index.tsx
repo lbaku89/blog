@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export const ProfileSection = () => {
   return (
-    <section className="flex flex-col justify-between h-[280px] relative overflow-hidden p-4 sm:p-5">
+    <section className="flex flex-col justify-between h-full relative overflow-hidden p-4 sm:p-5">
       {/* 배경 그라데이션 효과 */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 opacity-50"></div>
       <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-green-200/30 to-blue-200/30 dark:from-green-800/20 dark:to-blue-800/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
