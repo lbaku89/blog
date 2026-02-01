@@ -81,7 +81,7 @@ async function fetchGitHubContributions(username: string, githubToken?: string):
     const data = await response.json()
 
     if (data.errors) {
-      const errorMessages = data.errors.map((err: any) => err.message || JSON.stringify(err)).join(', ')
+      const errorMessages = data.errors.map((err: { message: string }) => err.message || JSON.stringify(err)).join(', ')
       console.error('GitHub GraphQL 오류:', JSON.stringify(data.errors, null, 2))
       return {
         data: null,
