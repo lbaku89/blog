@@ -5,6 +5,7 @@ import { FilteredPosts } from '@/component/FilteredPosts'
 import { ProfileSection } from '@/component/ProfileSection'
 import { Suspense } from 'react'
 import { isAdminAuthenticated } from '@/lib/auth'
+import { GitHubContribution } from '@/component/GitHubContribution'
 
 // Next.js 15에서 process.cwd() 사용 시 DYNAMIC_SERVER_USAGE 에러 방지
 export const dynamic = 'force-dynamic'
@@ -23,9 +24,16 @@ export default async function Home() {
   return (
     <>
       <div className="mt-8 max-w-[1100px] mx-auto px-4">
-        {/* 프로필 섹션 */}
-        <div className="mb-8 py-6 px-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-          <ProfileSection />
+        <div className="flex justify-between mb-8 gap-x-[50px]">
+          {/* 프로필 섹션 */}
+          <div className="flex-1 max-w-[744px] h-[280px] rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
+            <ProfileSection />
+          </div>
+
+          {/* GitHub Contribution 잔디 */}
+          <div className="hidden lg:block h-[280px] border-gray-200 dark:border-gray-700">
+            <GitHubContribution username="lbaku89" />
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-[50px] justify-center items-start">
@@ -37,7 +45,7 @@ export default async function Home() {
           </div>
 
           {/* 우측: 태그 목록 */}
-          <aside className="w-full lg:w-[250px] flex-shrink-0 order-1 lg:order-2 lg:sticky lg:top-8">
+          <aside className="w-full lg:w-[274px] flex-shrink-0 order-1 lg:order-2 lg:sticky lg:top-8">
             <Suspense fallback={<div>로딩 중...</div>}>
               <TagList tags={tagStats} />
             </Suspense>
