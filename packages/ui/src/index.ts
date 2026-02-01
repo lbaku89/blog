@@ -36,5 +36,6 @@ export {
   TypographyLead,
 } from './components/Typography/index'
 // utils
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './components/Tooltip/index'
 
 export { cn } from './lib/utils'
