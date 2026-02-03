@@ -123,7 +123,7 @@ export const GitHubContribution = ({ username = 'lbaku89' }: GitHubContributionP
       href={`https://github.com/${username}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="block w-full max-w-[280px] p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-green-300 dark:hover:border-green-700 transition-all group cursor-pointer"
+      className="block w-full max-w-[280px] h-full p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-green-300 dark:hover:border-green-700 transition-all group cursor-pointer"
     >
       {/* 헤더 */}
       <div className="mb-4">

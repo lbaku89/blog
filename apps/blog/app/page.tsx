@@ -26,12 +26,12 @@ export default async function Home() {
       <div className="mt-8 max-w-[1100px] mx-auto px-4">
         <div className="flex justify-between mb-8 gap-x-[50px]">
           {/* 프로필 섹션 */}
-          <div className="flex-1 max-w-[744px] h-[280px] rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
+          <div className="flex-1 max-w-[744px] min-h-[280px] rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
             <ProfileSection />
           </div>
 
           {/* GitHub Contribution 잔디 */}
-          <div className="hidden lg:block h-[280px] border-gray-200 dark:border-gray-700">
+          <div className="hidden lg:block min-h-[280px] border-gray-200 dark:border-gray-700">
             <GitHubContribution username="lbaku89" />
           </div>
         </div>
