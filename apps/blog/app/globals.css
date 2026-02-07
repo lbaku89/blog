@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 @source '../../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}';
 
@@ -42,6 +43,12 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
+  /* Line height values */
+  --leading-tight: 1.25;
+  --leading-normal: 1.3;
+  --leading-relaxed: 1.4;
+  --leading-loose: 1.5;
 }
 
 /*
