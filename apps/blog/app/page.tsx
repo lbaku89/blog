@@ -45,7 +45,7 @@ export default async function Home() {
           </div>
 
           {/* 우측: 태그 목록 */}
-          <aside className="w-full lg:w-[274px] flex-shrink-0 order-1 lg:order-2 lg:sticky lg:top-8">
+          <aside className="w-full lg:w-[274px] shrink-0 order-1 lg:order-2 lg:sticky lg:top-8">
             <Suspense fallback={<div>로딩 중...</div>}>
               <TagList tags={tagStats} />
             </Suspense>

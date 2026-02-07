@@ -85,7 +85,7 @@ export const GitHubContribution = ({ username = 'lbaku89' }: GitHubContributionP
       <div className={contributionContainerClassName}>
         <div className="h-full flex flex-col justify-center items-center p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <p className="text-sm font-medium text-red-800 dark:text-red-300 mb-1">데이터를 불러올 수 없습니다</p>
-          <p className="text-xs text-red-600 dark:text-red-400 break-words">
+          <p className="text-xs text-red-600 dark:text-red-400 wrap-break-word">
             {error || 'Contribution 데이터를 불러올 수 없습니다.'}
           </p>
         </div>
@@ -123,7 +123,7 @@ export const GitHubContribution = ({ username = 'lbaku89' }: GitHubContributionP
       href={`https://github.com/${username}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="block w-full max-w-[280px] h-full p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-green-300 dark:hover:border-green-700 transition-all group cursor-pointer"
+      className="block w-full max-w-[280px] h-full p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-xs hover:shadow-md hover:border-green-300 dark:hover:border-green-700 transition-all group cursor-pointer"
     >
       {/* 헤더 */}
       <div className="mb-4">
@@ -184,7 +184,7 @@ export const GitHubContribution = ({ username = 'lbaku89' }: GitHubContributionP
                   <Tooltip key={`${weekIndex}-${dayIndex}`}>
                     <TooltipTrigger asChild>
                       <div
-                        className={`w-3 h-3 ${contributionColor} rounded-sm transition-all hover:scale-110 hover:ring-2 hover:ring-green-400 dark:hover:ring-green-600 cursor-pointer shadow-sm pointer-events-auto`}
+                        className={`w-3 h-3 ${contributionColor} rounded-sm transition-all hover:scale-110 hover:ring-2 hover:ring-green-400 dark:hover:ring-green-600 cursor-pointer shadow-xs pointer-events-auto`}
                         aria-label={`${formattedDate}: ${day.contributionCount} contributions`}
                       />
                     </TooltipTrigger>

@@ -12,6 +12,6 @@ export const mdxComponents = {
 
   // 필요한 다른 컴포넌트들 추가 가능
   // code: ({ className, ...props }: React.ComponentPropsWithoutRef<'code'>) => {
-  //   return <code className=" !bg-gray-500 !text-blue-400 !px-[3px] !py-[3px] !rounded-sm !mr-[3px]" {...props} />
+  //   return <code className=" bg-gray-500! text-blue-400! px-[3px]! py-[3px]! rounded-sm! mr-[3px]!" {...props} />
   // },
 }
