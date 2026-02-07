@@ -18,9 +18,11 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
   const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [loginInputs, setLoginInputs] = useState({ id: '', password: '' })
+  const [errorMessage, setErrorMessage] = useState('')
   const pathname = usePathname()
 
   const handleLogin = () => {
+    setErrorMessage('')
     fetch('/api/login', {
       method: 'POST',
       body: JSON.stringify(loginInputs),
@@ -29,16 +31,19 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
         if (response.ok) {
           setIsLoggedIn(true)
           setDialogOpen(false)
+          setErrorMessage('')
           // 홈페이지(/)에 있으면 서버 컴포넌트를 다시 렌더링하기 위해 페이지 새로고침
           if (pathname === '/') {
             window.location.reload()
           }
         } else if (response.status === 401) {
-          alert('아이디 또는 비밀번호가 일치하지 않습니다.')
+          setErrorMessage('아이디 또는 비밀번호가 일치하지 않습니다.')
+        } else {
+          setErrorMessage('로그인에 실패했습니다. 다시 시도해주세요.')
         }
       })
       .catch((error) => {
-        alert('로그인 실패: ' + error.message)
+        setErrorMessage('로그인 실패: ' + error.message)
       })
   }
 
@@ -60,6 +65,7 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
     if (isLoggedIn) {
       handleLogout()
     } else {
+      setErrorMessage('')
       setDialogOpen(true)
     }
   }
@@ -89,6 +95,7 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4">
+              {errorMessage && <div className="text-sm text-red-600 dark:text-red-400">{errorMessage}</div>}
               <div className="grid gap-3">
                 <Label htmlFor="id">아이디</Label>
                 <Input id="id" name="id" value={loginInputs.id} onChange={handleChangeInput} required />
