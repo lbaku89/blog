@@ -95,7 +95,6 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4">
-              {errorMessage && <div className="text-sm text-red-600 dark:text-red-400">{errorMessage}</div>}
               <div className="grid gap-3">
                 <Label htmlFor="id">아이디</Label>
                 <Input id="id" name="id" value={loginInputs.id} onChange={handleChangeInput} required />
@@ -111,6 +110,7 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
                   required
                 />
               </div>
+              {errorMessage && <div className="text-sm text-red-600 dark:text-red-400">{errorMessage}</div>}
             </div>
             <DialogFooter className="mt-4">
               <Button type="submit" className="w-full">
