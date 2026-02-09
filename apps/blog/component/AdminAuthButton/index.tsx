@@ -76,14 +76,6 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
       })
   }
 
-  const handleClickAuthBtn = () => {
-    if (isLoggedIn) {
-      handleLogout()
-    } else {
-      setErrorMessage('')
-      setDialogOpen(true)
-    }
-  }
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -98,11 +90,17 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
   return (
     <>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger asChild>
-          <Button size="icon" variant="secondary" onClick={handleClickAuthBtn}>
-            {isLoggedIn ? <LogOut /> : <LogIn />}
+        {!isLoggedIn ? (
+          <DialogTrigger asChild>
+            <Button size="icon" variant="secondary">
+              <LogIn />
+            </Button>
+          </DialogTrigger>
+        ) : (
+          <Button size="icon" variant="secondary" onClick={handleLogout}>
+            <LogOut />
           </Button>
-        </DialogTrigger>
+        )}
         <DialogContent className="sm:max-w-[425px]" onClickCloseButton={() => setDialogOpen(false)}>
           <DialogHeader>
             <DialogTitle>Admin Login</DialogTitle>
