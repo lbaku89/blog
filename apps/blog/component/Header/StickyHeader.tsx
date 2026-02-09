@@ -52,8 +52,8 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
   return (
     <div
       className={cn(
-        'sticky top-0 z-50 bg-transparent backdrop-blur-sm transition-transform duration-200 ease-in-out',
-        hasShadow && 'border-b shadow-sm border-black/5 dark:border-white/10',
+        'sticky top-0 z-50 bg-transparent backdrop-blur-xs transition-transform duration-200 ease-in-out',
+        hasShadow && 'border-b shadow-xs border-black/5 dark:border-white/10',
         isHidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >

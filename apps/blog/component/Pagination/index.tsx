@@ -40,7 +40,7 @@ export const Pagination = ({ currentPage, totalPages }: { currentPage: number; t
 
         {pageArr.map((page) => (
           <li key={page}>
-            <Link href={`/pages/${page}`} className={cn(STYLE, currentPage === Number(page) && '!text-blue-400')}>
+            <Link href={`/pages/${page}`} className={cn(STYLE, currentPage === Number(page) && 'text-blue-400!')}>
               {page}
             </Link>
           </li>

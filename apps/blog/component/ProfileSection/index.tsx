@@ -6,15 +6,15 @@ export const ProfileSection = () => {
   return (
     <section className="flex flex-col justify-between h-full relative overflow-hidden p-4 sm:p-5">
       {/* 배경 그라데이션 효과 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 opacity-50"></div>
-      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-green-200/30 to-blue-200/30 dark:from-green-800/20 dark:to-blue-800/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      <div className="absolute inset-0 bg-linear-to-br from-green-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 opacity-50"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-green-200/30 to-blue-200/30 dark:from-green-800/20 dark:to-blue-800/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
       <div className="relative z-10 flex flex-col justify-between h-full">
         {/* 프로필 헤더 */}
         <div className="flex flex-col items-center mb-3">
           {/* 아바타 */}
           <div className="relative mb-2 group">
-            <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-green-400 to-blue-500 rounded-full blur-lg opacity-75 group-hover:opacity-100 transition-opacity"></div>
             <div className="relative bg-white dark:bg-gray-800 p-1 rounded-full">
               <Image src="/avatar.webp" alt="Hyunwoo" width={64} height={64} className="rounded-full" />
             </div>
@@ -22,7 +22,7 @@ export const ProfileSection = () => {
 
           {/* 이름과 타이틀 */}
           <h2 className="text-lg sm:text-xl font-bold mb-1 text-gray-900 dark:text-gray-100">Hyunwoo Kwon</h2>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-700 mb-2">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xs rounded-full border border-gray-200 dark:border-gray-700 mb-2">
             <span className="text-[10px] font-medium text-gray-600 dark:text-gray-400">Frontend Developer</span>
             <span className="text-sm">👋</span>
           </div>
@@ -45,7 +45,7 @@ export const ProfileSection = () => {
             href="https://github.com/lbaku89"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-xs border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-all duration-200 hover:scale-105 hover:shadow-lg"
             aria-label="GitHub 프로필"
           >
             <svg
@@ -65,7 +65,7 @@ export const ProfileSection = () => {
             href="https://www.linkedin.com/in/hyunwoo-kwon-4799b6296/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-blue-200 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-700 text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-xs border border-blue-200 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-700 text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-all duration-200 hover:scale-105 hover:shadow-lg"
             aria-label="LinkedIn 프로필"
           >
             <svg
@@ -83,7 +83,7 @@ export const ProfileSection = () => {
             href="mailto:khj930410@naver.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-orange-200 dark:border-orange-800 hover:border-orange-300 dark:hover:border-orange-700 text-orange-700 dark:text-orange-300 hover:text-orange-800 dark:hover:text-orange-200 transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 backdrop-blur-xs border border-orange-200 dark:border-orange-800 hover:border-orange-300 dark:hover:border-orange-700 text-orange-700 dark:text-orange-300 hover:text-orange-800 dark:hover:text-orange-200 transition-all duration-200 hover:scale-105 hover:shadow-lg"
             aria-label="이메일 보내기"
           >
             <EnvelopeIcon className="w-4 h-4 group-hover:scale-110 transition-transform" />

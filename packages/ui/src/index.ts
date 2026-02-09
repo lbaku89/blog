@@ -35,6 +35,7 @@ export {
   TypographyLarge,
   TypographyLead,
 } from './components/Typography/index'
+export { Toaster } from './components/Toast/index'
 // utils
 export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './components/Tooltip/index'
 export { Skeleton } from './components/Skeleton/index'

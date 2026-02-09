@@ -6,6 +6,9 @@ import './globals.css'
 import { Footer } from '@/component/Footer'
 import { Header } from '@/component/Header'
 import { ScrollToTop } from '@/component/ScrollToTop'
+import { LoginToastHandler } from '@/component/LoginToastHandler'
+import { Toaster } from '@common-ui'
+
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -77,6 +80,8 @@ export default function RootLayout({
         </div>
         <Footer />
         <ScrollToTop />
+        <Toaster />
+        <LoginToastHandler />
       </body>
     </html>
   )
