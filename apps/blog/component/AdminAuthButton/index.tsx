@@ -1,6 +1,8 @@
 'use client'
 
 import { Button, Label, Input } from '@common-ui'
+import { toast } from 'sonner'
+
 import { useState } from 'react'
 import {
   Dialog,
@@ -13,6 +15,7 @@ import {
 } from '@common-ui'
 import { LogIn, LogOut } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: boolean }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(initialIsLoggedIn)
@@ -20,7 +23,7 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
   const [loginInputs, setLoginInputs] = useState({ id: '', password: '' })
   const [errorMessage, setErrorMessage] = useState('')
   const pathname = usePathname()
-
+  // const router = useRouter()
   const handleLogin = () => {
     setErrorMessage('')
     fetch('/api/login', {
@@ -34,7 +37,13 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
           setErrorMessage('')
           // 홈페이지(/)에 있으면 서버 컴포넌트를 다시 렌더링하기 위해 페이지 새로고침
           if (pathname === '/') {
+            // 새로고침후에도 toast를 표시하기 위해 sessionStorage에 저장
+            sessionStorage.setItem('showLoginToast', 'true')
             window.location.reload()
+          } else {
+            toast.success('현우님 환영합니다!', {
+              position: 'bottom-center',
+            })
           }
         } else if (response.status === 401) {
           setErrorMessage('아이디 또는 비밀번호가 일치하지 않습니다.')
@@ -53,7 +62,13 @@ export const AdminAuthButton = ({ initialIsLoggedIn }: { initialIsLoggedIn: bool
         setIsLoggedIn(false)
         // 홈페이지(/)에 있으면 서버 컴포넌트를 다시 렌더링하기 위해 페이지 새로고침
         if (pathname === '/') {
+          // 새로고침 후에도 toast를 표시하기 위해 sessionStorage에 저장
+          sessionStorage.setItem('showLogoutToast', 'true')
           window.location.reload()
+        } else {
+          toast.success('로그아웃되었습니다.', {
+            position: 'bottom-center',
+          })
         }
       })
       .catch((error) => {
