@@ -1,0 +1,95 @@
+---
+title: '4년차 프론트엔드 개발자의 기술면접 대비 회고'
+description: '기술 면접을 준비하며 프론트엔드 기초 개념을 다시 정리한 회고'
+date: '2026-02-14'
+tags: ['frontend', 'javascript', 'react', 'nextjs', 'typescript', 'tech-interview', 'retrospective']
+published: true
+adminOnly: false
+---
+
+## 배경
+
+최근 이직을 확정지었고, 기술면접을 대비하며 공부했던 내용을 키워드 형태로 정리해보았다.
+
+처음에는 단순히 “면접 대비”가 목적이었지만 공부를 진행할수록 단순 암기가 아니라 동작 원리를 이해하는 방향으로 바뀌었다.
+그 과정에서 이전에는 보이지 않던 문제의 원인이 보이기 시작했고, 프론트엔드 개발자로서 한 단계 성장했다는 느낌을 받았다.
+
+> 단순히 개념을 아는 것과 동작을 설명할 수 있는 것은 전혀 다른 영역이었다.
+
+아래 키워드들은 단순 개념 암기로는 면접에서 응용 질문에 답하기 어렵다.
+
+각 개념에 대해 왜 존재하는지, 어떤 문제를 해결하기 위해 만들어졌는지를 이해해야 실제 질문에 대응할 수 있었다.
+
+## JavaScript — 코드가 실행되는 방식 이해
+
+단순 문법이 아니라 “코드가 어떤 순서로 실행되는가”를 이해하는 과정이었다.
+
+- 이벤트 루프
+- 실행 컨텍스트
+- 스코프 ( 블록 / 함수레벨 )
+- 클로저
+- 호이스팅, TDZ, var / let / cost
+- Promise, async / await
+- undefined / null
+- ES Module vs CommonJS
+
+## TypeScript — 타입을 통한 상태 표현
+
+타입은 에러 방지 도구라기보다 상태를 설계하는 수단에 가깝다는 걸 느꼈다.
+
+- Generic
+- Utility Type
+- Tagged Union
+- never type
+- interface vs Type
+
+## Browser — 실제 런타임 환경 이해
+
+특히 렌더링 파이프라인에 대한 이해가 중요했다.
+
+- 웹 접근성
+- Cookie / LocalStorage / IndexedDB
+- LCP / INP / CLS
+- CORS
+- 렌더링 파이프라인
+
+## 네트워크와 캐싱 — 프론트엔드는 서버와 분리되지 않는다
+
+데이터를 언제 다시 요청해야 하는지 판단하는 능력이 중요하다는 걸 느꼈다.
+
+- HTTP 1.1 / 2 / 3
+- TCP / UDP / QUIC
+- Cache-Control ( max-age, no-cache, no-store )
+- CDN / Edge Cache
+- TanStack Query 캐싱 전략
+
+## React **— UI 라이브러리가 아닌 렌더링 엔진으로 이해**
+
+- Render Phase / Commit Phase
+- Reconciliation / Diffing
+- Concurrent Rendering
+- useEffect / useLayoutEffect
+- Memoization 전략
+- key의 역할
+
+## Next.js — 서버와 클라이언트 경계
+
+- CSR / SSR / ISR
+- Server Component / Client Component
+- Hydration 과정
+
+## 그 외
+
+- stacking context
+- jpg, jpeg, png 특징 및 차이점
+- offset pagination, cursor pagination
+- linked list, double linked list
+- LRU, LFU
+- XSS, CSRF
+- 이벤트 버블링, 캡처링
+
+## 느낀점
+
+면접 대비로 시작한 공부였지만, 이직 여부와 관계없이 계속 이어가야 할 공부라고 느꼈다.
+
+이전에는 문제를 경험적으로 해결했다면 이제는 원리를 기반으로 설명할 수 있게 되었고, 그 과정 자체가 개발자로서의 성장이라고 생각한다.
