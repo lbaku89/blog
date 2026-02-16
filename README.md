@@ -42,7 +42,7 @@ pnpm --filter blog build
 ## 사용 기술
 
 - **패키지 관리**: pnpm
-- **프레임워크**: Next.js 14
-- **언어**: TypeScript
-- **스타일링**: Tailwind CSS
+- **프레임워크**: Next.js 16
+- **언어**: TypeScript 5
+- **스타일링**: Tailwind CSS v5
 - **콘텐츠**: MDX
