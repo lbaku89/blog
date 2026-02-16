@@ -1,0 +1,56 @@
+# lefthook.yml
+# ------------------------------------------------------------
+# Monorepo Git Hook 설정
+#
+# 핵심 원칙:
+# - 각 workspace(package) 기준으로 lint/format 실행
+# - staged 파일만 대상으로 수행 (커밋 속도 유지)
+# - pnpm recursive exec + "--" 로 인자 전달 보장
+#
+# ⚠️ 주의:
+# pnpm -r exec 에서 "--" 는 필수
+# 없으면 pnpm이 파일경로를 옵션/필터로 오해하여
+# 일부 파일이 lint/format 되지 않는 문제가 발생함
+# ------------------------------------------------------------
+
+pre-commit:
+  parallel: true
+  jobs:
+    # --------------------------------------------------------
+    # ESLint
+    #
+    # 목적:
+    # - 각 패키지의 eslint / tsconfig / plugin 환경을 존중하여 실행
+    #
+    # 동작 방식:
+    # pnpm -r exec → 각 workspace에서 개별 실행됨
+    # -- {staged_files} → eslint에게 파일 목록을 그대로 전달
+    #
+    # 결과:
+    # apps/admin 파일은 admin 설정으로,
+    # packages/ui 파일은 ui 설정으로 lint 수행
+    # --------------------------------------------------------
+    - name: eslint
+      glob: '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,yaml,yml}'
+      run: pnpm -r exec eslint --fix -- {staged_files}
+      stage_fixed: true
+
+    # --------------------------------------------------------
+    # Prettier
+    #
+    # 규칙:
+    # Prettier는 "파일 위치 기준"으로 가장 가까운 config(.prettierrc)를 탐색
+    # → 패키지에 설정이 없으면 루트 설정 자동 사용
+    #
+    # 즉:
+    # 레포 전체 포맷은 루트에서 통일되며,
+    # 특정 패키지에서만 override 가능
+    #
+    # -- 사용 이유:
+    # staged_files 목록을 pnpm이 해석하지 않고
+    # prettier에게 그대로 전달하기 위함
+    # --------------------------------------------------------
+    - name: prettier
+      glob: '*.{ts,cts,tsx,js,cjs,jsx,json,md,yaml,yml}'
+      run: pnpm -r exec prettier --write -- {staged_files}
+      stage_fixed: true
