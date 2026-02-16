@@ -5,12 +5,6 @@
 # 핵심 원칙:
 # - 각 workspace(package) 기준으로 lint/format 실행
 # - staged 파일만 대상으로 수행 (커밋 속도 유지)
-# - pnpm recursive exec + "--" 로 인자 전달 보장
-#
-# ⚠️ 주의:
-# pnpm -r exec 에서 "--" 는 필수
-# 없으면 pnpm이 파일경로를 옵션/필터로 오해하여
-# 일부 파일이 lint/format 되지 않는 문제가 발생함
 # ------------------------------------------------------------
 
 pre-commit:
@@ -21,9 +15,6 @@ pre-commit:
     #
     # 목적:
     # - 각 패키지의 eslint / tsconfig / plugin 환경을 존중하여 실행
-    #
-    # 동작 방식:
-    # pnpm -r exec → 각 workspace에서 개별 실행됨
     # -- {staged_files} → eslint에게 파일 목록을 그대로 전달
     #
     # 결과:
