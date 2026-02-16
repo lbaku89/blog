@@ -1,3 +1,13 @@
-import blogConfig from "./apps/blog/eslint.config.mjs";
+import { defineConfig, globalIgnores } from 'eslint/config'
 
-export default blogConfig;
+export function baseConfig() {
+  return defineConfig([
+    globalIgnores(['**/dist/**', '**/.turbo/**', '**/node_modules/**']),
+    {
+      rules: {
+        'no-unused-vars': 'warn',
+        'no-console': 'warn',
+      },
+    },
+  ])
+}
