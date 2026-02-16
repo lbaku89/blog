@@ -9,6 +9,7 @@
     "lint": "pnpm --filter blog lint"
   },
   "devDependencies": {
+    "eslint": "^9",
     "lefthook": "^2.1.1",
     "prettier": "^3.6.2"
   },
