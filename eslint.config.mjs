@@ -11,3 +11,6 @@ export function baseConfig() {
     },
   ])
 }
+
+// 루트에서 eslint 실행 시(lefthook 등) 이 설정 적용
+export default baseConfig()
