@@ -54,11 +54,5 @@
     "rehype-slug": "^6.0.0",
     "tailwindcss": "^4.1.18",
     "typescript": "^5"
-  },
-  "pnpm": {
-    "overrides": {
-      "@types/react": "19.2.13",
-      "@types/react-dom": "19.2.3"
-    }
   }
 }
