@@ -9,10 +9,22 @@
     "lint": "pnpm --filter blog lint"
   },
   "devDependencies": {
+    "eslint": "^9",
+    "lefthook": "^2.1.1",
     "prettier": "^3.6.2"
   },
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.13",
+      "@types/react-dom": "19.2.3"
+    },
+    "onlyBuiltDependencies": [
+      "lefthook",
+      "sharp"
+    ]
   }
 }

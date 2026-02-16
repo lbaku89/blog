@@ -1,0 +1,41 @@
+# ------------------------------------------------------------
+# EditorConfig
+# 목적: 에디터 저장 형식 통일 (줄바꿈 / 인코딩 / 기본 들여쓰기)
+# Prettier와 역할이 겹치지 않도록 최소 규칙만 정의
+# ------------------------------------------------------------
+
+root = true
+
+# 모든 파일 공통 규칙
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 코드 파일 (JS/TS/React/Next)
+[*.{js,jsx,ts,tsx,cjs,mjs,cts,mts}]
+indent_style = space
+indent_size = 2
+
+# 설정/데이터 파일
+[*.{json,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Markdown은 줄끝 공백 의미가 있으므로 제거 금지
+[*.md]
+trim_trailing_whitespace = false
+
+# Shell
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# Windows script
+[*.bat]
+end_of_line = crlf
+
+# Makefile은 탭 필수
+[Makefile]
+indent_style = tab

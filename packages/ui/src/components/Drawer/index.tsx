@@ -1,7 +1,13 @@
 'use client'
 import * as React from 'react'
-import { Drawer as DrawerPrimitive } from 'vaul'
+import { Drawer as VaulDrawer } from 'vaul'
 import { cn } from '../../lib/utils'
+
+// vaul은 peerDependencies로 React 19를 지원하지만, 배포된 타입 정의가 @types/react@18 기준이라
+// @types/react@19 사용 시 ReactNode 불일치로 JSX 타입 에러가 나서 단언으로 우회
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DrawerPrimitive = VaulDrawer as any
+
 function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
   return <DrawerPrimitive.Root data-slot="drawer" {...props} />
 }

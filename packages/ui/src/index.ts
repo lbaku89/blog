@@ -1,5 +1,5 @@
-export { Badge } from './components/badge/index'
-export { Button } from './components/button/index'
+export { Badge } from './components/Badge/index'
+export { Button } from './components/Button/index'
 export {
   Dialog,
   DialogContent,
