@@ -32,7 +32,7 @@ pre-commit:
     # --------------------------------------------------------
     - name: eslint
       glob: '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,yaml,yml}'
-      run: pnpm -r exec eslint --fix -- {staged_files}
+      run: pnpm exec eslint --fix -- {staged_files}
       stage_fixed: true
 
     # --------------------------------------------------------
@@ -52,5 +52,5 @@ pre-commit:
     # --------------------------------------------------------
     - name: prettier
       glob: '*.{ts,cts,tsx,js,cjs,jsx,json,md,yaml,yml}'
-      run: pnpm -r exec prettier --write -- {staged_files}
+      run: pnpm exec prettier --write -- {staged_files}
       stage_fixed: true
