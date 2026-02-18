@@ -1,6 +1,7 @@
 # [kwonhyunwoo.dev](https://www.kwonhyunwoo.dev/)
 
-https://khj930410.tistory.com/ 의 게시글을 현재 https://www.kwonhyunwoo.dev/ 으로 이동중 입니다.
+학습한 내용을 정리하고, 실무 경험을 바탕으로 공유하는 TECH BLOG입니다.  
+부족한 부분이 있다면 지적해주시고, 함께 나누고 싶은 지식, 의견이 있다면 언제든 환영합니다!
 
 ## 프로젝트 구조
 
