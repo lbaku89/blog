@@ -46,3 +46,8 @@ pnpm --filter blog build
 - **언어**: TypeScript 5
 - **스타일링**: Tailwind CSS v5
 - **콘텐츠**: MDX
+- **이미지 저장소**: Cloudflare R2 Object Storage
+
+## 이미지 자산 관리
+
+블로그 게시글에서 사용하는 이미지 자산은 저장소에 직접 추가하지 않고 **Cloudflare R2**에 업로드하여 관리합니다. 게시글에서는 R2에 업로드된 이미지의 공개 URL을 사용합니다.
