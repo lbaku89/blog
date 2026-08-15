@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import {
   Button,
+  buttonVariants,
   TypographyH3,
   cn,
   Drawer,
@@ -60,7 +61,7 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
       <header className="flex justify-between items-center bg-transparent mx-auto max-w-[1100px] px-4 py-3">
         <Link href="/" className="flex justify-start items-center gap-2">
           <Image src="/avatar.webp" alt="권현우의 프로필 사진" width={40} height={40} className="rounded-full" />
-          <TypographyH3 className="inline-block font-bold text-sm sm:text-base md:text-lg">HyunwooTech</TypographyH3>
+          <TypographyH3 className="inline-block font-bold text-sm sm:text-base md:text-lg">Hyunwoo</TypographyH3>
         </Link>
         <div className="flex gap-2 items-center">
           <nav className="hidden gap-2 justify-between md:flex">
@@ -83,10 +84,8 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
           </div>
           <div className="md:hidden">
             <Drawer direction="right">
-              <DrawerTrigger asChild>
-                <Button size="icon" variant="secondary" aria-label="메뉴 열기">
-                  <Bars3Icon className="w-5 h-5" />
-                </Button>
+              <DrawerTrigger className={buttonVariants({ variant: 'secondary', size: 'icon' })} aria-label="메뉴 열기">
+                <Bars3Icon className="w-5 h-5" />
               </DrawerTrigger>
               <DrawerContent>
                 <DrawerHeader>
