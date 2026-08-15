@@ -70,11 +70,11 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
                   <Link href="/">Post</Link>
                 </Button>
               </li>
-              <li>
+              {/* <li>
                 <Button asChild variant="secondary">
                   <Link href="/about">About</Link>
                 </Button>
-              </li>
+              </li> */}
             </ul>
           </nav>
           <div className="flex gap-2 items-center">
