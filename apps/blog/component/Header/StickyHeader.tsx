@@ -98,11 +98,11 @@ export const StickyHeader = ({ initialIsLoggedIn }: StickyHeaderProps) => {
                       <Link href="/">Post</Link>
                     </Button>
                   </DrawerClose>
-                  <DrawerClose asChild>
+                  {/* <DrawerClose asChild>
                     <Button asChild variant="secondary" className="w-full justify-start">
                       <Link href="/about">About</Link>
                     </Button>
-                  </DrawerClose>
+                  </DrawerClose> */}
                 </div>
               </DrawerContent>
             </Drawer>
