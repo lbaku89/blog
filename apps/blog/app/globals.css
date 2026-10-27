@@ -266,3 +266,22 @@ span[data-highlighted-line] {
 .dark span[data-highlighted-line] {
   background: rgba(96, 165, 250, 0.18);
 }
+
+/* 로컬 에디터 (app/editor) - 본문 영역을 포스트 페이지와 동일하게 */
+.post-editor {
+  --basePageBg: transparent;
+  font-family: inherit;
+}
+
+.post-editor [contenteditable='true'] {
+  padding-left: 0;
+  padding-right: 0;
+  outline: none;
+}
+
+.post-editor-toolbar {
+  @apply z-40 rounded-md bg-gray-100 dark:bg-neutral-800;
+  flex-wrap: wrap;
+  overflow: visible;
+  height: auto;
+}
