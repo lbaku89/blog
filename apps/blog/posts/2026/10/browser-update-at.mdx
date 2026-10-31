@@ -1,6 +1,6 @@
 ---
-title: "브라우저별 최신 버전은 언제 업데이트 될까"
-description: "궁금해서 찾아본 브라우저별 최신버전 업데이트 시점"
+title: "브라우저 업데이트는 언제, 어떻게 적용될까?"
+description: "궁금해서 찾아본 브라우저별 최신버전 업데이트 시점 및 적용"
 date: "2026-10-31"
 tags: ["browser"]
 published: true
@@ -8,9 +8,7 @@ published: true
 
 ### 배경
 
-각각의 브라우저의 버전이 언제 업데이트 되는지에 대해 구체적인 문서를 찾아서 명확히 하고 싶어졌다. 그래서 글로벌하게 점유율이 높은 브라우저의 업데이트 시점 정책에 대해 찾아보았다.
-
-![브라우저 점유율](https://pub-a578dcd164ef4e9fb8b9c1c67f7468ed.r2.dev/posts/2026/10/browser-update-at/image-b87d0aa2-15c0-4d60-a321-850c36391261.webp "모든 디바이스 기준 전세계 브라우저 점유율")
+주요 브라우저는 자동으로 업데이트된다고 알려져 있다. 그렇다면 업데이트는 언제 적용되며, 사용자는 항상 최신 버전을 사용하게 될까? 이를 확인하기 위해 주요 브라우저의 공식 업데이트 안내를 찾아보았다.![브라우저 점유율](https://pub-a578dcd164ef4e9fb8b9c1c67f7468ed.r2.dev/posts/2026/10/browser-update-at/image-b87d0aa2-15c0-4d60-a321-850c36391261.webp "모든 디바이스 기준 전세계 브라우저 점유율")
 
 ### Chrome&#x20;
 
@@ -28,7 +26,7 @@ published: true
 
 기본적으로 Edge도 크롬처럼 자동으로 업데이트 된다.
 
-다만 2가지 예외 상황일때만 수동 업데이트 한다고 되어있으며 해당 경우는 진짜 좀 특별한 경우인데 데이터 제한이 걸려있고 업데이트 버전을 위해 다운로드해야 될때 대규모 데이터가 필요한 경우로 생각하면 될 것 같다. ( 매우 특별한 상황이며 구체적인 상황에 대한 자세한 내용은 [https://support.microsoft.com/ko-kr/edge/microsoft-edge-update-settings](https://support.microsoft.com/ko-kr/edge/microsoft-edge-update-settings) 를 확인해보자 )&#x20;
+다만 2가지 예외 상황일때만 수동 업데이트 한다고 되어있으며 해당 경우는 진짜 좀 특별한 경우인데 데이터 제한이 걸려있고 업데이트 버전을 위해 다운로드해야 될때 대규모 데이터가 필요한 경우로 생각하면 될 것 같다. ( 구체적인 상황에 대한 자세한 내용은 [https://support.microsoft.com/ko-kr/edge/microsoft-edge-update-settings](https://support.microsoft.com/ko-kr/edge/microsoft-edge-update-settings) 를 확인해보자 )&#x20;
 
 ### FireFox
 
@@ -45,3 +43,19 @@ published: true
 ### 최신 브라우저를 쓰자
 
 당연한 애기긴 하지만 각 브라우저 새버전의 경우 보안 업데이트, 새로운 기능 업데이트, 속도, 성능의 업데이트로 인해 기존 브라우저 대비 이점을 가져갈 수 있으니 웬만하면 최신버전으로 가져가는게 좋다. 다른 이점들은 차치하더라도 특히 보안은 매우 크리티컬한 요소이기 때문에 중요하다.&#x20;
+
+### 그럼에도 사용자는 구형 브라우저의 사용을 완전히 배제 할 수 없다.
+
+오래된 OS의 경우 특정 브라우저의 일정버전 까지만 사용할 수 있고 그로 인해 최신버전의 브라우저를 이용하지 못하는 유저가 생길 수 있다. 예시로 크롬의 경우 윈도우 7,8,8.1 에 대해서 크롬을 더 이상 지원하지 않는다고 2023년에 공표했다. ( [https://support.google.com/chrome/thread/185534985/sunsetting-support-for-windows-7-8-8-1-in-early-2023?hl\=en-GB](https://support.google.com/chrome/thread/185534985/sunsetting-support-for-windows-7-8-8-1-in-early-2023?hl=en-GB) )&#x20;
+
+이런 경우 유저는 크롬의 특정 버전 이상을 디바이스에서 사용할 수 없는 것이다. 윈도우 엣지도 비슷한 예시가 있다. (. [https://blogs.windows.com/msedgedev/2022/12/09/microsoft-edge-and-webview2-ending-support-for-windows-7-and-windows-8-8-1/](https://blogs.windows.com/msedgedev/2022/12/09/microsoft-edge-and-webview2-ending-support-for-windows-7-and-windows-8-8-1/) )&#x20;
+
+구형 OS 사용외에도 일부러 특정 브라우저 버전을 고정해서 사용하는 경우도 있을 수 있다. 특수한 환경때문에 이런경우가 발생할 수 있고 따라서 이런 케이스도 고려를 해야한다.
+
+### 지원범위를 어떻게 가져갈까
+
+자동 업데이트가 제공되더라도 모든 사용자가 최신 브라우저를 사용하는 것은 아니다. 그렇다고 모든 구버전을 지원하기도 어렵다. 지원하는 버전이 늘어날수록 호환성을 확인하고 테스트하는데 시간이 필요하기 때문이다.
+
+우선 GA4 같은 분석 도구로 우리 서비스 방문자의 브라우저와 버전 분포를 확인할 수 있다. 이 데이터를 바탕으로 사용자가 많은 환경과 호환성 유지에 필요한 작업을 살펴보고, 어느 버전부터 정상 동작을 보장할지 정하는 것이 좋다.&#x20;
+
+&#x20;
