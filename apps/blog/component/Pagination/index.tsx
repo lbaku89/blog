@@ -1,4 +1,3 @@
-import { POSTS_PER_PAGE } from '../../constants/post'
 import Link from 'next/link'
 import {
   ChevronLeftIcon,
@@ -8,54 +7,75 @@ import {
 } from '@heroicons/react/24/solid'
 import { cn } from '@/utils/tailwind'
 
-export const Pagination = ({ currentPage, totalPages }: { currentPage: number; totalPages: number }) => {
-  const PAGINATION_UNIT = 5 // 한 사이클에 보여줄 페이지 수
+interface PaginationProps {
+  currentPage: number
+  totalPages: number
+  tag?: string
+}
 
-  const startPage = Math.floor((currentPage - 1) / PAGINATION_UNIT) * POSTS_PER_PAGE + 1
+export const Pagination = ({ currentPage, totalPages, tag }: PaginationProps) => {
+  if (totalPages <= 1) return null
 
-  const pageArr = Array(PAGINATION_UNIT)
-    .fill(0)
-    .map((_, index) => {
-      const page = startPage + index
-      return page <= totalPages ? page : null
-    })
-    .filter((page) => page !== null)
-
-  const STYLE =
-    'bg-gray-100 size-[35px] dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200'
+  const PAGINATION_UNIT = 5
+  // 페이지 묶음은 글 개수가 아니라 한 번에 표시할 페이지 수를 기준으로 계산한다.
+  const startPage = Math.floor((currentPage - 1) / PAGINATION_UNIT) * PAGINATION_UNIT + 1
+  const pages = Array.from({ length: Math.min(PAGINATION_UNIT, totalPages - startPage + 1) }, (_, i) => startPage + i)
+  const pageHref = (page: number) => {
+    const params = new URLSearchParams()
+    if (tag) params.set('tag', tag)
+    if (page > 1) params.set('page', String(page))
+    return params.size ? `/?${params}` : '/'
+  }
+  const style =
+    'bg-gray-100 size-10 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2'
+  const controls = [
+    { label: '첫 페이지', page: 1, Icon: ChevronDoubleLeftIcon, disabled: currentPage === 1 },
+    { label: '이전 페이지', page: currentPage - 1, Icon: ChevronLeftIcon, disabled: currentPage === 1, rel: 'prev' },
+    {
+      label: '다음 페이지',
+      page: currentPage + 1,
+      Icon: ChevronRightIcon,
+      disabled: currentPage === totalPages,
+      rel: 'next',
+    },
+    { label: '마지막 페이지', page: totalPages, Icon: ChevronDoubleRightIcon, disabled: currentPage === totalPages },
+  ]
+  const renderControl = ({ label, page, Icon, disabled, rel }: (typeof controls)[number]) => (
+    <li key={label}>
+      {disabled ? (
+        <span aria-label={label} aria-disabled="true" className={cn(style, 'pointer-events-none opacity-40')}>
+          <Icon className="size-[15px]" aria-hidden="true" />
+        </span>
+      ) : (
+        <Link href={pageHref(page)} aria-label={label} rel={rel} className={style}>
+          <Icon className="size-[15px]" aria-hidden="true" />
+        </Link>
+      )}
+    </li>
+  )
 
   return (
-    <nav>
-      <ul className="pagination flex gap-2 justify-center list-none items-center">
-        <li>
-          <Link href={`/pages/1`} className={cn(STYLE)}>
-            <ChevronDoubleLeftIcon className="size-[15px]" />
-          </Link>
-        </li>
-        <li>
-          <Link href={`/pages/${currentPage - 1 || 1}`} className={cn(STYLE)}>
-            <ChevronLeftIcon className="size-[15px]" />
-          </Link>
-        </li>
-
-        {pageArr.map((page) => (
+    <nav aria-label="포스트 페이지" className="mt-8">
+      <ul className="pagination flex list-none flex-wrap items-center justify-center gap-2">
+        {controls.slice(0, 2).map(renderControl)}
+        {pages.map((page) => (
           <li key={page}>
-            <Link href={`/pages/${page}`} className={cn(STYLE, currentPage === Number(page) && 'text-blue-400!')}>
-              {page}
-            </Link>
+            {page === currentPage ? (
+              <span
+                aria-current="page"
+                aria-label={`${page}페이지, 현재 페이지`}
+                className={cn(style, 'text-blue-600! font-semibold dark:text-blue-400!')}
+              >
+                {page}
+              </span>
+            ) : (
+              <Link href={pageHref(page)} aria-label={`${page}페이지`} className={style}>
+                {page}
+              </Link>
+            )}
           </li>
         ))}
-
-        <li>
-          <Link href={`/pages/${Math.min(currentPage + 1, totalPages)}`} className={STYLE}>
-            <ChevronRightIcon className="size-[15px]" />
-          </Link>
-        </li>
-        <li>
-          <Link href={`/pages/${totalPages}`} className={STYLE}>
-            <ChevronDoubleRightIcon className="size-[15px]" />
-          </Link>
-        </li>
+        {controls.slice(2).map(renderControl)}
       </ul>
     </nav>
   )
