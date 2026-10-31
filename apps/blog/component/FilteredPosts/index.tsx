@@ -1,59 +1,53 @@
-'use client'
-
-import { useSearchParams } from 'next/navigation'
-import { useMemo } from 'react'
-import { InfiniteScrollPosts } from '@/component/InfiniteScrollPosts'
+import { Pagination } from '@/component/Pagination'
+import { notFound } from 'next/navigation'
 import { TypographyH1 } from '@common-ui'
+import { PostCard } from '@/component/PostCard'
 import { type Post } from '@/types/post'
 
+const PAGE_SIZE = 5
+
 interface FilteredPostsProps {
+  // 관리자 접근 권한으로 필터링한 글만 전달받는다.
   allPosts: Post[]
+  page?: string
+  tag?: string
 }
 
-export const FilteredPosts = ({ allPosts }: FilteredPostsProps) => {
-  const searchParams = useSearchParams()
-  const tag = searchParams.get('tag')
+export const FilteredPosts = ({ allPosts, page, tag }: FilteredPostsProps) => {
+  const currentPage = page === undefined ? 1 : Number(page)
+  if (page !== undefined && (!/^\d+$/.test(page) || !Number.isSafeInteger(currentPage) || currentPage < 1)) {
+    notFound()
+  }
 
-  // 태그로 필터링
-  const filteredPosts = useMemo(() => {
-    if (!tag) return allPosts
-    
-    const trimmedTag = tag.trim()
-    
-    // "admin-only" 태그는 admin 전용 포스팅을 필터링
-    if (trimmedTag === 'admin-only') {
-      return allPosts.filter((post) => post.frontMatter.adminOnly === true)
-    }
-    
-    // admin 권한이 있는지 확인 (allPosts에 admin 전용 포스팅이 포함되어 있으면 admin 권한이 있음)
-    const hasAdminAccess = allPosts.some((post) => post.frontMatter.adminOnly)
-    
-    // 일반 태그는 실제 태그 배열에서 찾기
-    return allPosts.filter((post) => {
-      // admin 권한이 있으면 admin 전용 포스팅도 포함, 없으면 제외
-      if (post.frontMatter.adminOnly && !hasAdminAccess) {
-        return false
-      }
-      return post.frontMatter.tags.some((tag) => tag.trim() === trimmedTag)
-    })
-  }, [allPosts, tag])
+  const selectedTag = tag?.trim() || undefined
+  const filteredPosts = selectedTag
+    ? allPosts.filter((post) =>
+        selectedTag === 'admin-only'
+          ? post.frontMatter.adminOnly === true
+          : post.frontMatter.tags.some((item) => item.trim() === selectedTag)
+      )
+    : allPosts
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE))
+  if (currentPage > totalPages) notFound()
 
-  // 초기 5개만 로드
-  const initialPosts = useMemo(() => filteredPosts.slice(0, 5), [filteredPosts])
-  const hasMore = filteredPosts.length > 5
+  const posts = filteredPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   return (
     <>
       <TypographyH1 className="text-left">
-        {tag ? <span className="text-blue-600 dark:text-blue-400">#{tag}</span> : 'Recent Posts'}
+        {selectedTag ? <span className="text-blue-600 dark:text-blue-400">#{selectedTag}</span> : 'Recent Posts'}
       </TypographyH1>
-      {tag && <p className="mt-2 text-gray-600 dark:text-gray-400">{filteredPosts.length}개의 포스트</p>}
-      <InfiniteScrollPosts
-        key={tag || 'all'}
-        initialPosts={initialPosts}
-        initialHasMore={hasMore}
-        tag={tag || undefined}
-      />
+      <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{filteredPosts.length}개의 포스트</p>
+      {posts.length ? (
+        <ul className="mt-4 flex list-none flex-col gap-5">
+          {posts.map((post) => (
+            <PostCard post={post} key={post.slug} />
+          ))}
+        </ul>
+      ) : (
+        <p className="py-12 text-center text-gray-500">아직 등록된 포스트가 없습니다.</p>
+      )}
+      <Pagination currentPage={currentPage} totalPages={totalPages} tag={selectedTag} />
     </>
   )
 }
