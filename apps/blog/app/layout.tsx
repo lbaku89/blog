@@ -8,6 +8,7 @@ import { Header } from '@/component/Header'
 import { ScrollToTop } from '@/component/ScrollToTop'
 import { LoginToastHandler } from '@/component/LoginToastHandler'
 import { Toaster } from '@common-ui'
+import { GoogleAnalytics } from '@/component/GoogleAnalytics'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -53,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className="bg-white dark:bg-[#121212]" suppressHydrationWarning>
       <head>
-        {/* google analytics setting */}
+        {/* 구글 서치 콘솔 */}
         <meta name="google-site-verification" content="GoOy_S38H-PIOfcU58pJ0js6_b44FEC5-3PzUri-IXI" />
         <script
           dangerouslySetInnerHTML={{
@@ -82,6 +83,7 @@ export default function RootLayout({
         <ScrollToTop />
         <Toaster />
         <LoginToastHandler />
+        <GoogleAnalytics />
       </body>
     </html>
   )
